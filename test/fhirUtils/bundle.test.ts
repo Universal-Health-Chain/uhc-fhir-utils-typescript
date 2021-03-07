@@ -10,6 +10,9 @@ import BundleUtils = require('../../src/fhirUtils/Bundle')
 import { Bundle } from '../../src/fhirUtils/Bundle';
 const bundleUtils = new Bundle()
 
+import { FhirUtils } from '../../src/FhirUtils';
+const fhirUtils = new FhirUtils()
+
 const authorReferenceIdForTesting = "author-reference-uuid"
 const patientSubject = "2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
 
