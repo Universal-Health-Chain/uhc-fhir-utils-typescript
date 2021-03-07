@@ -7,7 +7,7 @@ import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCo
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
 
 
-export default class Bundle {
+export class Bundle {
     constructor() {
     }
 

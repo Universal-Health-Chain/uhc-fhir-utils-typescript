@@ -7,7 +7,7 @@ export const systemLOINC = "http://loinc.org"
 export const systemSNOMED = "http://snomed.info/sct"
 export const systemUCUM = "http://unitsofmeasure.org"
 
-export default class CodeableConcept {
+export class CodeableConcept {
     constructor() {
     }
 

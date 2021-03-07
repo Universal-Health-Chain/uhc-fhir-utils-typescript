@@ -1,5 +1,5 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
-export default class Bundle {
+export declare class Bundle {
     constructor();
     getTimestamp(fhirBundle: R4.IBundle): string;
     addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;

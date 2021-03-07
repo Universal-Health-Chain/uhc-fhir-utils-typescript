@@ -4,8 +4,11 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 import { IndexHL7 } from "../../src/fhirUtils/Hl7";
 import { GlobalIndexLOINC } from "../../src/fhirUtils/Loinc";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
-import Bundle = require('../../src/fhirUtils/Bundle')
-// const Bundle = require ('../../src/fhirUtils/Bundle')
+
+// Testing both ways
+import BundleUtils = require('../../src/fhirUtils/Bundle')
+import { Bundle } from '../../src/fhirUtils/Bundle';
+const bundleUtils = new Bundle()
 
 const authorReferenceIdForTesting = "author-reference-uuid"
 const patientSubject = "2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
@@ -34,7 +37,7 @@ const observationForTesting:R4.IObservation = {
 
 describe("create FHIR Document Bundle and operates with it", () => { 
   it("should build an empty FHIR Bundle", (done) => {
-      const result = Bundle.createBundleDocumentWithComposition() as any
+      const result = bundleUtils.createBundleDocumentWithComposition() as any
       expect(result.resourceType).toBe("Bundle")
       expect(result.id).toBeDefined()
       expect(result.entry.length).toBe(1)
@@ -42,8 +45,8 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
   it("should add a FHIR resource to a FHIR Bundle", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition() as any
-      bundle = Bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let bundle = BundleUtils.createBundleDocumentWithComposition() as any
+      bundle = BundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       // expect(bundle.entry).toBeDefined()
@@ -55,7 +58,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
   it("should create a FHIR bundle from an observation", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition([observationForTesting]) as any
+      let bundle = BundleUtils.createBundleDocumentWithComposition([observationForTesting]) as any
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       expect(bundle.entry).toBeDefined()
@@ -65,36 +68,36 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });    
   it("should get FHIR resources from a FHIR Bundle", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition()
-      bundle = Bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resources = Bundle.getAllResourcesInBundleEntries(bundle)
+      let bundle = BundleUtils.createBundleDocumentWithComposition()
+      bundle = BundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resources = BundleUtils.getAllResourcesInBundleEntries(bundle)
       expect(resources).toHaveLength(2)   // updated with the composition resource included
       expect(resources[1].resourceType).toEqual(observationForTesting.resourceType)
       done()
   });    
   it("should get FHIR resources by type from a FHIR Bundle", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition()
-      bundle = Bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resources = Bundle.getResourcesByTypes(bundle, ["Observation"])
+      let bundle = BundleUtils.createBundleDocumentWithComposition()
+      bundle = BundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resources = BundleUtils.getResourcesByTypes(bundle, ["Observation"])
       // //console.log("Resources = ", resources)
       expect(resources).toHaveLength(1)
       expect(resources[0]).toBe(observationForTesting)
       done()
   });
   it("should get a FHIR observation by its code from a FHIR Bundle", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition()
-      bundle = Bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resources = Bundle.getResourcesByTypes(bundle, ["Observation"])
+      let bundle = BundleUtils.createBundleDocumentWithComposition()
+      bundle = BundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resources = BundleUtils.getResourcesByTypes(bundle, ["Observation"])
       expect(resources).toHaveLength(1)
-      let observations = Bundle.getObservationsByCode(bundle, "code-for-testing-1")
+      let observations = BundleUtils.getObservationsByCode(bundle, "code-for-testing-1")
       expect(observations).toHaveLength(1)    
       expect(observations[0]).toEqual(observationForTesting)
       done()
   });
   it("should get a FHIR resource by ID from a FHIR Bundle", (done) => {
-      let bundle = Bundle.createBundleDocumentWithComposition()
-      bundle = Bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resource = Bundle.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
+      let bundle = BundleUtils.createBundleDocumentWithComposition()
+      bundle = BundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resource = BundleUtils.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
       expect(resource).toEqual(observationForTesting)
       done()
   });
@@ -107,7 +110,7 @@ describe("create bundle Documents and operates with it", () => {
         //console.log("IndexHL7.Category", IndexHL7.Category)
 
         // It creates an IPS Bundle document       
-        let ipsDocument = Bundle.createEmptyIPS(authorReferenceIdForTesting) as any
+        let ipsDocument = BundleUtils.createEmptyIPS(authorReferenceIdForTesting) as any
         //console.log("first ipsDocument = ", JSON.stringify(ipsDocument))
         expect(ipsDocument.id).toBeDefined()
         expect(ipsDocument.resourceType).toBe("Bundle")
@@ -115,11 +118,11 @@ describe("create bundle Documents and operates with it", () => {
         expect(ipsDocument.entry[0].resource.resourceType).toBe("Composition")
 
         // It checks isIPS()
-        let checkIPS = Bundle.isIPS(ipsDocument)
+        let checkIPS = BundleUtils.isIPS(ipsDocument)
         expect(checkIPS==true).toBe(true)
 
         // It checks if the "Composition" is of type "IPS"
-        let compositions = Bundle.getResourcesByTypes(ipsDocument, ["Composition"]) as any
+        let compositions = BundleUtils.getResourcesByTypes(ipsDocument, ["Composition"]) as any
         expect(compositions[0]).toBeDefined
         // console.log("composition[0] = ", JSON.stringify(compositions[0]))
         
@@ -128,19 +131,19 @@ describe("create bundle Documents and operates with it", () => {
         expect(compositionCodes.includes("60591-5")).toBeTruthy // or expect(compositionCodes).toContain("60591-5")
 
         // It adds an observation in the section
-        let modifiedIPS = Bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC, [observationForTesting]) as any
+        let modifiedIPS = BundleUtils.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC, [observationForTesting]) as any
         //console.log("IPS Document with added observation = ", JSON.stringify(modifiedIPS))
         expect(modifiedIPS.entry[1].resource).toEqual(observationForTesting)
         // TODO: check if the composition contains the reference to the added resource
 
         // It gets the observation from the IPS document
-        let resources = Bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC) as any
+        let resources = BundleUtils.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC) as any
         //expect(resources[0]).toEqual(observationForTesting)
 
         // It replaces the observation by its id into the IPS document
         let newObservation = observationForTesting
         newObservation.language = "newLanguage"
-        let newIPS = Bundle.replaceResourceById(newObservation, modifiedIPS) as any
+        let newIPS = BundleUtils.replaceResourceById(newObservation, modifiedIPS) as any
         //console.log("newIPS = ", JSON.stringify(newIPS))
         expect(newIPS.entry[1].resource).toBe(newObservation)
         done()

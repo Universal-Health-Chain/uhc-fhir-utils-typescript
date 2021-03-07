@@ -1,5 +1,5 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
-export default class BundleMessage {
+export declare class BundleMessage {
     constructor();
     createPlainMessageFHIR(senderId: string, messageId: string, bundleDoc?: R4.IBundle, textMessage?: string, attachments?: R4.IAttachment[], entityTitle?: string, entityDescription?: string): R4.IBundle;
     getBundleDocumentInFhirMessage(bundleMessage: R4.IBundle): R4.IBundle;

@@ -6,7 +6,7 @@ import { validateUUIDv4 } from "./commonUtils"
 
 const Bundle = require ("./Bundle")
 
-export default class BundleMessage {
+export class BundleMessage {
     constructor() {
     }
 

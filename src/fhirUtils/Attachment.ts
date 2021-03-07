@@ -6,7 +6,7 @@ import { decode as decodeBase64 } from "@stablelib/base64"
 import { validateFhirDateTime } from "./CommonFHIR"
 
 
-export default class Attachment {
+export class Attachment {
     constructor() {
     }
 
