@@ -1,6 +1,6 @@
 # uhc-fhir-utils-typescript
 
-Each time a new message is created, it SHALL be assigned an identifier (MessageHeader.id)
+Each time a new FHIR message is created, it SHALL be assigned an identifier (MessageHeader.id)
 An incoming message contains two identifiers:
     - MessageHeader.id (the id of the message)
     - Bundle.id (works as a document id in pouchDB)
@@ -10,7 +10,7 @@ A message has 2 important timestamps:
     - Bundle.meta.lastUpdated: the last time the message was updated (either by storing, or by modification)
 
 To receive messages, a receiver searches for all messages destined for itself, since its last check:
- GET [base]/Bundle?message.destination-uri=[rcv]&_lastUpdated=>2015-03-01T02:00:02+01:00
+ GET [base]/Bundle?message.destination-uri=[rcv]&_lastUpdated=>2021-18-02T17:35:15+01:00
 
 The receiver works through the response, processing each message.
 As each message is processed, the receiver creates a response message, reversing the source and destination, and posts it back to the server.
@@ -27,24 +27,7 @@ AuditEvents are not considered to be "part" of the patient record, while Communi
 
 Communication is used when a clinician or other user wants to ensure a record of a particular communication is itself maintained as part of the reviewable health record.
 
-A same connection can be used for different senders (parents, guardians) about the same subject (children, dependant)
-
-nacl.secretbox uses symmetrical crypto, a single key for encrypting and decrypting.
-
-nacl.box uses asymmetric public key encryption. A secret and public key pair are generated twice (pairA, pairB) for end-to-end communication and both parts will derive the same shared key (Diffie–Hellman logic) with the own secret key (private) and with the peer's public key.
-
-Also signing and box keys are different. To use only one key for both, see https://github.com/dchest/ed2curve-js.
-
-To work like RSA, generate a random ephemeral key pair (one time use), use its secret key to box, and send the public key along with ciphertext.
-
-Receiver will then combine this public key with their secret key to open the box (the secret ephemeral key is not needed anymore)
-
-NOTE: the @stablelib/utf8 encodeUTF8 and encodeUTF8 functions work the other way around as in the examples with nacl-util but in the same way as encodeBase64 and decodeBase64 do (more clear).
-An example: https://github.com/dchest/tweetnacl-js/wiki/Examples
-
-jsSHA is a JavaScript/TypeScript implementation of the entire family of SHA hashes as defined in FIPS PUB 180-4, FIPS PUB 202, and SP 800-185 as well as HMAC as defined in FIPS PUB 198-1.
-
-The FHIR hash of the data uses SHA-1 and it is represented using base64: https://www.hl7.org/fhir/datatypes-definitions.html#Attachment.hash
+The hash in FHIR Attachment is SHA-1 and it is represented using base64: https://www.hl7.org/fhir/datatypes-definitions.html#Attachment.hash
 
 IPS List of Profiles
 
