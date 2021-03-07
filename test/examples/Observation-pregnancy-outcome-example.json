@@ -1,0 +1,27 @@
+{
+  "resourceType": "Observation",
+  "id": "pregnancy-outcome-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: pregnancy-outcome-example</p><p><b>status</b>: final</p><p><b>code</b>: [#] Births total <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '11640-0' = '[#] Births total', given as '[#] Births total'})</span></p><p><b>subject</b>: <a href=\"Patient-patient-example-female.html\">Generated Summary: id: patient-example-female; 574687583; active; Martha DeLarosa ; ph: +31788700800(HOME); gender: female; birthDate: 1992-05-01</a></p><p><b>effective</b>: Jan 10, 2020 12:00:00 AM</p><p><b>value</b>: 1 1<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code 1 = '1')</span></p></div>"
+  },
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11640-0",
+        "display": "[#] Births total"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-example-female"
+  },
+  "effectiveDateTime": "2020-01-10",
+  "valueQuantity": {
+    "value": 1,
+    "system": "http://unitsofmeasure.org",
+    "code": "1"
+  }
+}

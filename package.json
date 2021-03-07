@@ -1,0 +1,40 @@
+{
+  "name": "uhc-fhir-utils-typescript",
+  "version": "1.0.0",
+  "description": "UHC's FHIR utils (Typescript)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --forceExit --coverage --verbose"
+  },
+  "author": "Fundación UNID",
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/yup": "^0.29.9",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.4.1",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@ahryman40k/ts-fhir-types": "^4.0.25",
+    "@stablelib/base64": "^1.0.0",
+    "@stablelib/utf8": "^1.0.0",
+    "@types/js-base64": "^2.3.2",
+    "@types/mocha": "^8.2.1",
+    "@types/node": "^14.6.0",
+    "@types/uuid": "^8.3.0",
+    "base-58": "0.0.1",
+    "dicom-parser": "^1.8.7",
+    "js-base64": "^2.6.4",
+    "jssha": "^3.1.2",
+    "uuid": "^8.3.0"
+  }
+}

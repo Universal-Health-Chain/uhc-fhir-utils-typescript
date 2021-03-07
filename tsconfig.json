@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "target": "esnext",
+    "module": "esnext",
+    "types": ["jest", "mocha", "node"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "skipLibCheck":true,
+    "outDir": "./lib",
+    "strict": true,
+    "typeRoots": [ "./types", "./node_modules/@types"]   
+  },
+  "include": ["./src"],
+  "exclude": ["./lib","node_modules", "**/__tests__/*", "**/test/*",  "*.test.ts"]
+}

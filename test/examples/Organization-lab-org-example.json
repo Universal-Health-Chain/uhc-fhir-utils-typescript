@@ -1,0 +1,21 @@
+{
+  "resourceType": "Organization",
+  "id": "lab-org-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: lab-org-example</p><p><b>active</b>: true</p><p><b>type</b>: Hospital-based laboratory facility <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '73588009' = 'Hospital-based laboratory facility', given as 'Hospital-based laboratory facility'})</span></p><p><b>name</b>: Best Hospital Laboratory</p></div>"
+  },
+  "active": true,
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "73588009",
+          "display": "Hospital-based laboratory facility"
+        }
+      ]
+    }
+  ],
+  "name": "Best Hospital Laboratory"
+}

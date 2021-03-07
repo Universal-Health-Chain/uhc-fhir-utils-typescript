@@ -1,0 +1,45 @@
+{
+  "resourceType": "Procedure",
+  "id": "eumfh-39-07-1",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: eumfh-39-07-1</p><p><b>status</b>: completed</p><p><b>category</b>: Surgical procedure <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '387713003' = 'Surgical procedure (procedure)', given as 'Surgical procedure'})</span></p><p><b>code</b>: Previous balloon angioplasty on mid-LAD stenosis with STENT Implantation <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '233404000' = 'Insertion of arterial stent', given as 'Insertion of arterial stent'}; {SNOMED CT code '233258006' = 'Angioplasty of artery', given as 'Balloon angioplasty of artery'})</span></p><p><b>subject</b>: <a href=\"Patient-eumfh-39-07.html\">Alexander Heig (inject 39-07). Generated Summary: id: eumfh-39-07; 39-07, EUR01P0001; active; Alexander Heig ; gender: male; birthDate: 1957-01-01</a></p><p><b>performed</b>: ?? --&gt; (ongoing)</p></div>"
+  },
+  "status": "completed",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "387713003",
+        "display": "Surgical procedure"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "233404000",
+        "display": "Insertion of arterial stent"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "233258006",
+        "display": "Balloon angioplasty of artery"
+      }
+    ],
+    "text": "Previous balloon angioplasty on mid-LAD stenosis with STENT Implantation"
+  },
+  "subject": {
+    "reference": "Patient/eumfh-39-07",
+    "display": "Alexander Heig (inject 39-07)"
+  },
+  "performedPeriod": {
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+        "valueCode": "unknown"
+      }
+    ]
+  }
+}

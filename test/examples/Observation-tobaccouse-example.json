@@ -1,0 +1,31 @@
+{
+  "resourceType": "Observation",
+  "id": "tobaccouse-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: tobaccouse-example</p><p><b>status</b>: final</p><p><b>code</b>: Tobacco smoking status <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '72166-2' = 'Tobacco smoking status', given as 'Tobacco smoking status'})</span></p><p><b>subject</b>: <a href=\"Patient-patient-example-female.html\">Generated Summary: id: patient-example-female; 574687583; active; Martha DeLarosa ; ph: +31788700800(HOME); gender: female; birthDate: 1992-05-01</a></p><p><b>effective</b>: Jul 15, 2019 12:00:00 AM</p><p><b>value</b>: Former smoker <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code 'LA15920-4' = 'Former smoker', given as 'Former smoker'})</span></p></div>"
+  },
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "72166-2",
+        "display": "Tobacco smoking status"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-example-female"
+  },
+  "effectiveDateTime": "2019-07-15",
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "LA15920-4",
+        "display": "Former smoker"
+      }
+    ]
+  }
+}

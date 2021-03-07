@@ -1,0 +1,49 @@
+{
+  "resourceType": "ImagingStudy",
+  "id": "TII-ImagingStudy-5-1",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: TII-ImagingStudy-5-1</p><p><b>identifier</b>: urn:oid:2.16.840.1.113883.2.9.999.1.12345</p><p><b>status</b>: available</p><p><b>subject</b>: <a href=\"Patient-eumfh-39-07.html\">Generated Summary: id: eumfh-39-07; 39-07, EUR01P0001; active; Alexander Heig ; gender: male; birthDate: 1957-01-01</a></p><p><b>procedureCode</b>: SPECT Heart perfusion and wall motion at rest and W stress and W Tl-201 IV and W Tc-99m Sestamibi IV <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '49569-7' = 'SPECT Heart perfusion and wall motion at rest and W stress and W Tl-201 IV and W Tc-99m Sestamibi IV', given as 'SPECT Heart perfusion and wall motion at rest and W stress and W Tl-201 IV and W Tc-99m Sestamibi IV'})</span></p><p><b>reasonCode</b>: Chest pain, hypertension, type II diabetes mellitus. <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><h3>Series</h3><table class=\"grid\"><tr><td>-</td><td><b>Uid</b></td><td><b>Modality</b></td><td><b>BodySite</b></td></tr><tr><td>*</td><td>2.16.840.1.113883.2.9.999.2.12345</td><td>Nuclear Medicine (Details: DICOM code NM = 'Nuclear Medicine', stated as 'Nuclear Medicine')</td><td>Heart (Details: SNOMED CT code 80891009 = 'Heart', stated as 'Heart')</td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "urn:dicom:uid",
+      "value": "urn:oid:2.16.840.1.113883.2.9.999.1.12345"
+    }
+  ],
+  "status": "available",
+  "subject": {
+    "reference": "Patient/eumfh-39-07"
+  },
+  "procedureCode": [
+    {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "49569-7",
+          "display": "SPECT Heart perfusion and wall motion at rest and W stress and W Tl-201 IV and W Tc-99m Sestamibi IV"
+        }
+      ]
+    }
+  ],
+  "reasonCode": [
+    {
+      "text": "Chest pain, hypertension, type II diabetes mellitus."
+    }
+  ],
+  "series": [
+    {
+      "uid": "2.16.840.1.113883.2.9.999.2.12345",
+      "modality": {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "NM",
+        "display": "Nuclear Medicine"
+      },
+      "bodySite": {
+        "system": "http://snomed.info/sct",
+        "code": "80891009",
+        "display": "Heart"
+      }
+    }
+  ]
+}

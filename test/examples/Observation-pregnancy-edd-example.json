@@ -1,0 +1,23 @@
+{
+  "resourceType": "Observation",
+  "id": "pregnancy-edd-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: pregnancy-edd-example</p><p><b>status</b>: final</p><p><b>code</b>: Delivery date Estimated <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '11778-8' = 'Delivery date Estimated', given as 'Delivery date Estimated'})</span></p><p><b>subject</b>: <a href=\"Patient-patient-example-female.html\">Generated Summary: id: patient-example-female; 574687583; active; Martha DeLarosa ; ph: +31788700800(HOME); gender: female; birthDate: 1992-05-01</a></p><p><b>effective</b>: Jan 10, 2020 12:00:00 AM</p><p><b>value</b>: May 2, 2020 12:00:00 AM</p></div>"
+  },
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11778-8",
+        "display": "Delivery date Estimated"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-example-female"
+  },
+  "effectiveDateTime": "2020-01-10",
+  "valueDateTime": "2020-05-02"
+}
