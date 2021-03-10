@@ -1,8 +1,10 @@
-export declare function optionsVaccinationProcedureCovid19SNOMED(globalOrRegional: string): void;
-export declare const RegionalIndexSNOMED: any;
-export declare const GlobalIndexSNOMED: any;
-export declare var SNOMED_CODES_HINT: any;
+/** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
+export declare enum GroupedSNOMED {
+    vaccinationProcedureFullCovid19 = "vaccinationProcedureFullCovid19",
+    vaccineTargetDisease = "vaccineTargetDisease"
+}
 export declare const SNOMED_TO_ICD10: any;
 export declare const SNOMED_TO_ICD11: any;
-export declare var SNOMED_CODES_LABEL: any;
-export declare function translateCodesSNOMED(codes: string[], labelKeySection?: string): string[];
+export declare function getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): any;
+export declare const RegionalIndexSNOMED: any;
+export declare const GlobalIndexSNOMED: any;

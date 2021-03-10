@@ -242,13 +242,13 @@ export function isIPS(bundleDocument:R4.IBundle): boolean {
     if (!bundleDocument || !bundleDocument.type || bundleDocument.type != R4.BundleTypeKind._document || !bundleDocument.entry ||!bundleDocument.entry.length || !bundleDocument.entry[0]
         || !bundleDocument.entry[0].resource || bundleDocument.entry[0].resource.resourceType != "Composition" || !bundleDocument.entry[0].resource.type
         || !bundleDocument.entry[0].resource.type.coding || !bundleDocument.entry[0].resource.type.coding[0] || !bundleDocument.entry[0].resource.type.coding[0].code
-        || bundleDocument.entry[0].resource.type.coding[0].code != GlobalIndexLOINC.Category.HealthSection.CompositionIPS ) return false
+        || bundleDocument.entry[0].resource.type.coding[0].code != "60591-5" ) return false
     else return true
 }
 
 // TODO: set the UHC identifier, not only the id
 export function createEmptyIPS(authorReferenceId:string): R4.IBundle{
-    let typeDocumentCodeLOINC:string = GlobalIndexLOINC.Category.HealthSection.CompositionIPS
+    let typeDocumentCodeLOINC:string = GlobalIndexLOINC.categorization.healthSection.compositionIPS
     return createBundleDocumentWithComposition(undefined, authorReferenceId, typeDocumentCodeLOINC)
 }
 

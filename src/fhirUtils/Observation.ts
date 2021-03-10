@@ -5,14 +5,6 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 
 const Bundle = require('./Bundle')
 
-export function getSectionVitalSignsLOINC(): string{
-    return GlobalIndexLOINC.Category.HealthSection.VitalSigns
-}
-
-export function getSectionSymptomsLOINC(): string{
-    return GlobalIndexLOINC.Category.HealthSection.Symptoms
-}
-
 export interface ObservationChoiceValueFhirR4{
     valueString?:             string
     valueQuantity?:           R4.IQuantity

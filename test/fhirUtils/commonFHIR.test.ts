@@ -1,6 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { anonymizeResource } from "../../src/fhirUtils/CommonFHIR"
+import { anonymizeResource } from "../../src/fhirUtils/CommonFHIR";
+import { getLabelsOfCodes } from "../../src/fhirUtils/CommonFHIR";
 
 const ipsDocument:any = require("../examples/Bundle-IPS-examples-Bundle-01.json")
 
@@ -13,6 +14,37 @@ describe("anonymize FHIR data", () => {
         const anonymizedFHIR = anonymizeResource(ipsDocument)
         // console.log("Anonymized IPS = ", JSON.stringify(anonymizedFHIR))
         // TODO: check if values are empty
+        done()
+    })
+    
+})
+
+describe("get labels of codes", () => {
+
+    it("should get labels of codes by sections in an object", (done) => {
+        const LabelsOfCodesGroupedInSections = {
+            group1:{
+                code1InGroup1: "labelOfCode1InGroup1"
+            },
+            group2:{
+                code1InGroup2: "labelOfCode1InGroup2"
+            }
+        }
+        const codes = ["code1InGroup1"]
+        const groupedSectionName = Object.keys(LabelsOfCodesGroupedInSections)[0] // "group1"
+
+        // It searchs and gets the labels by a specific groupedSectionName (more efficient)
+        let labelsByGroupedSectionName = getLabelsOfCodes(codes, LabelsOfCodesGroupedInSections, groupedSectionName)
+        expect(labelsByGroupedSectionName.length).toBeGreaterThan(0)
+        expect(labelsByGroupedSectionName[0]).toBeDefined()
+        // console.log("first label found with groupedSectionName = ", labelsByGroupedSectionName[0])
+
+        // It searchs and gets the labels without a specific groupedSectionName (less efficient)
+        let labelsWithoutGroupedSectionName = getLabelsOfCodes(codes, LabelsOfCodesGroupedInSections)
+        expect(labelsWithoutGroupedSectionName.length).toBeGreaterThan(0)
+        expect(labelsWithoutGroupedSectionName[0]).toBeDefined()
+        // console.log("first label found without groupedSectionName = ", labelsWithoutGroupedSectionName[0])
+
         done()
     })
 

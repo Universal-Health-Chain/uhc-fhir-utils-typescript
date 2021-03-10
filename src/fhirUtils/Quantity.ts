@@ -1,8 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-
-export const systemUCUM = "http://unitsofmeasure.org"
+import { systemUCUM } from "./CommonFHIR"
 
 /** Quantity */
 

@@ -1,0 +1,37 @@
+{
+    "vaccineTargetDisease": {
+        "840539006": "Disease caused by severe acute respiratory syndrome coronavirus 2 (disorder)",
+        "192644005": "Meningococcal meningitis (disorder)",
+        "40122008": "Pneumoconiosis (disorder)",
+        "186150001": "Enteritis caused by rotavirus (disorder)",
+        "56717001": "Tuberculosis (disorder)",
+        "27836007": "Pertussis (disorder)",
+        "372244006": "Malignant melanoma (disorder)",
+        "36989005": "Mumps (disorder)",
+        "38907003": "Varicella (disorder)",
+        "23502006": "Lyme disease (disorder)",
+        "14189004": "Measles (disorder)",
+        "25225006": "Disease caused by Adenovirus (disorder)",
+        "442438000": "Influenza caused by Influenza A virus (disorder)",
+        "24662006": "Influenza caused by Influenza B virus (disorder)",
+        "6142004": "Influenza (disorder)",
+        "240532009": "Human papillomavirus infection (disorder)",
+        "4834000": "Typhoid fever (disorder)",
+        "76902006": "Tetanus (disorder)",
+        "32398004": "Bronchitis (disorder)",
+        "70036007": "Haemophilus influenzae pneumonia (disorder)",
+        "398102009": "Acute poliomyelitis (disorder)",
+        "40468003": "Viral hepatitis, type A (disorder)",
+        "66071002": "Viral hepatitis type B (disorder)",
+        "50711007": "Viral hepatitis type C (disorder)",
+        "36653000": "Rubella (disorder)",
+        "75702008": "Brucellosis (disorder)",
+        "186772009": "Rocky Mountain spotted fever (disorder)",
+        "186788009": "Q fever (disorder)"
+    },
+    "vaccinationProcedureFullCovid19": {
+        "840534001": "Severe acute respiratory syndrome coronavirus 2 vaccination (procedure) - SARS-CoV-2 vaccination",
+        "65661000122107": "Administration of vaccine against COVID-19, first dose (procedure)",
+        "65671000122102": "Administration of vaccine against COVID-19, second dose (procedure)"
+    }
+}

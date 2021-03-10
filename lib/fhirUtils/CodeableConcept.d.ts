@@ -1,8 +1,4 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
-export declare const systemICD10 = "http://hl7.org/fhir/sid/icd-10";
-export declare const systemLOINC = "http://loinc.org";
-export declare const systemSNOMED = "http://snomed.info/sct";
-export declare const systemUCUM = "http://unitsofmeasure.org";
 export declare class CodeableConcept {
     constructor();
     getCodingsBySystem(coding: R4.ICoding[], system: string): R4.ICoding[];

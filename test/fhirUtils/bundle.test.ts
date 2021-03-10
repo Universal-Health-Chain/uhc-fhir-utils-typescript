@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { IndexHL7 } from "../../src/fhirUtils/Hl7";
+import { GlobalIndexHL7 } from "../../src/fhirUtils/Hl7";
 import { GlobalIndexLOINC } from "../../src/fhirUtils/Loinc";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
 
@@ -11,6 +11,7 @@ import { Bundle } from '../../src/fhirUtils/Bundle';
 const bundleUtils = new Bundle()
 
 import { FhirUtils } from '../../src/FhirUtils';
+import { systemLOINC } from "../../src/fhirUtils/CommonFHIR";
 const fhirUtils = new FhirUtils()
 
 const authorReferenceIdForTesting = "author-reference-uuid"
@@ -20,7 +21,7 @@ const patientSubject = "2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
 const targetDisease:string = "840539006"
 
 // -- Observation --
-const healthHistorySectionCodeForTesting = "11369-6" // IndexHL7.Category.HealthSection.DiagnosticResults
+const healthHistorySectionCodeForTesting = "11369-6" // IndexHL7.category.healthSection.DiagnosticResults
 
 const observationForTesting:R4.IObservation = {
     resourceType: "Observation",
@@ -110,7 +111,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
 describe("create bundle Documents and operates with it", () => {
 
     it("should create an IPS Document ", (done) => {
-        //console.log("IndexHL7.Category", IndexHL7.Category)
+        //console.log("IndexHL7.category", IndexHL7.category)
 
         // It creates an IPS Bundle document       
         let ipsDocument = BundleUtils.createEmptyIPS(authorReferenceIdForTesting) as any
@@ -129,18 +130,18 @@ describe("create bundle Documents and operates with it", () => {
         expect(compositions[0]).toBeDefined
         // console.log("composition[0] = ", JSON.stringify(compositions[0]))
         
-        let compositionCodes = getCodeListInCodeableConcept(compositions[0].type, IndexHL7.CODE_SYSTEMS.LOINC) as string[]
+        let compositionCodes = getCodeListInCodeableConcept(compositions[0].type, systemLOINC) as string[]
         //console.log("compositionCodes[] = ", compositionCodes)
         expect(compositionCodes.includes("60591-5")).toBeTruthy // or expect(compositionCodes).toContain("60591-5")
 
         // It adds an observation in the section
-        let modifiedIPS = BundleUtils.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC, [observationForTesting]) as any
+        let modifiedIPS = BundleUtils.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, systemLOINC, [observationForTesting]) as any
         //console.log("IPS Document with added observation = ", JSON.stringify(modifiedIPS))
         expect(modifiedIPS.entry[1].resource).toEqual(observationForTesting)
         // TODO: check if the composition contains the reference to the added resource
 
         // It gets the observation from the IPS document
-        let resources = BundleUtils.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, IndexHL7.CODE_SYSTEMS.LOINC) as any
+        let resources = BundleUtils.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, systemLOINC) as any
         //expect(resources[0]).toEqual(observationForTesting)
 
         // It replaces the observation by its id into the IPS document

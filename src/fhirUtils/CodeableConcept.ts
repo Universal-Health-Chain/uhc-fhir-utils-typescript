@@ -1,11 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-
-export const systemICD10 = "http://hl7.org/fhir/sid/icd-10"
-export const systemLOINC = "http://loinc.org"
-export const systemSNOMED = "http://snomed.info/sct"
-export const systemUCUM = "http://unitsofmeasure.org"
+import { systemLOINC, systemSNOMED } from "./CommonFHIR"
 
 export class CodeableConcept {
     constructor() {

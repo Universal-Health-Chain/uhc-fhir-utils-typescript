@@ -1,5 +1,15 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+export const systemICD10 = "http://hl7.org/fhir/sid/icd-10"
+export const systemLOINC = "http://loinc.org"
+export const systemSNOMED = "http://snomed.info/sct"
+export const systemUCUM = "http://unitsofmeasure.org"
+
+export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing"
+export const FHIR_DATE_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"
+export const FHIR_DATETIME_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
+export const FHIR_INSTANT_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))"
+
 export const ANONYMIZATION:string[] = ["extension", "_extension", "meta", "note", "display", "_display", "text", "data", "url",
     "title", "description", "authorString", "comment", "extraDetails", "patientInstruction", "availableTime", "notAvailable", "availabilityExceptions",
     "subject", "patient", "name", "family", "_family", "given", "birthDate", "age", "address", "contact", "gender", "telecom", "maritalStatus",
@@ -148,4 +158,61 @@ function findValuesHelper(obj:any, key:string, list:any[]) {
         }
     }
     return list;
+}
+
+// It returns the array of labels (e.g. to create "SelectOption" component)
+export function getLabelsOfCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
+    if (!codes.length || codes.length<1) return []
+    let labels:string[] = []
+    let codeLabelsKeys = Object.keys(codeLabels)
+    //console.log("Keys in codeLabels = ", keys)
+
+    if (codeLabelsKeys.length && codeLabelsKeys.length > 0){
+        // efficient search
+        if (groupedSectionName && codeLabelsKeys.includes(groupedSectionName)) {
+            codeLabelsKeys.forEach( function(keyName:any, index:number, object:any) {
+                // it looks for the specific keySection
+                if (keyName == groupedSectionName) {
+                    // console.log("get labels in groupedSection = ", groupedSectionName)
+                    codes.forEach(function(code:string) {
+                        // console.log("label of code " + code + " is = ", codeLabels[groupedSectionName][code])
+                        labels.push(codeLabels[groupedSectionName][code])
+                    })
+                } // else checks next
+            })
+        }
+        // less efficient search
+        else {
+            // no "groupedSectionName" was given, so it looks for every "code" in all the sections (keys) of the "codeLabels" object            
+            codes.forEach(function(code:string) {
+                codeLabelsKeys.forEach( function(currentSectionName:any) {
+                    // console.log("looking labels for codes in groupedSectionName = ", currentSectionName)
+                    let elements = Object.keys(codeLabels[currentSectionName])
+                    if (elements.length && elements.length > 0){
+                        let found:boolean = false
+                        if (!found) {
+                            elements.forEach (function (element) {
+                                if (element == code) {
+                                    labels.push(codeLabels[currentSectionName][code])
+                                    found = true
+                                }
+                            })
+                        }
+                    }
+                })
+            })
+        }
+    }
+    // //console.log("labels translateCodesLOINC = ", labels)
+    return labels
+}
+
+export function getDisplayCode(code:string, englishCodeLabels:any): string {
+    let codes:string[] = getLabelsOfCodes([code], englishCodeLabels)
+    return codes[0]
+}
+
+export function getLocalizedTextCode(code:string, localizedCodeLabels:any): string {
+    let codes:string[] = getLabelsOfCodes([code], localizedCodeLabels)
+    return codes[0]
 }

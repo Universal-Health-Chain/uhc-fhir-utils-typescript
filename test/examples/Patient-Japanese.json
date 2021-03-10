@@ -1,0 +1,29 @@
+{
+    "resourceType": "Patient",
+    "name": [
+        {
+            "extension":[{
+                "url":"http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation",
+                "valueCode":"IDE"
+            }],
+            "family": "木村",
+            "given": ["通男"]
+        },
+        {
+            "extension":[{
+                "url":"http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation",
+                "valueCode":"SYL"
+            }],
+            "family": "きむら",
+            "given": ["みちお"]
+        },
+        {
+            "extension":[{
+                "url":"http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation",
+                "valueCode":"ABC"
+            }],
+            "family": "KIMURA",
+            "given": ["MICHIO"]
+        }
+    ]
+}
