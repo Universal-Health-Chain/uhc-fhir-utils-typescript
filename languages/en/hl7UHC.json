@@ -1,4 +1,5 @@
 {
+    "_version": 2021031101,
     "eventStatus": {
         "preparation": "Preparation",
         "in-progress": "In Progress",
@@ -150,5 +151,19 @@
         "C106047": "Magnetic Resonance Unsafe",
         "C106045": "Magnetic Resonance Safe",
         "C106046": "Magnetic Resonance Conditional"
+    },
+    "organizationTypes": {
+        "prov": "Healthcare Provider",
+        "dept":	"Hospital Department",
+        "bus": "Non-Healthcare Business or Corporation",
+        "ins": "Insurance Company",
+        "govt":	"Government",
+        "cg": "Community Group",
+        "edu": "Educational Institute",
+        "pay": "Payer",
+        "team":	"Organizational team",
+        "reli": "Religious Institution",
+        "crs": "Clinical Research Sponsor",
+        "other": "Other"
     }
 }

@@ -4,7 +4,8 @@ export declare enum GroupedHL7 {
     cvxCovid19 = "cvxCovid19",
     deviceSafety = "deviceSafety",
     diagnosticServiceSections = "diagnosticServiceSections",
-    identifierType = "identifierType"
+    identifierType = "identifierType",
+    organizationTypes = "organizationTypes"
 }
 export declare function getVaccinesCovid19CVX(): string[];
 export declare const GlobalIndexHL7: IndexHL7;

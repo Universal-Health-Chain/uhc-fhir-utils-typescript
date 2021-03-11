@@ -54,6 +54,10 @@ export interface GroupedCodesHL7 {
         codes: string[];
         system: string;
     };
+    organizationType: {
+        codes: string[];
+        system: string;
+    };
 }
 export interface IndexLOINC extends GlobalIndex {
     readonly healthSections: string[];

@@ -27,7 +27,8 @@ export interface GroupedCodesHL7 {
     deviceSafety:               {codes:  string[], system: string},
     cvx:                        {codes:  string[], system: string},
     cvxCovid19:                 {codes:  string[], system: string},
-    eventStatus:                {codes:  string[], system: string}
+    eventStatus:                {codes:  string[], system: string},
+    organizationType:           {codes:  string[], system: string}
 }
 
 export interface IndexLOINC extends GlobalIndex {

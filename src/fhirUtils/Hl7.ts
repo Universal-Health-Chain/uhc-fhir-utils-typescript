@@ -8,7 +8,8 @@ export enum GroupedHL7 {
     cvxCovid19 = "cvxCovid19",  // labels for the specific Covid19 codes are contained in "cvx" in the JSON file
     deviceSafety = "deviceSafety",
     diagnosticServiceSections = "diagnosticServiceSections",
-    identifierType = "identifierType"
+    identifierType = "identifierType",
+    organizationTypes = "organizationTypes"
 }
 
 export function getVaccinesCovid19CVX(): string[] {
@@ -66,6 +67,10 @@ export const GlobalIndexHL7:IndexHL7 = {  // https://csvjson.com/json2csv
         eventStatus: {
             system: "http://hl7.org/fhir/event-status",
             codes: ["preparation","in-progress","completed","not-done","on-hold","stopped","entered-in-error","unknown"]
+        },
+        organizationType: {
+            system: "http://terminology.hl7.org/CodeSystem/organization-type",
+            codes: ["prov","dept","bus","ins","govt","cg","edu","pay","team","reli","crs","other"]
         }
     }
 }
