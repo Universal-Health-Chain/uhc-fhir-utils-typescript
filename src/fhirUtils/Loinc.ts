@@ -1,3 +1,5 @@
+import { GlobalIndex, IndexLOINC } from "../models"
+
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
@@ -51,12 +53,21 @@ export function getSectionSymptomsLOINC(): string{
     return GlobalIndexLOINC.categorization.healthSection.symptoms
 }
 
+export var LOINC_CODES_HINT:any = {         // It can be overrided with a custom language
+    "Covid19LaboratoryLabels": {
+        "LG51015-2": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (parent group code)
+        "LG51018-6": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (group code)
+        "LG51014-5": "SARSCoV2 virus detection",        // Nucleic acid amplification test (parent group code)
+        "LG51017-8": "SARSCoV2 detection",              // Nucleic acid amplification test (group code)
+    }
+}
+
 // TODO: define interface for GlobalIndex objects
 // It contains all the Covid19 test codes by serum or RNA detection
-export const GlobalIndexLOINC:any = {   // note: use https://csvjson.com/json2csv
-    get HealthSections():string[] { return this.categorization.healthSectionCodes },
-    get Covid19SerologyTestCodes():string[] { return this.categorization.laboratory.covid19["LG51015-2"]["LG51018-6"] },
-    get Covid19NaatTestCodes():string[] { return this.categorization.laboratory.covid19["LG51014-5"]["LG51017-8"] },
+export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/json2csv
+    get healthSections():string[] { return this.groupedCodes.healthSection.codes },
+    get covid19SerologyTestCodes():string[] { return this.categorization.laboratory.covid19["LG51015-2"]["LG51018-6"] },
+    get covid19NaatTestCodes():string[] { return this.categorization.laboratory.covid19["LG51014-5"]["LG51017-8"] },
     // get "Category"() { return this["_Category"] },
     // set "Category"(value) { this["_Category"] = value },
     
@@ -154,18 +165,10 @@ export const GlobalIndexLOINC:any = {   // note: use https://csvjson.com/json2cs
     return codes[0]
 } */
 
-export var LOINC_CODES_HINT:any = {         // It can be overrided with a custom language
-    "Covid19LaboratoryLabels": {
-        "LG51015-2": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (parent group code)
-        "LG51018-6": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (group code)
-        "LG51014-5": "SARSCoV2 virus detection",        // Nucleic acid amplification test (parent group code)
-        "LG51017-8": "SARSCoV2 detection",              // Nucleic acid amplification test (group code)
-    }
-}
-
-function getIndexCodesInParentGroupCodeLOINC(customCategory:string, subCategory:string, parentGroupCode:string):string[] {
+/*
+function getIndexCodesInParentGroupCodeLOINC(customCategory:any, subCategory:any, parentGroupCode:any):string[] {
     let codes:string[] = []
-    const groupCodes:string[] = Object.keys(GlobalIndexLOINC.category[customCategory][subCategory][parentGroupCode])
+    const groupCodes:string[] = Object.keys(GlobalIndexLOINC.categorization[customCategory][subCategory][parentGroupCode])
     if (groupCodes && groupCodes.length && groupCodes.length>0) {
         groupCodes.forEach( function(groupCode:string) {
             codes.push(...GlobalIndexLOINC.categorization[customCategory][subCategory][parentGroupCode][groupCode])
@@ -173,3 +176,4 @@ function getIndexCodesInParentGroupCodeLOINC(customCategory:string, subCategory:
     }
     return codes
 }
+*/

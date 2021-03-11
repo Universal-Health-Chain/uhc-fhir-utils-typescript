@@ -161,7 +161,7 @@ export function putSectionInComposition(composition:R4.IComposition, newSection:
     }
     else {
         // some section(s) exists so replace it if the section is found or add the section if it is not found
-        let codes:string[] = getCodesOfSections(newComposition.section,  GlobalIndexHL7.CODE_SYSTEMS.LOINC)
+        let codes:string[] = getCodesOfSections(newComposition.section,  GlobalIndexHL7.codeSystem.loinc)
         if (!codes.includes(newSection.code.coding[0].code)) newComposition.section.push(newSection)
         else newComposition = replaceSectionInComposition(newComposition, newSection)
     }

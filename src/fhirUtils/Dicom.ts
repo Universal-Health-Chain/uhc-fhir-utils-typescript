@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import * as dicom from 'dicom-parser'
-import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from '../models/Dicom'
+import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from '../models/DicomModels'
 import { R4 } from '@ahryman40k/ts-fhir-types'
 import { createDocumentReference } from './DocumentReference'
 import { createFhirAttachment } from './Attachment'

@@ -1,5 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { IndexHL7 } from "../models/FhirUtilsModels"
+
 export enum GroupedHL7 {
     // TODO: add from IndexHL7.groupedCodes
     cvx = "cvx",
@@ -13,13 +15,15 @@ export function getVaccinesCovid19CVX(): string[] {
     return GlobalIndexHL7.groupedCodes[GroupedHL7.cvxCovid19].codes
 }
 
-export const GlobalIndexHL7:any = {  // https://csvjson.com/json2csv
+export const GlobalIndexHL7:IndexHL7 = {  // https://csvjson.com/json2csv
     extension:{ // FHIR extensions
         mothersFamily: "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family"
     },
     codeSystem: {
         snomed: "http://snomed.info/sct",
-        loinc: "http://loinc.org",
+        loinc:  "http://loinc.org",
+        icd10:  "http://hl7.org/fhir/sid/icd-10",
+        ucum:   "http://unitsofmeasure.org" 
     },
     groupedCodes: { // it contains "system" and "codes" (removed  "category") with the codes for every key
         // ips: { system: "", codes: []},

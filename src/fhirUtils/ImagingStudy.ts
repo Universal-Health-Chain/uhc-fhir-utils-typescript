@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 } from "uuid"
-import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from "../models/Dicom"
+import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from "../models/DicomModels"
 
 export function createImagingStudy(subject:string, idValue?:string, idSystem?:string, series?:R4.IImagingStudy_Series[]): R4.IImagingStudy{
     let subjectReference:R4.IReference = {

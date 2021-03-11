@@ -1,2 +1,2 @@
-export * from './';
-export * from './Dicom';
+export * from "./DicomModels";
+export * from "./FhirUtilsModels";

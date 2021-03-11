@@ -1,3 +1,4 @@
+import { IndexHL7 } from "../models/FhirUtilsModels";
 export declare enum GroupedHL7 {
     cvx = "cvx",
     cvxCovid19 = "cvxCovid19",
@@ -6,4 +7,4 @@ export declare enum GroupedHL7 {
     identifierType = "identifierType"
 }
 export declare function getVaccinesCovid19CVX(): string[];
-export declare const GlobalIndexHL7: any;
+export declare const GlobalIndexHL7: IndexHL7;

@@ -1,6 +1,8 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { getLabelsOfCodes } from "./CommonFHIR"
+import { IndexSNOMED } from "../models/FhirUtilsModels"
+
 const vaccinationProcedureCovid19International = "840534001"
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
@@ -54,7 +56,7 @@ export const RegionalIndexSNOMED:any = {
 }
 
 // TODO: define interface for GlobalIndex objects
-export const GlobalIndexSNOMED:any = {  // note: use https://csvjson.com/json2csv
+export const GlobalIndexSNOMED:IndexSNOMED = {  // note: use https://csvjson.com/json2csv
     // some categorization classifications
     categorization: {
         allergies: {
@@ -78,6 +80,7 @@ export const GlobalIndexSNOMED:any = {  // note: use https://csvjson.com/json2cs
     }
 }
 
+/*
 function getIndexCodesByCategoriesSNOMED(customCategory:string, subCategory:string, parentGroupCode:string):string[] {
     let codes:string[] = []
     const groupCodes:string[] = Object.keys(GlobalIndexSNOMED.category[customCategory][subCategory][parentGroupCode])
@@ -88,3 +91,4 @@ function getIndexCodesByCategoriesSNOMED(customCategory:string, subCategory:stri
     }
     return codes
 }
+*/

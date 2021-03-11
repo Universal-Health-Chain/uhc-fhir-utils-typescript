@@ -1,5 +1,5 @@
 import * as dicom from 'dicom-parser';
-import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie } from '../models/Dicom';
+import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie } from '../models/DicomModels';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 export declare function getDicomdirContent(blobFileAsUint8ArrayOfBytes: Uint8Array): DicomdirContentPatient[];
 export declare function createFhirDocument(imagingStudy: R4.IImagingStudy, dcmResources?: R4.IDocumentReference[]): R4.IBundle;
