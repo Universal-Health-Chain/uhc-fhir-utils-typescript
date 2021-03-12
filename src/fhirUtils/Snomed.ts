@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { getLabelsOfCodes } from "./CommonFHIR"
+import { getLabelsOfCodes, getDisplayCode } from "./CommonFHIR"
 import { IndexSNOMED } from "../models/FhirUtilsModels"
 
 const vaccinationProcedureCovid19International = "840534001"
@@ -11,14 +11,15 @@ export enum GroupedSNOMED { // from GlobalIndexSNOMED.groupedCodes
     vaccineTargetDisease = "vaccineTargetDisease"
 }
 
-const ResultCovid19SerologyCodesSNOMED:string[] = [
-    "10828004", // DISPLAY: "Positive"
-    "260385009" // DISPLAY: "Negative"
-]
-const ResultCovid19NaatCodesSNOMED:string[] = [
-    "260373001", // DISPLAY: "Detected"
-    "260373001" // DISPLAY: "Not Detected"
-]
+export enum ResultCovid19SerologyCodesSNOMED {
+    positive = "10828004",  // DISPLAY: "Positive"
+    negative = "260385009"  // DISPLAY: "Negative"
+}
+
+export enum ResultCovid19NaatCodesSNOMED {
+    detected = "260373001", // DISPLAY: "Detected"
+    notDetected = "260415000" // DISPLAY: "Not Detected"
+}
 
 export const SNOMED_TO_ICD10:any = {
     "840539006": "U07.1",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
@@ -28,6 +29,11 @@ export const SNOMED_TO_ICD10:any = {
 export const SNOMED_TO_ICD11:any = {
     "840539006": "RA01.0",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
     "840544004": "RA01.1",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
+}
+
+export function getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {
+    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/snomedUHC.json")
+    return getDisplayCode(code, englishCodeLabels)
 }
 
 // TODO: define interface for GlobalIndex objects

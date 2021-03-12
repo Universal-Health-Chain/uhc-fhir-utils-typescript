@@ -6,6 +6,7 @@ export declare enum GroupedLOINC {
     laboratoryTestCovid19 = "laboratoryTestCovid19",
     laboratoryTestTopCommonSI = "laboratoryTestTopCommonSI"
 }
+export declare function getDisplayCodeLoinc(code: string, englishCodeLabels?: any): string;
 /** Get predefined goups of codes */
 export declare function getFullTestCovid19LOINC(): string[];
 export declare function getFullSerologyTestCovid19LOINC(): string[];

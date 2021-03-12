@@ -1,12 +1,11 @@
 
 import { getLabelsOfCodes } from "../../src/fhirUtils/CommonFHIR";
-import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED } from "../../src/fhirUtils/Snomed";
+import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED, ResultCovid19SerologyCodesSNOMED, getDisplayCodeSnomed } from "../../src/fhirUtils/Snomed";
 
 // TODO: define interface for SnomedLabels JSON objects
 const SnomedLabelsEN:any = require ("../../languages/en/snomedUHC.json") 
 
 describe("translate SNOMED codes", () => {
-
         it("should translate SNOMED code", (done) => {
             expect(Object.keys(SnomedLabelsEN.vaccineTargetDisease).length).toBeGreaterThan(0)
             // console.log("LoincLabelsEN.healthSection = ", LoincLabelsEN.healthSection)
@@ -39,6 +38,13 @@ describe("translate SNOMED codes", () => {
             // console.log("first label found without groupedSectionName = ", labelsWithoutGroupedSectionName[0])
 
             done()
+        })
+
+        it("should display LOINC code", () => {
+            let code = ResultCovid19SerologyCodesSNOMED.negative
+            let displayCode = getDisplayCodeSnomed(code)
+            console.log("display code SNOMED " + code + " = ", displayCode)
+            expect(displayCode==undefined).toBeFalsy()
         })
     
     })

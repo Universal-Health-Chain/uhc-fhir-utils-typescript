@@ -1,4 +1,5 @@
 import { GlobalIndex, IndexLOINC } from "../models"
+import { getDisplayCode } from "./CommonFHIR"
 
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
@@ -9,6 +10,11 @@ export enum GroupedLOINC {
     documentType = "documentType",
     laboratoryTestCovid19 = "laboratoryTestCovid19",
     laboratoryTestTopCommonSI = "laboratoryTestTopCommonSI"
+}
+
+export function getDisplayCodeLoinc(code:string, englishCodeLabels?:any): string {
+    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/loincUHC.json")
+    return getDisplayCode(code, englishCodeLabels)
 }
 
 /** Get predefined goups of codes */

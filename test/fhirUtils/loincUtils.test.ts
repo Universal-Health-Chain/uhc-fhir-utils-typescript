@@ -1,6 +1,7 @@
 
 import { getLabelsOfCodes } from "../../src/fhirUtils/CommonFHIR";
 import { getFullTestCovid19LOINC, GroupedLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, getSectionDiagnosticResultsLOINC, getSectionImmunizationLOINC, getSectionVitalSignsLOINC, getSectionSymptomsLOINC } from "../../src/fhirUtils/Loinc";
+import { getDisplayCodeLoinc } from "../../src/fhirUtils/Loinc";
 
 // TODO: define interface for SnomedLabels JSON objects
 const LoincLabelsEN:any = require ("../../languages/en/loincUHC.json")
@@ -44,9 +45,7 @@ describe("get specific section code", () => {
 
 })
 
-
 describe("translate LOINC codes", () => {
-
     it("should translate LOINC code", (done) => {
         expect(Object.keys(LoincLabelsEN.healthSection).length).toBeGreaterThan(0)
         // console.log("LoincLabelsEN.healthSection = ", LoincLabelsEN.healthSection)
@@ -71,6 +70,13 @@ describe("translate LOINC codes", () => {
         // console.log("first label found without groupedSectionName = ", labelsWithoutGroupedSectionName[0])
 
         done()
+    })
+
+    it("should display LOINC code", () => {
+        let codes = getFullSerologyTestCovid19LOINC()
+        let displayCode = getDisplayCodeLoinc(codes[0])
+        console.log("display code LOINC " + codes[0] + " = ", displayCode)
+        expect(displayCode==undefined).toBeFalsy()
     })
 
 })

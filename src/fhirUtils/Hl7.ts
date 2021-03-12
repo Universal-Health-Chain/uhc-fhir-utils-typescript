@@ -1,6 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { IndexHL7 } from "../models/FhirUtilsModels"
+import { getDisplayCode } from "./CommonFHIR"
 
 export enum GroupedHL7 {
     // TODO: add from IndexHL7.groupedCodes
@@ -10,6 +11,11 @@ export enum GroupedHL7 {
     diagnosticServiceSections = "diagnosticServiceSections",
     identifierType = "identifierType",
     organizationTypes = "organizationTypes"
+}
+
+export function getDisplayCodeHl7(code:string, englishCodeLabels?:any): string {
+    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/hl7UHC.json")
+    return getDisplayCode(code, englishCodeLabels)
 }
 
 export function getVaccinesCovid19CVX(): string[] {
