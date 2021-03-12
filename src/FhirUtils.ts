@@ -5,9 +5,9 @@ import { Bundle } from "./fhirUtils/Bundle";
 import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
 import { Immunization } from "./fhirUtils/Immunization";
-import { Hl7, GroupedHL7, GlobalIndexHL7 } from "./fhirUtils/Hl7";
-import { Loinc, GroupedLOINC, GlobalIndexLOINC } from "./fhirUtils/Loinc";
-import { Snomed, GroupedSNOMED, GlobalIndexSNOMED, RegionalIndexSNOMED } from "./fhirUtils/Snomed";
+import { Hl7 } from "./fhirUtils/Hl7";
+import { Loinc } from "./fhirUtils/Loinc";
+import { Snomed } from "./fhirUtils/Snomed";
 
 export class FhirUtils {
     public attachment: Attachment
