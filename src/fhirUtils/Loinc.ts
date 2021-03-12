@@ -1,7 +1,50 @@
+/* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
+
 import { GlobalIndex, IndexLOINC } from "../models"
 import { getDisplayCode } from "./CommonFHIR"
 
-/* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
+
+export class Loinc {
+    constructor(){
+    }
+
+    getDisplayCodeLoinc(code:string, englishCodeLabels?:any): string {
+        return getDisplayCodeLoinc(code, englishCodeLabels)
+    }
+    
+    /** Get predefined goups of codes */
+    
+   getFullTestCovid19LOINC(): string[] {
+        return getFullTestCovid19LOINC()
+    }
+    
+    getFullSerologyTestCovid19LOINC(): string[] {
+        return getFullSerologyTestCovid19LOINC()
+    }
+    
+    getFullNaatTestCovid19LOINC(): string[] {
+        return getFullNaatTestCovid19LOINC()
+    }
+    
+    /** Get medical history section codes */
+    
+    getSectionDiagnosticResultsLOINC(): string{
+        return getSectionDiagnosticResultsLOINC()
+    }
+    
+    getSectionImmunizationLOINC(): string{
+        return getSectionImmunizationLOINC()
+    }
+    
+    getSectionVitalSignsLOINC(): string{
+        return getSectionVitalSignsLOINC()
+    }
+    
+    getSectionSymptomsLOINC(): string{
+        return getSectionSymptomsLOINC()
+    }
+}
+
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export enum GroupedLOINC {

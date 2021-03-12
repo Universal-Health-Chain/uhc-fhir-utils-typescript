@@ -1,9 +1,24 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { getLabelsOfCodes, getDisplayCode } from "./CommonFHIR"
+import { getDisplayCode } from "./CommonFHIR"
 import { IndexSNOMED } from "../models/FhirUtilsModels"
 
 const vaccinationProcedureCovid19International = "840534001"
+
+export class Snomed {
+    constructor() {
+    }
+
+    getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {
+        return getDisplayCodeSnomed(code, englishCodeLabels)
+    }
+    
+    // TODO: define interface for GlobalIndex objects
+    getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string){
+        return getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional)
+    }
+    
+}
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export enum GroupedSNOMED { // from GlobalIndexSNOMED.groupedCodes

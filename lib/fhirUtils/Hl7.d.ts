@@ -1,4 +1,9 @@
 import { IndexHL7 } from "../models/FhirUtilsModels";
+export declare class Hl7 {
+    constructor();
+    getDisplayCodeHl7(code: string, englishCodeLabels?: any): string;
+    getVaccinesCovid19CVX(): string[];
+}
 export declare enum GroupedHL7 {
     cvx = "cvx",
     cvxCovid19 = "cvxCovid19",

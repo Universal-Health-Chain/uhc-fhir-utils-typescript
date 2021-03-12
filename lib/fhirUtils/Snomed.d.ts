@@ -1,4 +1,9 @@
 import { IndexSNOMED } from "../models/FhirUtilsModels";
+export declare class Snomed {
+    constructor();
+    getDisplayCodeSnomed(code: string, englishCodeLabels?: any): string;
+    getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): any;
+}
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export declare enum GroupedSNOMED {
     vaccinationProcedureFullCovid19 = "vaccinationProcedureFullCovid19",

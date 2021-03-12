@@ -3,6 +3,21 @@
 import { IndexHL7 } from "../models/FhirUtilsModels"
 import { getDisplayCode } from "./CommonFHIR"
 
+
+export class Hl7 {
+    constructor() {
+    }
+
+    getDisplayCodeHl7(code:string, englishCodeLabels?:any): string {
+        return  getDisplayCodeHl7(code, englishCodeLabels)
+    }
+    
+    getVaccinesCovid19CVX(): string[] {
+        return getVaccinesCovid19CVX()
+    }
+    
+}
+
 export enum GroupedHL7 {
     // TODO: add from IndexHL7.groupedCodes
     cvx = "cvx",
