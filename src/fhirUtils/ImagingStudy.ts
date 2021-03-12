@@ -4,6 +4,38 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 } from "uuid"
 import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from "../models/DicomModels"
 
+export class ImagingStudy {
+
+    constructor(){
+    }
+
+    createImagingStudy(subject:string, idValue?:string, idSystem?:string, series?:R4.IImagingStudy_Series[]): R4.IImagingStudy{
+        return createImagingStudy(subject, idValue, idSystem, series)
+    }
+    
+    createSerie(modalityCode:string, uid?:string, number?:number, instances?:R4.IImagingStudy_Instance[]): R4.IImagingStudy_Series{
+        return createSerie(modalityCode, uid, number, instances)
+    }
+    
+    addSeriesToStudy(fhirStudy: R4.IImagingStudy, fhirSeries:R4.IImagingStudy_Series[]): R4.IImagingStudy{
+        return addSeriesToStudy(fhirStudy, fhirSeries)
+    }
+    
+    createInstance(instanceUID:string, sopClassUID:string,  number?:number, title?:string): R4.IImagingStudy_Instance {
+        return createInstance(instanceUID, sopClassUID,  number, title)
+    }
+    
+    addInstancesToSerie(fhirSerie:R4.IImagingStudy_Series, fhirinstances:R4.IImagingStudy_Instance[]): R4.IImagingStudy_Series{
+        return addInstancesToSerie(fhirSerie, fhirinstances)
+    }
+    
+    // hierachical dicomdir structure is needed to create series and studies with recursive operations
+    createImagingStudiesByDicomdirContent(subjectId:string, dicomdirPatients:DicomdirContentPatient[]): R4.IImagingStudy[] {
+        return createImagingStudiesByDicomdirContent(subjectId, dicomdirPatients)
+    }
+
+}
+
 export function createImagingStudy(subject:string, idValue?:string, idSystem?:string, series?:R4.IImagingStudy_Series[]): R4.IImagingStudy{
     let subjectReference:R4.IReference = {
         reference: subject

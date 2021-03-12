@@ -2,6 +2,32 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 
+export class Reference {
+
+    constructor(){
+    }
+
+    getReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
+        return getReferencesByIdentifierAndSystem(referencesFHIR, system)
+    }
+    
+    getLiteralReferencesStrings(referencesFHIR:R4.IReference[]) : string[] {
+        return getLiteralReferencesStrings(referencesFHIR)
+    }
+    
+    createReferenceFHIR(strReference:string, type?:string, display?:string): R4.IReference {
+        return createReferenceFHIR(strReference, type, display)
+    }
+    
+    createReferencesByLiteralURLs(literalReferences:string[]): R4.IReference[]{
+        return createReferencesByLiteralURLs(literalReferences)
+    }
+    
+    createReferenceIdentifiers(identifiers:string[], system:string): R4.IReference[] {
+        return createReferenceIdentifiers(identifiers, system)
+    }
+
+}
 
 export function getReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
     if (!referencesFHIR.length || referencesFHIR.length < 1) throw new Error ("Missing FHIR References")

@@ -3,7 +3,24 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { systemUCUM } from "./CommonFHIR"
 
-/** Quantity */
+export class Quantity {
+    constructor() {
+    }
+
+    createSimpleQuantityByCodeMg(number:number){
+        createSimpleQuantityByCodeMg(number)
+    }
+    
+    createSimpleQuantityByCodeMl(number:number){
+        return createSimpleQuantityByCodeMl(number)
+    }
+    
+    createSimpleQuantity(number:number, code:string){
+        return createSimpleQuantity(number, code)
+    }
+
+}
+
 
 export function createSimpleQuantityByCodeMg(number:number){
     return createSimpleQuantity(number, "mg")

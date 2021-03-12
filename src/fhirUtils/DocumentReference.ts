@@ -3,13 +3,39 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidRandom} from "uuid"
 
+export class DocumentReference {
+    constructor(){
+    }
+    
+    // TODO: use category classes of https://www.hl7.org/fhir/valueset-document-classcodes.html
+    // and remove {"11369-6":"History of Immunization"} in the "additional category classes"
+    // getDocumentReferenceAdditionalCategoryCodeAndValueOptionsLOINC(language:string): any[] { // CodeAndValue[]
+
+    // TODO: change
+    getDocumentReferenceTypeCodeAndValueOptionsLOINC(language:string): any {
+        return getDocumentReferenceTypeCodeAndValueOptionsLOINC(language)
+    }
+    
+    getFhirAttachmentsInDocumentReference(documentReference:R4.IDocumentReference): R4.IAttachment[] {
+        return getFhirAttachmentsInDocumentReference(documentReference)
+    }
+    
+    createDocumentReference(contents:R4.IDocumentReference_Content[], id?:string, identifiers?:R4.IIdentifier[]): R4.IDocumentReference {
+        return createDocumentReference(contents, id, identifiers)
+    }
+
+}
+
+/*
 export function getDocumentReferenceAdditionalCategoryCodeAndValueOptionsLOINC(language:string): any[] { // CodeAndValue[]
     return [
         // TODO: use category classes of https://www.hl7.org/fhir/valueset-document-classcodes.html
         // and remove {"11369-6":"History of Immunization"} in the "additional category classes"
     ]
 }
+*/
 
+// TODO: change
 export function getDocumentReferenceTypeCodeAndValueOptionsLOINC(language:string): any {
     // based on https://loinc.org/81214-9/ recommended C-CDA R2.0 and R2.1 sections
     // and https://www.hl7.org/fhir/valueset-c80-doc-typecodes.html

@@ -2,6 +2,17 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 
+export class Identifier {
+    
+    constructor(){
+    }
+
+    addIdentifier(fhirResource:any, system:string, value:string, use?:R4.IdentifierUseKind, assignerReference?:string, period?:R4.IPeriod): any {
+        return addIdentifier(fhirResource, system, value, use, assignerReference, period)
+    }
+    
+}
+
 export function addIdentifier(fhirResource:any, system:string, value:string, use?:R4.IdentifierUseKind, assignerReference?:string, period?:R4.IPeriod): any {
     let singleIdentifier:R4.IIdentifier = {system: system, value: value}
     if (use) singleIdentifier.use = use

@@ -7,6 +7,13 @@ export declare const FHIR_DATE_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)
 export declare const FHIR_DATETIME_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(.[0-9]+)?(Z|(+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?";
 export declare const FHIR_INSTANT_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(.[0-9]+)?(Z|(+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))";
 export declare const ANONYMIZATION: string[];
+export declare class CommonFHIR {
+    constructor();
+    validateFhirDateTime(dateTime: string): boolean;
+    getLabelsOfCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
+    getDisplayCode(code: string, englishCodeLabels: any): string;
+    getLocalizedTextCode(code: string, localizedCodeLabels: any): string;
+}
 export declare function validateFhirDateTime(dateTime: string): boolean;
 export declare function getChoiceNameFromValueFHIR(fhir: any): string;
 export declare function anonymizeResource(fhirResource: any): any;

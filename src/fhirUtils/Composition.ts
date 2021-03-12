@@ -6,6 +6,57 @@ import { GlobalIndexHL7 } from "./Hl7"
 import { validateUUIDv4 } from "./commonUtils"
 import { systemLOINC } from "./CommonFHIR"
 
+export class Composition {
+    
+    constructor(){
+    }
+
+    getCodesOfSections(sections:R4.IComposition_Section[], system:string): string[] {
+        return getCodesOfSections(sections, system)
+    }
+    
+    // TODO: manage empty authorReferenceId and typeDocumentCodeLOINC
+    createDefaultComposition(authorReferenceId?:string, typeDocumentCodeLOINC?:string, id?:string): R4.IComposition {
+        return createDefaultComposition(authorReferenceId, typeDocumentCodeLOINC, id)
+    }
+    
+    createEmptyCompositionIPS(authorReferenceId:string): R4.IComposition {
+        return createEmptyCompositionIPS(authorReferenceId)
+    }
+    
+    
+    // TODO: put display and text of the section (translation)
+    addResourcesToComposition(composition:R4.IComposition, resources:any[], sectionCode:string, sectionSystem:string): R4.IComposition {
+        return addResourcesToComposition(composition, resources, sectionCode, sectionSystem)
+    }
+    
+    createEmptyCompositionSection(sectionCode:string, sectionSystem:string): R4.IComposition_Section {
+        return createEmptyCompositionSection(sectionCode, sectionSystem)
+    }
+    
+    // It is mandatory to have one and only one code in the section
+    addReferencesToCompositionSection(section:R4.IComposition_Section, references:R4.IReference[]): R4.IComposition_Section {
+        return addReferencesToCompositionSection(section, references)
+    }
+    
+    // TODO: it does not add the type of the resource in the reference(?)
+    getReferencesOfResources(resources:any[]): R4.IReference[] {
+        return getReferencesOfResources(resources)
+    }
+    
+    // getSectionByCodeInComposition returns empty if no section found
+    getSectionByCodeInComposition(composition:R4.IComposition, sectionCode:string, sectionSystem?:string): R4.IComposition_Section {
+        return getSectionByCodeInComposition(composition, sectionCode, sectionSystem)
+    }
+    
+    // It updates the composition with the new section
+    putSectionInComposition(composition:R4.IComposition, newSection:R4.IComposition_Section): R4.IComposition {
+        return putSectionInComposition(composition, newSection)
+    }
+
+}
+
+
 // import { getCodesOfSections } from "./fhirCodingUtils"
 
 

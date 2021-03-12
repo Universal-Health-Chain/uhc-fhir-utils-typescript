@@ -15,11 +15,35 @@ export const ANONYMIZATION:string[] = ["extension", "_extension", "meta", "note"
     "subject", "patient", "name", "family", "_family", "given", "birthDate", "age", "address", "contact", "gender", "telecom", "maritalStatus",
      "reference", "identifier", "masterIdentifier", "id", "fullUrl"] 
 
+export class CommonFHIR {
+    constructor(){
+    }
+
+    // TODO:
+    validateFhirDateTime(dateTime:string): boolean {
+        return validateFhirDateTime(dateTime)
+    }
+
+    getLabelsOfCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
+        return getLabelsOfCodes(codes, codeLabels, groupedSectionName)
+    }
+    
+    getDisplayCode(code:string, englishCodeLabels:any): string {
+        return getDisplayCode(code, englishCodeLabels)
+    }
+    
+    getLocalizedTextCode(code:string, localizedCodeLabels:any): string {
+        return getLocalizedTextCode(code, localizedCodeLabels)
+    }
+
+}
+
 // TODO:
 export function validateFhirDateTime(dateTime:string): boolean {
     return true
 }
 
+// TODO: change to enum
 export function getChoiceNameFromValueFHIR(fhir: any): string {
     switch(fhir) {
         case (fhir.valueString):            return "valueString"

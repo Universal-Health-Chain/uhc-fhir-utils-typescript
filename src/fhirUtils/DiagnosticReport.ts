@@ -4,6 +4,16 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 
 // TODO: unify createFhirReferences and createReferenceLiteralURLs
 
+export class DiagnosticReport {
+    constructor() {
+    }
+
+    getFhirAttachmentsInDiagnosticReport(diagnosticReport:R4.IDiagnosticReport): R4.IAttachment[] {
+        return getFhirAttachmentsInDiagnosticReport(diagnosticReport)
+    }
+    
+}
+
 export function getFhirAttachmentsInDiagnosticReport(diagnosticReport:R4.IDiagnosticReport): R4.IAttachment[] {
     if (!diagnosticReport.presentedForm || !diagnosticReport.presentedForm.length || diagnosticReport.presentedForm.length<1) return []
     let attachments:R4.IAttachment[] = []
