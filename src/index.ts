@@ -1,7 +1,9 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 // exports interfaces
-export * from "./models";
+// export * from "./models";
+export * from "./models/DicomModels";
+export * from "./models/FhirUtilsModels";
 
 // export classes
 export * from "./FhirUtils";

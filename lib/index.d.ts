@@ -1,4 +1,5 @@
-export * from "./models";
+export * from "./models/DicomModels";
+export * from "./models/FhirUtilsModels";
 export * from "./FhirUtils";
 export { getValidOrNewUUIDv4, sortObject, validateUUIDv4 } from "./fhirUtils/commonUtils";
 export { anonymizeResource, getLabelsOfCodes, getDisplayCode } from "./fhirUtils/CommonFHIR";
