@@ -3,16 +3,18 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidRandom} from "uuid"
 import { decode as decodeBase64 } from "@stablelib/base64"
-import { validateFhirDateTime } from "./CommonFHIR"
+// import { validateFhirDateTime } from "./CommonFHIR"
 
 
 export class Attachment {
     constructor() {
     }
 
+    /*
     createAttachmentFHIR(url: string, resourceLanguage?: string, size?: number, hash?: string, creation?: string, title?: string): R4.IAttachment {
         return createAttachmentFHIR(url, resourceLanguage, size, hash, creation, title)
     }
+    */
 
     createFhirAttachment(mimeType:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
         return createFhirAttachment(mimeType, id, url, title, language, hashSHA1, size, base64Data, creationDateTime)
@@ -45,7 +47,8 @@ export function createFhirAttachment(mimeType:string, id?:string, url?:string, t
     if (hashSHA1) result.hash = hashSHA1
     if (size) result.size = size
     if (base64Data) result.data = base64Data
-    if (creationDateTime && validateFhirDateTime(creationDateTime)) result.creation = creationDateTime
+    // TODO: validateFhirDateTime
+    if (creationDateTime) result.creation = creationDateTime
     return result
 }
 

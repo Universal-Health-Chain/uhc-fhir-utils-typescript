@@ -9,14 +9,12 @@ export declare const FHIR_INSTANT_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]
 export declare const ANONYMIZATION: string[];
 export declare class CommonFHIR {
     constructor();
-    validateFhirDateTime(dateTime: string): boolean;
-    getLabelsOfCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
+    anonymizeResource(fhirResource: any): any;
+    getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
     getDisplayCode(code: string, englishCodeLabels: any): string;
     getLocalizedTextCode(code: string, localizedCodeLabels: any): string;
 }
-export declare function validateFhirDateTime(dateTime: string): boolean;
-export declare function getChoiceNameFromValueFHIR(fhir: any): string;
 export declare function anonymizeResource(fhirResource: any): any;
-export declare function getLabelsOfCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
+export declare function getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
 export declare function getDisplayCode(code: string, englishCodeLabels: any): string;
 export declare function getLocalizedTextCode(code: string, localizedCodeLabels: any): string;

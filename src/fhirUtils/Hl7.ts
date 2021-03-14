@@ -8,7 +8,7 @@ export class Hl7 {
     constructor() {
     }
 
-    getDisplayCodeHl7(code:string, englishCodeLabels?:any): string {
+    getDisplayCode(code:string, englishCodeLabels?:any): string {
         return  getDisplayCodeHl7(code, englishCodeLabels)
     }
     

@@ -19,13 +19,19 @@ export class CommonFHIR {
     constructor(){
     }
 
+    anonymizeResource(fhirResource: any): any {
+        return anonymizeResource(fhirResource)
+    }
+
+    /*
     // TODO:
     validateFhirDateTime(dateTime:string): boolean {
         return validateFhirDateTime(dateTime)
     }
+    */
 
-    getLabelsOfCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
-        return getLabelsOfCodes(codes, codeLabels, groupedSectionName)
+    getLabelsOfGroupedCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
+        return getLabelsOfGroupedCodes(codes, codeLabels, groupedSectionName)
     }
     
     getDisplayCode(code:string, englishCodeLabels:any): string {
@@ -38,27 +44,6 @@ export class CommonFHIR {
 
 }
 
-// TODO:
-export function validateFhirDateTime(dateTime:string): boolean {
-    return true
-}
-
-// TODO: change to enum
-export function getChoiceNameFromValueFHIR(fhir: any): string {
-    switch(fhir) {
-        case (fhir.valueString):            return "valueString"
-        case (fhir.valueQuantity):          return "valueQuantity"
-        case (fhir.valueRatio):             return "valueRatio"
-        case (fhir.valueRange):             return "valueRange"
-        case (fhir.valueCodeableConcept):   return "valueCodeableConcept"
-        case (fhir.valueBoolean):           return "valueBoolean"
-        case (fhir.valueSampledData):       return "valueSampledData"
-        case (fhir.valueTime):              return "valueTime"
-        case (fhir.valueDateTime):          return "valueDateTime"
-        case (fhir.valuePeriod):            return "valuePeriod"
-        default: return ""
-    }
-}
 
 // composition.section.entry will be empty in an IPS document, also observation.hasMembers (fix it?)
 // TODO: remove identifier, performer should be empty
@@ -185,7 +170,7 @@ function findValuesHelper(obj:any, key:string, list:any[]) {
 }
 
 // It returns the array of labels (e.g. to create "SelectOption" component)
-export function getLabelsOfCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
+export function getLabelsOfGroupedCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
     if (!codes.length || codes.length<1) return []
     let labels:string[] = []
     let codeLabelsKeys = Object.keys(codeLabels)
@@ -232,11 +217,37 @@ export function getLabelsOfCodes(codes: string[], codeLabels:any, groupedSection
 }
 
 export function getDisplayCode(code:string, englishCodeLabels:any): string {
-    let codes:string[] = getLabelsOfCodes([code], englishCodeLabels)
+    let codes:string[] = getLabelsOfGroupedCodes([code], englishCodeLabels)
     return codes[0]
 }
 
 export function getLocalizedTextCode(code:string, localizedCodeLabels:any): string {
-    let codes:string[] = getLabelsOfCodes([code], localizedCodeLabels)
+    let codes:string[] = getLabelsOfGroupedCodes([code], localizedCodeLabels)
     return codes[0]
 }
+
+/*
+// TODO:
+export function validateFhirDateTime(dateTime:string): boolean {
+    return true
+}
+*/
+
+/*
+// TODO: change to enum
+export function getChoiceNameFromValueFHIR(fhir: any): string {
+    switch(fhir) {
+        case (fhir.valueString):            return "valueString"
+        case (fhir.valueQuantity):          return "valueQuantity"
+        case (fhir.valueRatio):             return "valueRatio"
+        case (fhir.valueRange):             return "valueRange"
+        case (fhir.valueCodeableConcept):   return "valueCodeableConcept"
+        case (fhir.valueBoolean):           return "valueBoolean"
+        case (fhir.valueSampledData):       return "valueSampledData"
+        case (fhir.valueTime):              return "valueTime"
+        case (fhir.valueDateTime):          return "valueDateTime"
+        case (fhir.valuePeriod):            return "valuePeriod"
+        default: return ""
+    }
+}
+*/

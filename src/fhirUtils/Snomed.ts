@@ -9,15 +9,48 @@ export class Snomed {
     constructor() {
     }
 
-    getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {
-        return getDisplayCodeSnomed(code, englishCodeLabels)
-    }
+    getDisplayCode = (code:string, englishCodeLabels?:any): string => getDisplayCodeSnomed(code, englishCodeLabels)
     
     // TODO: define interface for GlobalIndex objects
     getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string){
         return getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional)
     }
+
+    getPositiveOrDetectedCodesSNOMED = ():string[] => positiveOrDetectedCodesSNOMED()
+    getNegativeOrNotDetectedCodesSNOMED = ():string[] => negativeOrNotDetectedCodesSNOMED()
+    getSuspectedOrInconclusiveCodesSNOMED = ():string[] => suspectedOrInconclusiveCodesSNOMED()
+    getProbablyNotPresentCodesSNOMED = ():string[] => probablyNotPresentCodesSNOMED()
     
+}
+
+export const SNOMED_TO_ICD10:any = {
+    "840539006": "U07.1",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
+    "840544004": "U07.2",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
+}
+
+export const SNOMED_TO_ICD11:any = {
+    "840539006": "RA01.0",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
+    "840544004": "RA01.1",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
+}
+
+export enum covid19DiseaseTermsSNOMED {
+    covid19Disease      = "840539006",  // COVID-19 (disorder)
+    suspectedCovid19    = "840544004",  // Suspected COVID-19 (situation)
+    exposureToCovid19   = "840546002"   // Exposure to SARS-CoV-2 (event)
+}
+
+export enum ResultQualifierValueSNOMED {
+    positive            = "10828004",   // DISPLAY: "Positive"
+    negative            = "260385009",  // DISPLAY: "Negative"
+    detected            = "260373001",  // DISPLAY: "Detected"
+    notDetected         = "260415000",  // DISPLAY: "Not Detected"
+    presumptivePositive = "720735008",
+    confirmedPresent    = "410605003",
+    probablyPresent     = "410592001",
+    probablyNotPresent  = "410593006",
+    definitelyNotPresent= "410594000",
+    inconclusive        = "419984006",
+    actionStatusUnknown = "410537005"
 }
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
@@ -36,15 +69,25 @@ export enum ResultCovid19NaatCodesSNOMED {
     notDetected = "260415000" // DISPLAY: "Not Detected"
 }
 
-export const SNOMED_TO_ICD10:any = {
-    "840539006": "U07.1",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
-    "840544004": "U07.2",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
-}
-
-export const SNOMED_TO_ICD11:any = {
-    "840539006": "RA01.0",  // Disease caused by Severe acute respiratory syndrome coronavirus 2 (disorder)  
-    "840544004": "RA01.1",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
-}
+export const positiveOrDetectedCodesSNOMED = ():string[] => [
+    ResultQualifierValueSNOMED.positive,
+    ResultQualifierValueSNOMED.detected,
+    ResultQualifierValueSNOMED.confirmedPresent        
+]
+export const negativeOrNotDetectedCodesSNOMED = ():string[] => [
+    ResultQualifierValueSNOMED.negative,
+    ResultQualifierValueSNOMED.notDetected,
+    ResultQualifierValueSNOMED.definitelyNotPresent
+]
+export const suspectedOrInconclusiveCodesSNOMED = ():string[] => [
+    ResultQualifierValueSNOMED.actionStatusUnknown,
+    ResultQualifierValueSNOMED.inconclusive,
+    ResultQualifierValueSNOMED.presumptivePositive,
+    ResultQualifierValueSNOMED.probablyPresent
+]
+export const probablyNotPresentCodesSNOMED = ():string[] => [
+    ResultQualifierValueSNOMED.probablyNotPresent
+]
 
 export function getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {
     if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/snomedUHC.json")
@@ -52,27 +95,28 @@ export function getDisplayCodeSnomed(code:string, englishCodeLabels?:any): strin
 }
 
 // TODO: define interface for GlobalIndex objects
-export function getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string){
+export function getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string):string[] {
     if (!globalOrRegional || globalOrRegional.toLocaleUpperCase() == "GLOBAL") {
         // return international + all regional codes
         return GlobalIndexSNOMED.groupedCodes.vaccinationProcedureFullCovid19.codes
-        return vaccinationProcedureCovid19International
+        // return vaccinationProcedureCovid19International
     }
     if (globalOrRegional.toLocaleUpperCase() == "INTERNATIONAL") {
         // returns only international (no regional codes)
-        return vaccinationProcedureCovid19International
+        return [vaccinationProcedureCovid19International]
     }
     if (globalOrRegional.toLocaleUpperCase() == "ES") {
         // returns only the specific regional codes
-        return RegionalIndexSNOMED.ES.vaccinacionProcedureCovid19
+        return RegionalIndexSNOMED.ES.vaccinacionProcedureCovid19Codes
     }
+    else return []
 }
 
 // list of countries by country code
 export const RegionalIndexSNOMED:any = {
     ES: {
         // LaboratoryResultCovid19Codes:[],    // TODO
-        vaccinacionProcedureCovid19: ["65661000122107","65671000122102"]    // first dose and second dose
+        vaccinacionProcedureCovid19Codes: ["65661000122107","65671000122102"]    // first dose and second dose
     }
 }
 
@@ -92,7 +136,7 @@ export const GlobalIndexSNOMED:IndexSNOMED = {  // note: use https://csvjson.com
         vaccinationProcedureFullCovid19: {
             codes: [
                 vaccinationProcedureCovid19International,
-                RegionalIndexSNOMED.ES.vaccinacionProcedureCovid19
+                RegionalIndexSNOMED.ES.vaccinacionProcedureCovid19Codes
             ],
         },
         vaccineTargetDisease: {

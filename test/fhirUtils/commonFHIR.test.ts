@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { anonymizeResource } from "../../src/fhirUtils/CommonFHIR";
-import { getLabelsOfCodes } from "../../src/fhirUtils/CommonFHIR";
+import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
 
 const ipsDocument:any = require("../examples/Bundle-IPS-examples-Bundle-01.json")
 
@@ -34,13 +34,13 @@ describe("get labels of codes", () => {
         const groupedSectionName = Object.keys(LabelsOfCodesGroupedInSections)[0] // "group1"
 
         // It searchs and gets the labels by a specific groupedSectionName (more efficient)
-        let labelsByGroupedSectionName = getLabelsOfCodes(codes, LabelsOfCodesGroupedInSections, groupedSectionName)
+        let labelsByGroupedSectionName = getLabelsOfGroupedCodes(codes, LabelsOfCodesGroupedInSections, groupedSectionName)
         expect(labelsByGroupedSectionName.length).toBeGreaterThan(0)
         expect(labelsByGroupedSectionName[0]).toBeDefined()
         // console.log("first label found with groupedSectionName = ", labelsByGroupedSectionName[0])
 
         // It searchs and gets the labels without a specific groupedSectionName (less efficient)
-        let labelsWithoutGroupedSectionName = getLabelsOfCodes(codes, LabelsOfCodesGroupedInSections)
+        let labelsWithoutGroupedSectionName = getLabelsOfGroupedCodes(codes, LabelsOfCodesGroupedInSections)
         expect(labelsWithoutGroupedSectionName.length).toBeGreaterThan(0)
         expect(labelsWithoutGroupedSectionName[0]).toBeDefined()
         // console.log("first label found without groupedSectionName = ", labelsWithoutGroupedSectionName[0])

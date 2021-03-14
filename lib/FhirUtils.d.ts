@@ -4,6 +4,7 @@ import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
 import { Composition } from "./fhirUtils/Composition";
 import { CommonFHIR } from "./fhirUtils/CommonFHIR";
+import { Covid19 } from "./fhirUtils/Covid19";
 import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
 import { DocumentReference } from "./fhirUtils/DocumentReference";
 import { Identifier } from "./fhirUtils/Identifier";
@@ -14,6 +15,7 @@ import { Loinc } from "./fhirUtils/Loinc";
 import { Snomed } from "./fhirUtils/Snomed";
 import { Reference } from "./fhirUtils/Reference";
 import { Quantity } from "./fhirUtils/Quantity";
+import { Sections } from "./fhirUtils/Sections";
 export declare class FhirUtils {
     attachment: Attachment;
     bundle: Bundle;
@@ -21,6 +23,7 @@ export declare class FhirUtils {
     codeableConcept: CodeableConcept;
     commonFHIR: CommonFHIR;
     composition: Composition;
+    covid19: Covid19;
     diagnosticReport: DiagnosticReport;
     documentReference: DocumentReference;
     identifier: Identifier;
@@ -31,5 +34,6 @@ export declare class FhirUtils {
     snomed: Snomed;
     references: Reference;
     quantity: Quantity;
+    sections: Sections;
     constructor();
 }

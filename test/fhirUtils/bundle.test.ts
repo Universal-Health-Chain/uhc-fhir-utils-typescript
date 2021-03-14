@@ -1,8 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { GlobalIndexHL7 } from "../../src/fhirUtils/Hl7";
-import { GlobalIndexLOINC } from "../../src/fhirUtils/Loinc";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
 
 // Testing both ways

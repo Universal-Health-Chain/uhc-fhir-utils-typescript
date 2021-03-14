@@ -6,6 +6,7 @@ import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
 import { Composition } from "./fhirUtils/Composition";
 import { CommonFHIR } from "./fhirUtils/CommonFHIR";
+import { Covid19 } from "./fhirUtils/Covid19";
 import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
 // import { Dicom } from "./fhirUtils/Dicom";
 import { DocumentReference } from "./fhirUtils/DocumentReference";
@@ -17,6 +18,8 @@ import { Loinc } from "./fhirUtils/Loinc";
 import { Snomed } from "./fhirUtils/Snomed";
 import { Reference } from "./fhirUtils/Reference";
 import { Quantity } from "./fhirUtils/Quantity";
+import { Sections } from "./fhirUtils/Sections";
+
 
 export class FhirUtils {
     public attachment: Attachment
@@ -25,6 +28,7 @@ export class FhirUtils {
     public codeableConcept: CodeableConcept
     public commonFHIR: CommonFHIR
     public composition: Composition
+    public covid19: Covid19
     public diagnosticReport: DiagnosticReport
     // public dicom: Dicom
     public documentReference: DocumentReference
@@ -36,6 +40,7 @@ export class FhirUtils {
     public snomed: Snomed
     public references: Reference
     public quantity: Quantity
+    public sections: Sections
 
     constructor() {
         this.attachment = new Attachment()
@@ -44,6 +49,7 @@ export class FhirUtils {
         this.codeableConcept = new CodeableConcept()
         this.commonFHIR = new CommonFHIR()
         this.composition = new Composition()
+        this.covid19 = new Covid19()       
         this.diagnosticReport = new DiagnosticReport()
         // this.dicom = new Dicom()
         this.documentReference = new DocumentReference()
@@ -54,6 +60,7 @@ export class FhirUtils {
         this.loinc = new Loinc()
         this.snomed = new Snomed()
         this.references = new Reference()
-        this.quantity = new Quantity()        
+        this.quantity = new Quantity() 
+        this.sections = new Sections()
     }
 }

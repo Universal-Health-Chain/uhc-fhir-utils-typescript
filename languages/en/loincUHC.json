@@ -27,8 +27,8 @@
     "laboratoryTestCovid19": {
         "LG51015-2": "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT",
         "LG51014-5": "SARSCoV2 virus detection (parent group code) - Nucleic acid amplification test",
-        "LG51018-6": "SARSCoV2 antibody detection (group code) - by Immunoassay or pVNT",
-        "LG51017-8": "SARSCoV2 detection (group code) - Nucleic acid amplification test",
+        "LG51018-6": "SARSCoV2 antibody detection",
+        "LG51017-8": "SARSCoV2 virus detection",
 
         "95423-0": "Influenza virus A and B and SARS-CoV-2 (COVID-19) identified in Respiratory specimen by NAA with probe detection",
         "95971-8": "SARS CoV-2 stimulated gamma interferon [Presence] in Blood",

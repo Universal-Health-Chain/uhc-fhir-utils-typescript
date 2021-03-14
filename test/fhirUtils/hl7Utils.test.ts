@@ -1,5 +1,5 @@
 
-import { getLabelsOfCodes } from "../../src/fhirUtils/CommonFHIR";
+import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
 import { getVaccinesCovid19CVX, GroupedHL7, getDisplayCodeHl7 } from "../../src/fhirUtils/Hl7";
 
 // TODO: define interface for SnomedLabels JSON objects
@@ -19,13 +19,13 @@ describe("translate HL7 codes", () => {
         expect(groupedSectionName).toBeDefined
 
         // It searchs and gets the labels by a specific groupedSectionName (more efficient)
-        let labelsByGroupedSectionName = getLabelsOfCodes(vaccineCovid19CVX, Hl7LabelsEN, groupedSectionName)
+        let labelsByGroupedSectionName = getLabelsOfGroupedCodes(vaccineCovid19CVX, Hl7LabelsEN, groupedSectionName)
         expect(labelsByGroupedSectionName.length).toBeGreaterThan(0)
         expect(labelsByGroupedSectionName[0]).toBeDefined()
         // console.log("first label found with groupedSectionName = ", labelsByGroupedSectionName[0])
 
         // It searchs and gets the labels without a specific groupedSectionName (less efficient)
-        let labelsWithoutGroupedSectionName = getLabelsOfCodes(vaccineCovid19CVX, Hl7LabelsEN)
+        let labelsWithoutGroupedSectionName = getLabelsOfGroupedCodes(vaccineCovid19CVX, Hl7LabelsEN)
         expect(labelsWithoutGroupedSectionName.length).toBeGreaterThan(0)
         expect(labelsWithoutGroupedSectionName[0]).toBeDefined()
         // console.log("first label found without groupedSectionName = ", labelsWithoutGroupedSectionName[0])

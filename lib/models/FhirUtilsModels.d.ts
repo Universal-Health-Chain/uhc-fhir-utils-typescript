@@ -87,12 +87,7 @@ export interface GroupedCodesLOINC {
     };
 }
 export interface IndexSNOMED extends GlobalIndex {
-    categorization: {
-        allergies: {
-            food: any;
-        };
-        procedure: any;
-    };
+    categorization: any;
     groupedCodes: GroupedCodesSNOMED;
 }
 export interface GroupedCodesSNOMED {

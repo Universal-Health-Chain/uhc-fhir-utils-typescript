@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndex, IndexLOINC } from "../models"
+import { IndexLOINC } from "../models"
 import { getDisplayCode } from "./CommonFHIR"
 
 
@@ -8,43 +8,16 @@ export class Loinc {
     constructor(){
     }
 
-    getDisplayCodeLoinc(code:string, englishCodeLabels?:any): string {
-        return getDisplayCodeLoinc(code, englishCodeLabels)
-    }
-    
-    /** Get predefined goups of codes */
-    
-   getFullTestCovid19LOINC(): string[] {
-        return getFullTestCovid19LOINC()
-    }
-    
-    getFullSerologyTestCovid19LOINC(): string[] {
-        return getFullSerologyTestCovid19LOINC()
-    }
-    
-    getFullNaatTestCovid19LOINC(): string[] {
-        return getFullNaatTestCovid19LOINC()
-    }
-    
-    /** Get medical history section codes */
-    
-    getSectionDiagnosticResultsLOINC(): string{
-        return getSectionDiagnosticResultsLOINC()
-    }
-    
-    getSectionImmunizationLOINC(): string{
-        return getSectionImmunizationLOINC()
-    }
-    
-    getSectionVitalSignsLOINC(): string{
-        return getSectionVitalSignsLOINC()
-    }
-    
-    getSectionSymptomsLOINC(): string{
-        return getSectionSymptomsLOINC()
-    }
-}
+    getDisplayCode = (code:string, englishCodeLabels?:any): string => getDisplayCodeLoinc(code, englishCodeLabels)
 
+    healthSections = ():string[] => GlobalIndexLOINC.groupedCodes.healthSection.codes
+
+    laboratoryTestTopCommonSI = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestTopCommonSI.codes
+
+    laboratoryTestCodesSerologyLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
+    
+    laboratoryTestCodesNaatLOINC = ():string[] => getFullNaatTestCovid19LOINC()
+}
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export enum GroupedLOINC {
@@ -60,16 +33,10 @@ export function getDisplayCodeLoinc(code:string, englishCodeLabels?:any): string
     return getDisplayCode(code, englishCodeLabels)
 }
 
-/** Get predefined goups of codes */
-
-export function getFullTestCovid19LOINC(): string[] {
-    return GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
-}
-
 export function getFullSerologyTestCovid19LOINC(): string[] {
     return [
-        "LG51015-2",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
-        "LG51018-6",    // DISPLAY "SARSCoV2 antibody detection (group code) - by Immunoassay or pVNT"
+        // "LG51015-2",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
+        "LG51018-6",    // DISPLAY "SARSCoV2 antibody detection"
         ...GlobalIndexLOINC.categorization.laboratory.covid19["LG51015-2"]["LG51018-6"] 
         // GlobalIndexLOINC.Covid19SerologyTestCodes()  // It is not a function
     ]
@@ -77,38 +44,11 @@ export function getFullSerologyTestCovid19LOINC(): string[] {
 
 export function getFullNaatTestCovid19LOINC(): string[] {
     return [
-        "LG51014-5",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
-        "LG51017-8",    // DISPLAY "SARSCoV2 antibody detection (group code) - by Immunoassay or pVNT"
+        // "LG51014-5",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
+        "LG51017-8",    // "SARSCoV2 virus detection"
         ...GlobalIndexLOINC.categorization.laboratory.covid19["LG51014-5"]["LG51017-8"]
         // GlobalIndexLOINC.Covid19NaatTestCodes()  // It is not a fuction
     ]
-}
-
-/** Get medical history section codes */
-
-export function getSectionDiagnosticResultsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.DiagnosticResults
-}
-
-export function getSectionImmunizationLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.immunization
-}
-
-export function getSectionVitalSignsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.vitalSigns
-}
-
-export function getSectionSymptomsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.symptoms
-}
-
-export var LOINC_CODES_HINT:any = {         // It can be overrided with a custom language
-    "Covid19LaboratoryLabels": {
-        "LG51015-2": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (parent group code)
-        "LG51018-6": "SARSCoV2 antibody detection",     // by Immunoassay or pVNT (group code)
-        "LG51014-5": "SARSCoV2 virus detection",        // Nucleic acid amplification test (parent group code)
-        "LG51017-8": "SARSCoV2 detection",              // Nucleic acid amplification test (group code)
-    }
 }
 
 // TODO: define interface for GlobalIndex objects
@@ -208,11 +148,6 @@ export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/
     }
 
 }
-
-/* export function displayCodeLOINC(codeLOINC:string): string {
-    let codes:string[] = translateCodesLOINC([codeLOINC])
-    return codes[0]
-} */
 
 /*
 function getIndexCodesInParentGroupCodeLOINC(customCategory:any, subCategory:any, parentGroupCode:any):string[] {
