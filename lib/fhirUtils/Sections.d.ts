@@ -1,13 +1,23 @@
 export declare class Sections {
     constructor();
-    /** Get medical history section codes */
-    getSectionDiagnosticResultsLOINC(): string;
-    getSectionImmunizationLOINC(): string;
-    getSectionVitalSignsLOINC(): string;
-    getSectionSymptomsLOINC(): string;
+    getPatientSummaryLOINC: () => string;
+    getSectionAdvanceDirectivesLOINC: () => string;
+    getSectionAllergiesLOINC: () => string;
+    getSectionDiagnosticResultsLOINC: () => string;
+    getSectionDietLOINC: () => string;
+    getSectionFamilyDiseasesLOINC: () => string;
+    getSectionFunctionalStatusLOINC: () => string;
+    getSectionImmunizationLOINC: () => string;
+    getSectionMedicalDevicesLOINC: () => string;
+    getSectionMedicationLOINC: () => string;
+    getSectionMentalStatusLOINC: () => string;
+    getSectionOutPatientLOINC: () => string;
+    getSectionPastProblemsLOINC: () => string;
+    getSectionPlanOfCareLOINC: () => string;
+    getSectionPregnancyLOINC: () => string;
+    getSectionProblemListLOINC: () => string;
+    getSectionProceduresLOINC: () => string;
+    getSectionSocialHistoryLOINC: () => string;
+    getSectionSymptomsLOINC: () => string;
+    getSectionVitalSignsLOINC: () => string;
 }
-/** Get medical history section codes */
-export declare function getSectionDiagnosticResultsLOINC(): string;
-export declare function getSectionImmunizationLOINC(): string;
-export declare function getSectionVitalSignsLOINC(): string;
-export declare function getSectionSymptomsLOINC(): string;

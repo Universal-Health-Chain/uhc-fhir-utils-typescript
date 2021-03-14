@@ -1,44 +1,29 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndexLOINC } from "./Loinc"
+import { medicalHistoryClassification } from "./Loinc"
 
 export class Sections {
     constructor(){
     }
-    
-    /** Get medical history section codes */
-    
-    getSectionDiagnosticResultsLOINC(): string{
-        return getSectionDiagnosticResultsLOINC()
-    }
-    
-    getSectionImmunizationLOINC(): string{
-        return getSectionImmunizationLOINC()
-    }
-    
-    getSectionVitalSignsLOINC(): string{
-        return getSectionVitalSignsLOINC()
-    }
-    
-    getSectionSymptomsLOINC(): string{
-        return getSectionSymptomsLOINC()
-    }
-}
 
-/** Get medical history section codes */
-
-export function getSectionDiagnosticResultsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.DiagnosticResults
-}
-
-export function getSectionImmunizationLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.immunization
-}
-
-export function getSectionVitalSignsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.vitalSigns
-}
-
-export function getSectionSymptomsLOINC(): string{
-    return GlobalIndexLOINC.categorization.healthSection.symptoms
+    getPatientSummaryLOINC          = ():string => medicalHistoryClassification.ips
+    getSectionAdvanceDirectivesLOINC= ():string => medicalHistoryClassification.advanceDirectives
+    getSectionAllergiesLOINC        = ():string => medicalHistoryClassification.allergies
+    getSectionDiagnosticResultsLOINC= ():string => medicalHistoryClassification.diagnosticResults
+    getSectionDietLOINC             = ():string => medicalHistoryClassification.diet
+    getSectionFamilyDiseasesLOINC   = ():string => medicalHistoryClassification.familyDiseases
+    getSectionFunctionalStatusLOINC = ():string => medicalHistoryClassification.functionalStatus
+    getSectionImmunizationLOINC     = ():string => medicalHistoryClassification.immunization
+    getSectionMedicalDevicesLOINC   = ():string => medicalHistoryClassification.medicalDevices
+    getSectionMedicationLOINC       = ():string => medicalHistoryClassification.medication
+    getSectionMentalStatusLOINC     = ():string => medicalHistoryClassification.mentalStatus
+    getSectionOutPatientLOINC       = ():string => medicalHistoryClassification.outpatient
+    getSectionPastProblemsLOINC     = ():string => medicalHistoryClassification.pastProblems
+    getSectionPlanOfCareLOINC       = ():string => medicalHistoryClassification.planOfCare
+    getSectionPregnancyLOINC        = ():string => medicalHistoryClassification.pregnancy
+    getSectionProblemListLOINC      = ():string => medicalHistoryClassification.problemList
+    getSectionProceduresLOINC       = ():string => medicalHistoryClassification.procedures
+    getSectionSocialHistoryLOINC    = ():string => medicalHistoryClassification.socialHistory
+    getSectionSymptomsLOINC         = ():string => medicalHistoryClassification.symptoms
+    getSectionVitalSignsLOINC       = ():string => medicalHistoryClassification.vitalSigns
 }
