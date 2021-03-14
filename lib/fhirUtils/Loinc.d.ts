@@ -29,6 +29,10 @@ export declare enum medicalHistoryClassification {
     outpatient = "46240-8",
     advanceDirectives = "42348-3"
 }
+export declare enum covidLaboratoryTestGroups {
+    serologyTestsGroup = "LG51018-6",
+    naatTestsGroup = "LG51017-8"
+}
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export declare enum GroupedLOINC {
     healthSection = "healthSection",

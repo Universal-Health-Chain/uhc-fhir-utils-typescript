@@ -1,8 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { FhirUtils } from "../../src/"
-import { covid19DiseaseTermsSNOMED } from "../../src/fhirUtils/Snomed"
-import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "../../src/fhirUtils/Icd"
 const fhirUtils = new FhirUtils()
 
 describe("get specific COVID-19 related code(s) by system(s)", () => {
@@ -71,22 +69,29 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         expect(result).toBeTruthy()
     })
 
-    it("should display laboratoryTestCodesNaatLOINC", () => {
-        let codes = fhirUtils.covid19.laboratoryTestCodesLOINC()
+    it("should get laboratory test group code: serology or naat group code", () => {
+        let code:string = fhirUtils.covid19.naatTestsGroupCodeLOINC()
+        expect(code==undefined).toBeFalsy()
+        code = fhirUtils.covid19.naatTestsGroupCodeLOINC()
+        expect(code==undefined).toBeFalsy()
+    })
+
+    it("should display laboratoryTestsCodesLOINC", () => {
+        let codes = fhirUtils.covid19.laboratoryTestsCodesLOINC()
         let displayCode = fhirUtils.loinc.getDisplayCode(codes[0])
         // console.log("display code LOINC " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })
 
     it("should display laboratoryTestCodesSerologyLOINC", () => {
-        let codes = fhirUtils.covid19.laboratoryTestCodesSerologyLOINC()
+        let codes = fhirUtils.covid19.serologyTestsCodesLOINC()
         let displayCode = fhirUtils.loinc.getDisplayCode(codes[0])
         // console.log("display code LOINC " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })
 
     it("should display laboratoryTestCodesNaatLOINC", () => {
-        let codes = fhirUtils.covid19.laboratoryTestCodesNaatLOINC()
+        let codes = fhirUtils.covid19.naatTestsCodesLOINC()
         let displayCode = fhirUtils.loinc.getDisplayCode(codes[0])
         // console.log("display code LOINC " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()

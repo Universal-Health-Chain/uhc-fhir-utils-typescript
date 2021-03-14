@@ -5,10 +5,13 @@ export declare class Covid19 {
     vaccineCodesCVX: () => string[];
     /** Get specific codes by system WHO's ATC */
     vaccineCodeATC: () => string;
-    /** Get specific codes by system LOINC */
-    laboratoryTestCodesLOINC: () => string[];
-    laboratoryTestCodesSerologyLOINC: () => string[];
-    laboratoryTestCodesNaatLOINC: () => string[];
+    /** Get LOINC laboratory test group code: serology or naat group code */
+    naatTestsGroupCodeLOINC: () => string;
+    serologyTestsGroupCodeLOINC: () => string;
+    /** Get all or specific LOINC laboratory tests */
+    laboratoryTestsCodesLOINC: () => string[];
+    naatTestsCodesLOINC: () => string[];
+    serologyTestsCodesLOINC: () => string[];
     /** Get specific codes by system SNOMED */
     positiveOrDetectedCodesSNOMED: () => string[];
     negativeOrNotDetectedCodesSNOMED: () => string[];

@@ -44,6 +44,10 @@ export enum medicalHistoryClassification {
     // clinicalNotes   
 }
 
+export enum covidLaboratoryTestGroups {
+    serologyTestsGroup  = "LG51018-6",
+    naatTestsGroup      = "LG51017-8" 
+}
 
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export enum GroupedLOINC {
@@ -88,6 +92,7 @@ export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/
     
     // some categorization classifications
     categorization: {
+        // TODO: deprecate healthSection and use medicalHistoryClassification instead
         healthSection: {
             compositionIPS: "60591-5",
             allergies: "48765-2",

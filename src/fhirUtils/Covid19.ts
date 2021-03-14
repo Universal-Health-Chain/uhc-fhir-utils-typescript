@@ -1,7 +1,7 @@
 
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC } from "./Loinc"
+import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups } from "./Loinc"
 import { covid19DiseaseTermsSNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
     negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED } from "./Snomed"
 import { GlobalIndexHL7 } from "./Hl7"
@@ -20,10 +20,14 @@ export class Covid19{
     /** Get specific codes by system WHO's ATC */
     vaccineCodeATC = ():string => "J07BX03"
     
-    /** Get specific codes by system LOINC */
-    laboratoryTestCodesLOINC = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
-    laboratoryTestCodesSerologyLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
-    laboratoryTestCodesNaatLOINC = ():string[] => getFullNaatTestCovid19LOINC()
+    /** Get LOINC laboratory test group code: serology or naat group code */
+    naatTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.naatTestsGroup
+    serologyTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.serologyTestsGroup
+
+    /** Get all or specific LOINC laboratory tests */
+    laboratoryTestsCodesLOINC = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+    naatTestsCodesLOINC = ():string[] => getFullNaatTestCovid19LOINC()
+    serologyTestsCodesLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
 
     /** Get specific codes by system SNOMED */
 
