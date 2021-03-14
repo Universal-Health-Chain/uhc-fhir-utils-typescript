@@ -39,7 +39,7 @@ export enum covid19DiseaseTermsSNOMED {
     exposureToCovid19   = "840546002"   // Exposure to SARS-CoV-2 (event)
 }
 
-export enum ResultQualifierValueSNOMED {
+export enum resultQualifierValueSNOMED {
     positive            = "10828004",   // DISPLAY: "Positive"
     negative            = "260385009",  // DISPLAY: "Negative"
     detected            = "260373001",  // DISPLAY: "Detected"
@@ -59,34 +59,34 @@ export enum GroupedSNOMED { // from GlobalIndexSNOMED.groupedCodes
     vaccineTargetDisease = "vaccineTargetDisease"
 }
 
-export enum ResultCovid19SerologyCodesSNOMED {
+export enum resultCovid19SerologyCodesSNOMED {
     positive = "10828004",  // DISPLAY: "Positive"
     negative = "260385009"  // DISPLAY: "Negative"
 }
 
-export enum ResultCovid19NaatCodesSNOMED {
+export enum resultCovid19NaatCodesSNOMED {
     detected = "260373001", // DISPLAY: "Detected"
     notDetected = "260415000" // DISPLAY: "Not Detected"
 }
 
 export const positiveOrDetectedCodesSNOMED = ():string[] => [
-    ResultQualifierValueSNOMED.positive,
-    ResultQualifierValueSNOMED.detected,
-    ResultQualifierValueSNOMED.confirmedPresent        
+    resultQualifierValueSNOMED.positive,
+    resultQualifierValueSNOMED.detected,
+    resultQualifierValueSNOMED.confirmedPresent        
 ]
 export const negativeOrNotDetectedCodesSNOMED = ():string[] => [
-    ResultQualifierValueSNOMED.negative,
-    ResultQualifierValueSNOMED.notDetected,
-    ResultQualifierValueSNOMED.definitelyNotPresent
+    resultQualifierValueSNOMED.negative,
+    resultQualifierValueSNOMED.notDetected,
+    resultQualifierValueSNOMED.definitelyNotPresent
 ]
 export const suspectedOrInconclusiveCodesSNOMED = ():string[] => [
-    ResultQualifierValueSNOMED.actionStatusUnknown,
-    ResultQualifierValueSNOMED.inconclusive,
-    ResultQualifierValueSNOMED.presumptivePositive,
-    ResultQualifierValueSNOMED.probablyPresent
+    resultQualifierValueSNOMED.actionStatusUnknown,
+    resultQualifierValueSNOMED.inconclusive,
+    resultQualifierValueSNOMED.presumptivePositive,
+    resultQualifierValueSNOMED.probablyPresent
 ]
 export const probablyNotPresentCodesSNOMED = ():string[] => [
-    ResultQualifierValueSNOMED.probablyNotPresent
+    resultQualifierValueSNOMED.probablyNotPresent
 ]
 
 export function getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {

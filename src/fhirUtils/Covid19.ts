@@ -3,7 +3,7 @@
 
 import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups } from "./Loinc"
 import { covid19DiseaseTermsSNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
-    negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED } from "./Snomed"
+    negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED, resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED } from "./Snomed"
 import { GlobalIndexHL7 } from "./Hl7"
 import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "./Icd"
 
@@ -30,6 +30,12 @@ export class Covid19{
     serologyTestsCodesLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
 
     /** Get specific codes by system SNOMED */
+    naatResultsCodesSNOMED = ():string[] => [
+        resultCovid19NaatCodesSNOMED.detected, resultCovid19NaatCodesSNOMED.notDetected
+    ]
+    serologyResultsCodesSNOMED = ():string[] => [
+        resultCovid19SerologyCodesSNOMED.positive, resultCovid19SerologyCodesSNOMED.negative
+    ]
 
     positiveOrDetectedCodesSNOMED = ():string[] => positiveOrDetectedCodesSNOMED()
     negativeOrNotDetectedCodesSNOMED = ():string[] => negativeOrNotDetectedCodesSNOMED()

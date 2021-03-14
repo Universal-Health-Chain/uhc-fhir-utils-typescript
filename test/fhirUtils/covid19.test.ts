@@ -69,11 +69,23 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         expect(result).toBeTruthy()
     })
 
-    it("should get laboratory test group code: serology or naat group code", () => {
+    it("should get laboratory test group code: serology or NAAT group code", () => {
         let code:string = fhirUtils.covid19.naatTestsGroupCodeLOINC()
         expect(code==undefined).toBeFalsy()
         code = fhirUtils.covid19.naatTestsGroupCodeLOINC()
         expect(code==undefined).toBeFalsy()
+    })
+
+    it("should get the possible result codes for serology or NAAT laboratory tests", () => {
+        let codes:string[] = fhirUtils.covid19.naatResultsCodesSNOMED()
+        let displayCode = fhirUtils.snomed.getDisplayCode(codes[0])
+        // console.log("display code LOINC " + codes[0] + " = ", displayCode)
+        expect(displayCode==undefined).toBeFalsy()
+        
+        codes = fhirUtils.covid19.serologyResultsCodesSNOMED()
+        displayCode = fhirUtils.snomed.getDisplayCode(codes[0])
+        // console.log("display code LOINC " + codes[0] + " = ", displayCode)
+        expect(displayCode==undefined).toBeFalsy()
     })
 
     it("should display laboratoryTestsCodesLOINC", () => {

@@ -15,7 +15,7 @@ export declare enum covid19DiseaseTermsSNOMED {
     suspectedCovid19 = "840544004",
     exposureToCovid19 = "840546002"
 }
-export declare enum ResultQualifierValueSNOMED {
+export declare enum resultQualifierValueSNOMED {
     positive = "10828004",
     negative = "260385009",
     detected = "260373001",
@@ -33,11 +33,11 @@ export declare enum GroupedSNOMED {
     vaccinationProcedureFullCovid19 = "vaccinationProcedureFullCovid19",
     vaccineTargetDisease = "vaccineTargetDisease"
 }
-export declare enum ResultCovid19SerologyCodesSNOMED {
+export declare enum resultCovid19SerologyCodesSNOMED {
     positive = "10828004",
     negative = "260385009"
 }
-export declare enum ResultCovid19NaatCodesSNOMED {
+export declare enum resultCovid19NaatCodesSNOMED {
     detected = "260373001",
     notDetected = "260415000"
 }

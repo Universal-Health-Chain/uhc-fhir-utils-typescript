@@ -1,6 +1,6 @@
 
 import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED, ResultCovid19SerologyCodesSNOMED, getDisplayCodeSnomed } from "../../src/fhirUtils/Snomed";
+import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED, resultCovid19SerologyCodesSNOMED, getDisplayCodeSnomed } from "../../src/fhirUtils/Snomed";
 
 // TODO: define interface for SnomedLabels JSON objects
 const SnomedLabelsEN:any = require ("../../languages/en/snomedUHC.json") 
@@ -41,7 +41,7 @@ describe("translate SNOMED codes", () => {
         })
 
         it("should display LOINC code", () => {
-            let code = ResultCovid19SerologyCodesSNOMED.negative
+            let code = resultCovid19SerologyCodesSNOMED.negative
             let displayCode = getDisplayCodeSnomed(code)
             console.log("display code SNOMED " + code + " = ", displayCode)
             expect(displayCode==undefined).toBeFalsy()

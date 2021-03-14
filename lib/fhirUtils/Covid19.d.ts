@@ -13,6 +13,8 @@ export declare class Covid19 {
     naatTestsCodesLOINC: () => string[];
     serologyTestsCodesLOINC: () => string[];
     /** Get specific codes by system SNOMED */
+    naatResultsCodesSNOMED: () => string[];
+    serologyResultsCodesSNOMED: () => string[];
     positiveOrDetectedCodesSNOMED: () => string[];
     negativeOrNotDetectedCodesSNOMED: () => string[];
     suspectedOrInconclusiveCodesSNOMED: () => string[];
