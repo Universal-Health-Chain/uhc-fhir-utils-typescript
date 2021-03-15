@@ -124,11 +124,13 @@ export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
                         // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
                         codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19Utils.vaccineCodes(), codesCovid19)
                         // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                        break
                     }
                     case ("DiagnosticReport"): {
                         // It checks for all COVID-19 laboratory test codes (LOINC)
                         codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], covid19Utils.laboratoryTestCodes(), codesCovid19)
                         // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                        break
                     }
                     // case ("Immunization"): {}
                     default:{

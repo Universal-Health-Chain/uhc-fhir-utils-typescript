@@ -30,18 +30,11 @@ export class CommonFHIR {
     }
     */
 
+    // display code SHALL ALWAYS BE English (international)
     getLabelsOfGroupedCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
         return getLabelsOfGroupedCodes(codes, codeLabels, groupedSectionName)
     }
     
-    getDisplayCode(code:string, englishCodeLabels:any): string {
-        return getDisplayCode(code, englishCodeLabels)
-    }
-    
-    getLocalizedTextCode(code:string, localizedCodeLabels:any): string {
-        return getLocalizedTextCode(code, localizedCodeLabels)
-    }
-
 }
 
 
@@ -170,10 +163,10 @@ function findValuesHelper(obj:any, key:string, list:any[]) {
 }
 
 // It returns the array of labels (e.g. to create "SelectOption" component)
-export function getLabelsOfGroupedCodes(codes: string[], codeLabels:any, groupedSectionName?: string): string[] {  
+export function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile:any, groupedSectionName?: string): string[] {  
     if (!codes.length || codes.length<1) return []
     let labels:string[] = []
-    let codeLabelsKeys = Object.keys(codeLabels)
+    let codeLabelsKeys = Object.keys(hl7LanguageFile)
     //console.log("Keys in codeLabels = ", keys)
 
     if (codeLabelsKeys.length && codeLabelsKeys.length > 0){
@@ -185,7 +178,7 @@ export function getLabelsOfGroupedCodes(codes: string[], codeLabels:any, grouped
                     // console.log("get labels in groupedSection = ", groupedSectionName)
                     codes.forEach(function(code:string) {
                         // console.log("label of code " + code + " is = ", codeLabels[groupedSectionName][code])
-                        labels.push(codeLabels[groupedSectionName][code])
+                        labels.push(hl7LanguageFile[groupedSectionName][code])
                     })
                 } // else checks next
             })
@@ -196,13 +189,13 @@ export function getLabelsOfGroupedCodes(codes: string[], codeLabels:any, grouped
             codes.forEach(function(code:string) {
                 codeLabelsKeys.forEach( function(currentSectionName:any) {
                     // console.log("looking labels for codes in groupedSectionName = ", currentSectionName)
-                    let elements = Object.keys(codeLabels[currentSectionName])
+                    let elements = Object.keys(hl7LanguageFile[currentSectionName])
                     if (elements.length && elements.length > 0){
                         let found:boolean = false
                         if (!found) {
                             elements.forEach (function (element) {
                                 if (element == code) {
-                                    labels.push(codeLabels[currentSectionName][code])
+                                    labels.push(hl7LanguageFile[currentSectionName][code])
                                     found = true
                                 }
                             })
@@ -216,15 +209,8 @@ export function getLabelsOfGroupedCodes(codes: string[], codeLabels:any, grouped
     return labels
 }
 
-export function getDisplayCode(code:string, englishCodeLabels:any): string {
-    let codes:string[] = getLabelsOfGroupedCodes([code], englishCodeLabels)
-    return codes[0]
-}
-
-export function getLocalizedTextCode(code:string, localizedCodeLabels:any): string {
-    let codes:string[] = getLabelsOfGroupedCodes([code], localizedCodeLabels)
-    return codes[0]
-}
+// display code SHALL ALWAYS BE English (international), groupedSectionName is mandatory only for HL7
+// export function getDisplayOrTextByCode(code:string, languageFile:any, groupedSectionName?:string): string {}
 
 /*
 // TODO:

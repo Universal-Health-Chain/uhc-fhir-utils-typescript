@@ -6,7 +6,7 @@ import { FhirUtils } from "../../src/"
 const fhirUtils = new FhirUtils()
 
 // TODO: define interface for SnomedLabels JSON objects
-const LoincLabelsEN:any = require ("../../languages/en/loincUHC.json")
+const LoincLabelsEN:any = require ("../../languages/international/loincUHC.json")
 
 describe("translate LOINC codes", () => {
     it("should translate LOINC code", (done) => {
@@ -38,7 +38,7 @@ describe("translate LOINC codes", () => {
 
     it("should display LOINC code", () => {
         let codes = fhirUtils.loinc.healthSections()
-        let displayCode = fhirUtils.loinc.getDisplayCode(codes[0])
+        let displayCode = fhirUtils.loinc.getDisplayOrTextByCodeLOINC(codes[0])
         console.log("display code LOINC " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })

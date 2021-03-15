@@ -1,15 +1,20 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { IndexHL7 } from "../models/FhirUtilsModels"
-import { getDisplayCode } from "./CommonFHIR"
+import { getLabelsOfGroupedCodes } from "./CommonFHIR"
 
 
 export class Hl7 {
     constructor() {
     }
 
-    getDisplayCode(code:string, englishCodeLabels?:any): string {
-        return  getDisplayCodeHl7(code, englishCodeLabels)
+    getDisplayOrTextInGroupedSection(code:string, hl7LanguageFile?:any, groupedSectionName?:string): string {
+        return getDisplayOrTextByCodeHL7(code, hl7LanguageFile, groupedSectionName)
+    }
+
+    // display code SHALL ALWAYS BE English (international)
+    getLabelsOfCodesInGroupedSection(codes:string[], hl7LanguageFile?:any, groupedSectionName?:string): string[] {
+        return getLabelsOfCodesInGroupedSection(codes, hl7LanguageFile, groupedSectionName)
     }
     
     getVaccinesCovid19CVX(): string[] {
@@ -28,9 +33,15 @@ export enum GroupedHL7 {
     organizationTypes = "organizationTypes"
 }
 
-export function getDisplayCodeHl7(code:string, englishCodeLabels?:any): string {
-    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/hl7UHC.json")
-    return getDisplayCode(code, englishCodeLabels)
+// display code SHALL ALWAYS BE English (international)
+export function getDisplayOrTextByCodeHL7(code:string, hl7LanguageFile?:any, groupedSectionName?:string): string {
+    if (!hl7LanguageFile) hl7LanguageFile = require("../../languages/international/hl7UHC.json")
+    return getLabelsOfGroupedCodes([code], hl7LanguageFile, groupedSectionName)[0]
+}
+
+export function getLabelsOfCodesInGroupedSection(codes:string[], hl7LanguageFile?:any, groupedSectionName?:string): string[] {
+    if (!hl7LanguageFile) hl7LanguageFile = require("../../languages/international/hl7UHC.json")
+    return getLabelsOfGroupedCodes(codes, hl7LanguageFile, groupedSectionName)
 }
 
 export function getVaccinesCovid19CVX(): string[] {

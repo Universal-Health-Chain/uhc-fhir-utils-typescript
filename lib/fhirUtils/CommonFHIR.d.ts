@@ -11,10 +11,6 @@ export declare class CommonFHIR {
     constructor();
     anonymizeResource(fhirResource: any): any;
     getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
-    getDisplayCode(code: string, englishCodeLabels: any): string;
-    getLocalizedTextCode(code: string, localizedCodeLabels: any): string;
 }
 export declare function anonymizeResource(fhirResource: any): any;
-export declare function getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
-export declare function getDisplayCode(code: string, englishCodeLabels: any): string;
-export declare function getLocalizedTextCode(code: string, localizedCodeLabels: any): string;
+export declare function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile: any, groupedSectionName?: string): string[];

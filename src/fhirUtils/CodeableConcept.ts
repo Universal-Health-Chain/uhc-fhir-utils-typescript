@@ -2,33 +2,36 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { systemLOINC, systemSNOMED } from "./CommonFHIR"
+import { getDisplayOrTextByCodeHL7 } from "./Hl7"
+import { getDisplayOrTextByCodeLOINC } from "./Loinc"
+import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 
 export class CodeableConcept {
     constructor() {
     }
 
-    getCodingsBySystem(coding: R4.ICoding[], system:string): R4.ICoding[]{
-        return getCodingsBySystem(coding, system)
+    getCodingsBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
+        return getCodingsBySystem(codeableConcept, system)
     }
 
-    getSingleCodingBySystem(coding: R4.ICoding[], system:string): R4.ICoding{
-        return getSingleCodingBySystem(coding, system)
+    getSingleCodingBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding{
+        return getSingleCodingBySystem(codeableConcept, system)
     }
 
-    getCodingsLOINC(coding: R4.ICoding[]): R4.ICoding[]{
-        return getCodingsLOINC(coding)
+    getCodingsLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
+        return getCodingsLOINC(codeableConcept)
     }
 
-    getSingleCodingLOINC(coding: R4.ICoding[]): R4.ICoding{
-        return getSingleCodingLOINC(coding)
+    getSingleCodingLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding{
+        return getSingleCodingLOINC(codeableConcept)
     }
 
-    getCodingSNOMED(coding: R4.ICoding[]): R4.ICoding[]{
-        return getCodingSNOMED(coding)
+    getCodingsSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
+        return getCodingsSNOMED(codeableConcept)
     }
 
-    getSingleCodingSNOMED(coding: R4.ICoding[]): R4.ICoding{
-        return getSingleCodingSNOMED(coding)
+    getSingleCodingSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding{
+        return getSingleCodingSNOMED(codeableConcept)
     }
 
     createCoding(code:string, system:string): R4.ICoding {
@@ -51,16 +54,6 @@ export class CodeableConcept {
         return getCodeListInArrayOfCodeableConcepts(codeableConcepts, system)
     }
 
-    // TODO: put display and / or custom text
-    createSingleCodeableConceptSNOMED(code:string, language?: string): R4.ICodeableConcept{
-        return createSingleCodeableConceptSNOMED(code, language)
-    }
-
-    // TODO: put display for every code
-    createCodeableConceptsFromSNOMED(codes:string[], language?: string): R4.ICodeableConcept[] {
-        return createCodeableConceptsFromSNOMED(codes, language)
-    }
-
     createCodeableConceptBySystem(code:string, system:string): R4.ICodeableConcept {
         return createCodeableConceptBySystem(code, system)
     }
@@ -72,66 +65,72 @@ export class CodeableConcept {
 
 /** Coding  */
 
-export function getCodingsBySystem(coding: R4.ICoding[], system:string): R4.ICoding[]{
+export function getCodingsBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
     let results:R4.ICoding[] = []
-    coding.forEach(function(item){
-        if (item.system==system) results.push(item)
-    })
+    if(codeableConcept.coding && codeableConcept.coding.length && codeableConcept.coding.length>0) {
+        codeableConcept.coding.forEach(function(coding){
+            if (coding.system && coding.system == system) results.push(coding)
+        })
+    }
+    // console.log("getCodingsBySystem = ", JSON.stringify(results))
     return results
 }
 
-export function getSingleCodingBySystem(coding: R4.ICoding[], system:string): R4.ICoding{
-    let result = coding.some(function(item){
-        if (item.system==system) return item
-    })
-    return result as R4.ICoding
+export function getSingleCodingBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding{
+    return getCodingsBySystem(codeableConcept, system)[0]
 }
 
-export function getCodingsLOINC(coding: R4.ICoding[]): R4.ICoding[]{
-    let results:R4.ICoding[] = []
-    coding.forEach(function(item){
-        if (item.system == systemLOINC) results.push(item)
-    })
-    return results
+export function getCodingsLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
+    return getCodingsBySystem(codeableConcept, systemLOINC)
 }
 
-export function getSingleCodingLOINC(coding: R4.ICoding[]): R4.ICoding{
-    let result = coding.some(function(item){
-        if (item.system == systemLOINC) return item
-    })
-    return result as R4.ICoding
+export function getSingleCodingLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding{
+    return getSingleCodingBySystem(codeableConcept, systemLOINC)
 }
 
-// returns all the SNOMED CT coding found in an array of R4.ICoding
-export function getCodingSNOMED(coding: R4.ICoding[]): R4.ICoding[]{
-    let results:R4.ICoding[] = []
-    coding.forEach(function(item){
-      if (item.system == systemSNOMED) results.push(item)
-    })
-    return results
+export function getCodingsSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
+    return getCodingsBySystem(codeableConcept, systemSNOMED)
 }
 
-// returns only the first SNOMED CT coding found in an array of R4.ICoding
-export function getSingleCodingSNOMED(coding: R4.ICoding[]): R4.ICoding{
-    let result:R4.ICoding = {}
-    coding.some(function(item){
-      if (item.system == systemSNOMED) result=item
-    })
+export function getSingleCodingSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding{
+    return getSingleCodingBySystem(codeableConcept, systemSNOMED)
+}
+
+// 'display' SHALL BE English (default) but 'text' can be any custom language
+export function createDisplayOrTextOfCodeable(code:string, system:string, customLanguageFile?:any):string {
+    let systemType:string = system
+    if (String(system).startsWith("http://hl7.org")) systemType = "http://hl7.org"
+    // console.log("createDisplayOrText of code " + code + " and system " + system)
+
+    // it checks if HL7 or others
+    let result:string = ""
+    switch (String(systemType)) {
+        case systemLOINC: {
+            result = getDisplayOrTextByCodeLOINC(code, customLanguageFile)
+            // console.log("getDisplayOrTextByCodeLOINC = ", result)
+            break
+        }
+        case systemSNOMED: {
+            result = getDisplayOrTextByCodeSNOMED(code, customLanguageFile)
+            // console.log("getDisplayOrTextByCodeSNOMED = ", result)
+            break
+        }
+        case "http://hl7.org": {
+            result = getDisplayOrTextByCodeHL7(code, customLanguageFile, system)
+            // console.log("getDisplayOrTextByCodeHL7 = ", result)
+            break
+        }
+    }  
     return result
 }
 
-export function createCoding(code:string, system:string): R4.ICoding {
-    // it gets the display if any
-    let display:string = ""
-    switch (system) {
-      // case  IndexHL7.CODE_SYSTEMS.LOINC: display = getDisplayFromLOINC(code)
-      // case  IndexHL7.CODE_SYSTEMS.SNOMED: display = getDisplayFromSNOMED(code)
+export function createCoding(code:string, system:string, display?:string): R4.ICoding {
+    let coding: R4.ICoding = {
+        system: system,
+        code: code
     }
-  
-    let coding: R4.ICoding = {}
-    coding.system = system
-    coding.code = code
-    if (display != "") coding.display = display
+    if (display) coding.display = display
+    
     return coding
 }
 
@@ -192,55 +191,35 @@ export function getCodeListInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeab
     return results
 }
 
-export function createSingleCodeableConceptSNOMED(code:string, language?: string): R4.ICodeableConcept{
-    let coding: R4.ICoding = createCoding(code, systemSNOMED)
-    if (!coding || !coding.code || coding.code == "") return {} as R4.ICodeableConcept
+// It creates CodeableConcept with display in english and text also in english or in other language if language file is provided
+export function createCodeableConceptBySystem(code:string, system:string, customLanguageFile?:any) : R4.ICodeableConcept {
+    let codeableConcept:R4.ICodeableConcept = {}
+    if (!code) return codeableConcept
 
-    let codeableConcept: R4.ICodeableConcept = {}
-    // FHIR CodeableConcept contais an array of coding objects for different CODE_SYSTEMS
-    codeableConcept.coding = [coding]
-    if (!language) return codeableConcept   // not needed a local translation
-    
-    // it gets the local translation if any
-    // let text:string = getLocaleTextFromSNOMED(code, language)
-    // if (!text || text == "") return codeableConcept // no local translation provided
-    // codeableConcept.text = text
+    // invert order of customLanguageFile and system because system is mandatory in coding
+    const display:string = createDisplayOrTextOfCodeable(code, system) // international display text in English by default, no customLanguageFile
+    console.log("createCodeableConceptBySystem display = ", display)
+    let customText:string = display
+    if (customLanguageFile) customText = createDisplayOrTextOfCodeable(code, system, customLanguageFile)
+    console.log("createCodeableConceptBySystem customText = ", customText)
+
+    // It puts the Coding and the text into the CodeableConcept and returns
+    let newCoding:R4.ICoding = createCoding(code, system, display)
+    codeableConcept = {
+        coding: [newCoding],
+        text: customText
+    }
+
     return codeableConcept
 }
 
-export function createCodeableConceptsFromSNOMED(codes:string[], language?: string): R4.ICodeableConcept[] {
-    let codeableConcepts:R4.ICodeableConcept[] = []
-    if (codes.length && codes.length>0) {
-        codes.forEach(function (code:string) {
-            let codeableConcept:R4.ICodeableConcept = createSingleCodeableConceptSNOMED(code, language)
-            if (codeableConcept && codeableConcept.coding && codeableConcept.coding.length && codeableConcept.coding.length>0) {
-                codeableConcepts.push(codeableConcept)
-            }
-        })
-    }
-    return codeableConcepts
-}
-
-export function createCodeableConceptBySystem(code:string, system:string) : R4.ICodeableConcept {
-    let output:R4.ICodeableConcept = {}
-    if (code == "") return output
-
-    let newCoding:R4.ICoding = createCoding(code, system)
-    // put the Coding in the CodeableConcept and return
-    output = { coding: [newCoding] }
-    return output
-}
-
-export function createArrayOfCodeableConceptsOfSystem(inputCodes:string[], system:string) : R4.ICodeableConcept[] {
+export function createArrayOfCodeableConceptsOfSystem(inputCodes:string[], system:string, customLanguageFile?:any) : R4.ICodeableConcept[] {
     if (!inputCodes.length || inputCodes.length < 1) throw new Error ("Missing codes")
     
     let output:R4.ICodeableConcept[] = []
 
-    inputCodes.forEach(function(item){
-        let newCoding:R4.ICoding = createCoding(item, system)
-        
-        // put the Coding in a CodeableConcept
-        let newCodeableConcept:R4.ICodeableConcept = { coding: [newCoding] }
+    inputCodes.forEach(function(code){
+        let newCodeableConcept:R4.ICodeableConcept = createCodeableConceptBySystem(code, system, customLanguageFile)
 
         // put the CodeableConcept in the output array
         if (!output) output = [newCodeableConcept]    // if not initialized

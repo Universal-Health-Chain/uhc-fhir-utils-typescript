@@ -1,14 +1,13 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { IndexLOINC } from "../models"
-import { getDisplayCode } from "./CommonFHIR"
-
 
 export class Loinc {
     constructor(){
     }
-
-    getDisplayCode = (code:string, englishCodeLabels?:any): string => getDisplayCodeLoinc(code, englishCodeLabels)
+    
+    // display code SHALL ALWAYS BE English (international)
+    getDisplayOrTextByCodeLOINC = (code:string, loincLanguageFile?:any): string => getDisplayOrTextByCodeLOINC(code, loincLanguageFile)
 
     healthSections = ():string[] => GlobalIndexLOINC.groupedCodes.healthSection.codes
 
@@ -58,9 +57,10 @@ export enum GroupedLOINC {
     laboratoryTestTopCommonSI = "laboratoryTestTopCommonSI"
 }
 
-export function getDisplayCodeLoinc(code:string, englishCodeLabels?:any): string {
-    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/loincUHC.json")
-    return getDisplayCode(code, englishCodeLabels)
+// display code SHALL ALWAYS BE English (international)
+export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:any): string {
+    if (!loincLanguageFile) loincLanguageFile = require("../../languages/international/loinc.json")
+    return loincLanguageFile[code] // getDisplayOrTextByCode(code, loincLanguageFile)
 }
 
 export function getFullSerologyTestCovid19LOINC(): string[] {
@@ -167,7 +167,7 @@ export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/
         },
         // It includes not only official terms but parent groups, groups, panels and prerelease terms
         laboratoryTestCovid19: {
-            codes: [ "LG51015-2", "LG51014-5", "LG51018-6", "LG51017-8", // parent groups and groups
+            codes: ["LG51018-6", "LG51017-8", // groups (removed parent groups "LG51015-2" and "LG51014-5"
                 "95423-0","95971-8","95972-6","95973-4","95209-3","94763-0","94661-6","95825-6","94762-2","94769-7","94558-4","96119-3","94562-6","94768-9","95427-1","94720-0","95125-1","94761-4","94563-4","94507-1","95429-7","94505-5","94547-7","95542-7","95416-4","94564-2","94508-9","95428-9","94506-3","95521-1","94510-5","94311-8","94312-6","95522-9","94760-6","95409-9","94533-7","94756-4","94757-2","95425-5","96448-6","94766-3","94316-7","94307-6","94308-4","95411-5","95410-7","94644-2","94511-3","94559-2","95824-9","94639-2","94646-7","94645-9","96120-1","94534-5","96091-4","94314-2","96123-5","94745-7","94746-5","94819-0","94565-9","94759-8","95406-5","95608-6","94500-6","95424-8","94845-5","94822-4","94660-8","94309-2","94642-6","94643-4","94640-0","95609-4","94767-1","94641-8","96603-6","95970-0","94764-8","94313-4","94310-0","94509-7","96121-9","94758-0","95823-1","94765-5","94315-9","96122-7","94502-2","94647-5","94532-9"
             ]
         },

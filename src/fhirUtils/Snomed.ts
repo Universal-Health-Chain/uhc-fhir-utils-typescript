@@ -1,6 +1,5 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { getDisplayCode } from "./CommonFHIR"
 import { IndexSNOMED } from "../models/FhirUtilsModels"
 
 const vaccinationProcedureCovid19International = "840534001"
@@ -9,7 +8,8 @@ export class Snomed {
     constructor() {
     }
 
-    getDisplayCode = (code:string, englishCodeLabels?:any): string => getDisplayCodeSnomed(code, englishCodeLabels)
+    // display code SHALL ALWAYS BE English (international)
+    getDisplayOrTextByCodeSNOMED = (code:string, snomedLanguageFile?:any): string => getDisplayOrTextByCodeSNOMED(code, snomedLanguageFile)
     
     // TODO: define interface for GlobalIndex objects
     getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string){
@@ -89,9 +89,10 @@ export const probablyNotPresentCodesSNOMED = ():string[] => [
     resultQualifierValueSNOMED.probablyNotPresent
 ]
 
-export function getDisplayCodeSnomed(code:string, englishCodeLabels?:any): string {
-    if (!englishCodeLabels) englishCodeLabels = require("../../languages/en/snomedUHC.json")
-    return getDisplayCode(code, englishCodeLabels)
+// display code SHALL ALWAYS BE English (international)
+export function getDisplayOrTextByCodeSNOMED(code:string, snomedLanguageFile?:any): string {
+    if (!snomedLanguageFile) snomedLanguageFile = require("../../languages/international/snomedGPS.json")
+    return snomedLanguageFile[code] // getDisplayOrTextByCode(code, snomedLanguageFile)
 }
 
 // TODO: define interface for GlobalIndex objects

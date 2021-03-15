@@ -1,7 +1,7 @@
 import { IndexSNOMED } from "../models/FhirUtilsModels";
 export declare class Snomed {
     constructor();
-    getDisplayCode: (code: string, englishCodeLabels?: any) => string;
+    getDisplayOrTextByCodeSNOMED: (code: string, snomedLanguageFile?: any) => string;
     getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): string[];
     getPositiveOrDetectedCodesSNOMED: () => string[];
     getNegativeOrNotDetectedCodesSNOMED: () => string[];
@@ -45,7 +45,7 @@ export declare const positiveOrDetectedCodesSNOMED: () => string[];
 export declare const negativeOrNotDetectedCodesSNOMED: () => string[];
 export declare const suspectedOrInconclusiveCodesSNOMED: () => string[];
 export declare const probablyNotPresentCodesSNOMED: () => string[];
-export declare function getDisplayCodeSnomed(code: string, englishCodeLabels?: any): string;
+export declare function getDisplayOrTextByCodeSNOMED(code: string, snomedLanguageFile?: any): string;
 export declare function getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): string[];
 export declare const RegionalIndexSNOMED: any;
 export declare const GlobalIndexSNOMED: IndexSNOMED;
