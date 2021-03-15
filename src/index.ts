@@ -11,5 +11,5 @@ export * from "./FhirUtils";
 // export consts and enums (and functions outside classes)
 export { GlobalIndexHL7, GroupedHL7 } from "./fhirUtils/Hl7"
 export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./fhirUtils/Loinc";
-export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED, resultCovid19NaatCodesSNOMED as ResultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED as ResultCovid19SerologyCodesSNOMED, SNOMED_TO_ICD10, SNOMED_TO_ICD11 } from "./fhirUtils/Snomed";
+export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED, resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED, SNOMED_TO_ICD10, SNOMED_TO_ICD11 } from "./fhirUtils/Snomed";
 export { getValidOrNewUUIDv4, sortObject, validateUUIDv4 } from "./fhirUtils/commonUtils"

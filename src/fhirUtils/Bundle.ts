@@ -5,7 +5,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
-
+import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
+import { Covid19 } from "./Covid19"
+const covid19Utils = new Covid19()
 
 export class Bundle {
     constructor() {
@@ -13,6 +15,15 @@ export class Bundle {
 
     getTimestamp(fhirBundle:R4.IBundle): string {
         return getTimestamp(fhirBundle)
+    }
+
+    getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
+        return getTagsOfBundleDocument(bundleDocument)
+    }
+
+    // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
+    isIPS(bundleDocument:R4.IBundle): boolean {
+        return isIPS(bundleDocument)
     }
 
     // TODO: ADD RESOURCES TO COMPOSITION SECTIONS AND FULLURL
@@ -27,13 +38,8 @@ export class Bundle {
         return addAdditionalResourcesToBundle(bundle, resources, sectionCode, sectionSystem)
     }
 
-    createBundleDocumentWithComposition(resources?:any[], authorReferenceId?:string, typeDocumentCodeLOINC?:string): R4.IBundle {
+    createBundleDocumentWithTypeLOINC(resources?:any[], authorReferenceId?:string, typeDocumentCodeLOINC?:string): R4.IBundle {
         return createBundleDocumentWithComposition(resources, authorReferenceId, typeDocumentCodeLOINC)
-    }
-
-    // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
-    isIPS(bundleDocument:R4.IBundle): boolean {
-        return isIPS(bundleDocument)
     }
 
     // TODO: set the UHC identifier, not only the id
@@ -63,7 +69,7 @@ export class Bundle {
         return getResourcesInSection(bundleDocument, sectionCode, sectionSystem)
     }
 
-    getAllResourcesInBundleEntries(bundle: R4.IBundle): any[] {
+    getAllResources(bundle: R4.IBundle): any[] {
         return getAllResourcesInBundleEntries(bundle)
     }
 
@@ -95,13 +101,45 @@ export class Bundle {
 
 }
 
-
 export function getTimestamp(fhirBundle:R4.IBundle): string {
     if (fhirBundle.timestamp) return fhirBundle.timestamp
     if (fhirBundle.entry && fhirBundle.entry.length && fhirBundle.entry.length>0 && fhirBundle.entry[0].resource
         && fhirBundle.entry[0].resource.resourceType && fhirBundle.entry[0].resource.resourceType == "Composition"
         && fhirBundle.entry[0].resource.date ) return fhirBundle.entry[0].resource.date
     return ""   // else returns empty
+}
+
+export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
+    let uhcCodeTags:string[] = []
+    let resources:any = getAllResourcesInBundleEntries(bundleDocument)
+    if (resources && resources.length && resources.length > 1) {
+        resources.forEach( function(resource:any) {
+            if (resource.resourceType != "Composition") {
+                // It adds the resource found to the tags list
+                uhcCodeTags.push(resource.resourceType)
+                let codesCovid19:string[] = []
+  
+                switch(resource.resourceType) {
+                    case ("Immunization"): {
+                        // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
+                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19Utils.vaccineCodes(), codesCovid19)
+                        // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                    }
+                    case ("DiagnosticReport"): {
+                        // It checks for all COVID-19 laboratory test codes (LOINC)
+                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], covid19Utils.laboratoryTestCodes(), codesCovid19)
+                        // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                    }
+                    // case ("Immunization"): {}
+                    default:{
+                        // console.log("COVID-19 codes found result: ", codesCovid19)
+                        if (codesCovid19 && codesCovid19.length && codesCovid19.length>0) uhcCodeTags.push(covid19Utils.covid19Tag())
+                    }
+                }
+            }
+        })
+    }
+    return uhcCodeTags
 }
 
 // createEmptyBundle does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithComposition)

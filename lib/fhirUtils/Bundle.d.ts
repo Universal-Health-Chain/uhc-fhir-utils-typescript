@@ -2,17 +2,18 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Bundle {
     constructor();
     getTimestamp(fhirBundle: R4.IBundle): string;
+    getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
+    isIPS(bundleDocument: R4.IBundle): boolean;
     addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
     addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
-    createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
-    isIPS(bundleDocument: R4.IBundle): boolean;
+    createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
     addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem: string, resources: any[]): R4.IBundle;
     addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
     getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
     getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem?: string): any[];
-    getAllResourcesInBundleEntries(bundle: R4.IBundle): any[];
+    getAllResources(bundle: R4.IBundle): any[];
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
@@ -21,6 +22,7 @@ export declare class Bundle {
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
 export declare function getTimestamp(fhirBundle: R4.IBundle): string;
+export declare function getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
 export declare function addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
 export declare function addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
 export declare function createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;

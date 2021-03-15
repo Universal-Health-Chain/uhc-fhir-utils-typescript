@@ -76,15 +76,15 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         expect(code==undefined).toBeFalsy()
     })
 
-    it("should get the possible result codes for serology or NAAT laboratory tests", () => {
+    it("should get possible SNOMED result codes for serology or NAAT laboratory tests", () => {
         let codes:string[] = fhirUtils.covid19.naatResultsCodesSNOMED()
         let displayCode = fhirUtils.snomed.getDisplayCode(codes[0])
-        // console.log("display code LOINC " + codes[0] + " = ", displayCode)
+        // console.log("display code SNOMED " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
         
         codes = fhirUtils.covid19.serologyResultsCodesSNOMED()
         displayCode = fhirUtils.snomed.getDisplayCode(codes[0])
-        // console.log("display code LOINC " + codes[0] + " = ", displayCode)
+        // console.log("display code SNOMED " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })
 
