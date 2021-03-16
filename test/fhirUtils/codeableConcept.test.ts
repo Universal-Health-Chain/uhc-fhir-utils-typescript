@@ -1,11 +1,10 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
-import { createArrayOfCodeableConceptsOfSystem, getCodeListInArrayOfCodeableConcepts, getSingleCodingSNOMED } from '../../src/fhirUtils/CodeableConcept';
-import { getDisplayOrTextByCodeSNOMED } from '../../src/fhirUtils/Snomed';
 
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
+import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
 const fhirUtils = new FhirUtils()
 
 const customLanguageFileSpanishSNOMED:any = {
@@ -13,19 +12,36 @@ const customLanguageFileSpanishSNOMED:any = {
 }
 
 describe("test CodeableConcept", () => {
-    
     it("should create an array of codeable concepts and get the codes, display and text", () => {
         const code = fhirUtils.covid19.suspectedDiseaseSNOMED()
-        const codeableConcepts:R4.ICodeableConcept[] = createArrayOfCodeableConceptsOfSystem([code], systemSNOMED, customLanguageFileSpanishSNOMED)
+        const internationalDisplay = fhirUtils.snomed.getDisplayOrTextByCodeSNOMED(code)
+        const customText = customLanguageFileSpanishSNOMED[code]
+       
+        const codeableConcept = createCodeableConcept(code, systemSNOMED, internationalDisplay, "systemVersion", false, customText)
+        expect(codeableConcept).toBeDefined
+        expect(codeableConcept.text).toBe(customLanguageFileSpanishSNOMED["840544004"])
+        
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingSNOMED(codeableConcept)
+        expect(coding.code).toBe(code)
+        expect(coding.display).toBe(internationalDisplay)
+
+    })
+    it("should create an array of codeable concepts and get the codes, display and text", () => {
+        const code = fhirUtils.covid19.suspectedDiseaseSNOMED()
+        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+            [code],
+            systemSNOMED,
+            customLanguageFileSpanishSNOMED
+        )
         // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
         expect(codeableConcepts).toHaveLength(1)
         expect(codeableConcepts[0].text).toBe(customLanguageFileSpanishSNOMED["840544004"])
         
-        const codes = getCodeListInArrayOfCodeableConcepts(codeableConcepts)
+        const codes = fhirUtils.codeableConcept.getCodeListInArrayOfCodeableConcepts(codeableConcepts)
         expect(codes[0]).toBe(code)
 
-        const coding:R4.ICoding = getSingleCodingSNOMED(codeableConcepts[0])
-        const displaySNOMED = getDisplayOrTextByCodeSNOMED(code)
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingSNOMED(codeableConcepts[0])
+        const displaySNOMED = fhirUtils.snomed.getDisplayOrTextByCodeSNOMED(code)
         expect(coding.display).toBe(displaySNOMED)
     })
 })

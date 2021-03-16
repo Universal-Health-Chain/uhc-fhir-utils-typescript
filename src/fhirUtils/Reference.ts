@@ -7,29 +7,29 @@ export class Reference {
     constructor(){
     }
 
-    getReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
-        return getReferencesByIdentifierAndSystem(referencesFHIR, system)
+    getStringsReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
+        return getStringsReferencesByIdentifierAndSystem(referencesFHIR, system)
     }
     
-    getLiteralReferencesStrings(referencesFHIR:R4.IReference[]) : string[] {
-        return getLiteralReferencesStrings(referencesFHIR)
+    getStringsReferences(referencesFHIR:R4.IReference[]) : string[] {
+        return getStringsReferences(referencesFHIR)
     }
     
-    createReferenceFHIR(strReference:string, type?:string, display?:string): R4.IReference {
-        return createReferenceFHIR(strReference, type, display)
+    createWithStringReference(strReference:string, type?:string, display?:string): R4.IReference {
+        return createWithStringReference(strReference, type, display)
     }
     
-    createReferencesByLiteralURLs(literalReferences:string[]): R4.IReference[]{
-        return createReferencesByLiteralURLs(literalReferences)
+    createByStringsReferences(literalReferences:string[]): R4.IReference[]{
+        return createByStringsReferences(literalReferences)
     }
     
-    createReferenceIdentifiers(identifiers:string[], system:string): R4.IReference[] {
-        return createReferenceIdentifiers(identifiers, system)
+    createByIdentifiersAndSystem(identifiers:string[], system:string): R4.IReference[] {
+        return createByIdentifiersAndSystem(identifiers, system)
     }
 
 }
 
-export function getReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
+export function getStringsReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
     if (!referencesFHIR.length || referencesFHIR.length < 1) throw new Error ("Missing FHIR References")
 
     let identifierReference:string[] = []
@@ -41,7 +41,7 @@ export function getReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[
     return identifierReference
 }
 
-export function getLiteralReferencesStrings(referencesFHIR:R4.IReference[]) : string[] {
+export function getStringsReferences(referencesFHIR:R4.IReference[]) : string[] {
     if (!referencesFHIR.length || referencesFHIR.length < 1) throw new Error ("Missing FHIR References")
 
     let literalReferences:string[] = []
@@ -51,15 +51,15 @@ export function getLiteralReferencesStrings(referencesFHIR:R4.IReference[]) : st
     return literalReferences
 }
 
-export function createReferenceFHIR(strReference:string, type?:string, display?:string): R4.IReference {
-    if (strReference == "") return {} as R4.IReference  // returns void, but not null or error
+export function createWithStringReference(strReference:string, type?:string, display?:string): R4.IReference {
+    if (!strReference) return {} as R4.IReference  // returns void, but not null or error
     let fhirReference:R4.IReference = {reference: strReference}
     if (type) fhirReference.type = type
     if (display) fhirReference.display = display
     return fhirReference
 }
 
-export function createReferencesByLiteralURLs(literalReferences:string[]): R4.IReference[]{
+export function createByStringsReferences(literalReferences:string[]): R4.IReference[]{
     if (!literalReferences.length || literalReferences.length < 1) throw new Error ("Missing literal references")
 
     let referencesFHIR:R4.IReference[] = []
@@ -74,7 +74,7 @@ export function createReferencesByLiteralURLs(literalReferences:string[]): R4.IR
     return referencesFHIR
 }
 
-export function createReferenceIdentifiers(identifiers:string[], system:string): R4.IReference[] {
+export function createByIdentifiersAndSystem(identifiers:string[], system:string): R4.IReference[] {
     if (!identifiers.length || identifiers.length < 1) throw new Error ("Missing identifiers")
 
     let references:R4.IReference[] = []

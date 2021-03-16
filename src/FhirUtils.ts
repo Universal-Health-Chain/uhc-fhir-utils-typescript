@@ -38,7 +38,7 @@ export class FhirUtils {
     public hl7: Hl7
     public loinc: Loinc
     public snomed: Snomed
-    public references: Reference
+    public reference: Reference
     public quantity: Quantity
     public sections: Sections
 
@@ -59,7 +59,7 @@ export class FhirUtils {
         this.hl7 = new Hl7()
         this.loinc = new Loinc()
         this.snomed = new Snomed()
-        this.references = new Reference()
+        this.reference = new Reference()
         this.quantity = new Quantity() 
         this.sections = new Sections()
     }

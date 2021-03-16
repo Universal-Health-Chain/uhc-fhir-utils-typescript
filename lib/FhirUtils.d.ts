@@ -32,7 +32,7 @@ export declare class FhirUtils {
     hl7: Hl7;
     loinc: Loinc;
     snomed: Snomed;
-    references: Reference;
+    reference: Reference;
     quantity: Quantity;
     sections: Sections;
     constructor();
