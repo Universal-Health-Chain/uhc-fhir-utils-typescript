@@ -4,8 +4,9 @@ import { Attachment } from "./fhirUtils/Attachment";
 import { Bundle } from "./fhirUtils/Bundle";
 import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
-import { Composition } from "./fhirUtils/Composition";
 import { CommonFHIR } from "./fhirUtils/CommonFHIR";
+import { Communication } from "./fhirUtils/Communication";
+import { Composition } from "./fhirUtils/Composition";
 import { Covid19 } from "./fhirUtils/Covid19";
 import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
 // import { Dicom } from "./fhirUtils/Dicom";
@@ -27,6 +28,7 @@ export class FhirUtils {
     public bundleMessage: BundleMessage
     public codeableConcept: CodeableConcept
     public commonFHIR: CommonFHIR
+    public communication: Communication
     public composition: Composition
     public covid19: Covid19
     public diagnosticReport: DiagnosticReport
@@ -48,6 +50,7 @@ export class FhirUtils {
         this.bundleMessage = new BundleMessage()
         this.codeableConcept = new CodeableConcept()
         this.commonFHIR = new CommonFHIR()
+        this.communication = new Communication()
         this.composition = new Composition()
         this.covid19 = new Covid19()       
         this.diagnosticReport = new DiagnosticReport()

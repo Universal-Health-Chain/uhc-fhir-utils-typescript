@@ -5,16 +5,16 @@ import { IndexLOINC } from "../models"
 export class Loinc {
     constructor(){
     }
-    
+
+    aboRhCodeLOINC = ():string => terminologyCodesLOINC.aboRH
+
     // display code SHALL ALWAYS BE English (international)
     getDisplayOrTextByCodeLOINC = (code:string, loincLanguageFile?:any): string => getDisplayOrTextByCodeLOINC(code, loincLanguageFile)
 
     healthSections = ():string[] => GlobalIndexLOINC.groupedCodes.healthSection.codes
 
     laboratoryTestTopCommonSI = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestTopCommonSI.codes
-
     laboratoryTestCodesSerologyLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
-    
     laboratoryTestCodesNaatLOINC = ():string[] => getFullNaatTestCovid19LOINC()
 }
 
@@ -41,6 +41,12 @@ export enum medicalHistoryClassification {
     advanceDirectives   = "42348-3"
     // goals
     // clinicalNotes   
+}
+
+export enum terminologyCodesLOINC {
+    serologyTestsGroup  = "LG51018-6",
+    naatTestsGroup      = "LG51017-8",
+    aboRH               = "882-1"       // https://loinc.org/882-1/
 }
 
 export enum covidLaboratoryTestGroups {

@@ -2,8 +2,9 @@ import { Attachment } from "./fhirUtils/Attachment";
 import { Bundle } from "./fhirUtils/Bundle";
 import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
-import { Composition } from "./fhirUtils/Composition";
 import { CommonFHIR } from "./fhirUtils/CommonFHIR";
+import { Communication } from "./fhirUtils/Communication";
+import { Composition } from "./fhirUtils/Composition";
 import { Covid19 } from "./fhirUtils/Covid19";
 import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
 import { DocumentReference } from "./fhirUtils/DocumentReference";
@@ -22,6 +23,7 @@ export declare class FhirUtils {
     bundleMessage: BundleMessage;
     codeableConcept: CodeableConcept;
     commonFHIR: CommonFHIR;
+    communication: Communication;
     composition: Composition;
     covid19: Covid19;
     diagnosticReport: DiagnosticReport;

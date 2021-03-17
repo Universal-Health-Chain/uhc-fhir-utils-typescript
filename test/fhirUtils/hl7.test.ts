@@ -37,6 +37,7 @@ describe("translate HL7 codes", () => {
     it("should display HL7 code", () => {
         let codes = getVaccinesCovid19CVX()
         let displayCode = getDisplayOrTextByCodeHL7(codes[0])   // international English display code (default)
+        // console.log("displayCode HL7 = ", displayCode)
         expect(displayCode).toBeDefined
     })
 

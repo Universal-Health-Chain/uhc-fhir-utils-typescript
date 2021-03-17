@@ -16,7 +16,7 @@ export class Attachment {
     }
     */
 
-    createFhirAttachment(mimeType:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
+    createFhirAttachment(mimeType?:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
         return createFhirAttachment(mimeType, id, url, title, language, hashSHA1, size, base64Data, creationDateTime)
     }
 
@@ -38,18 +38,21 @@ export function createAttachmentFHIR(url: string, resourceLanguage?: string, siz
     return fhirAttachment
 }
 
-export function createFhirAttachment(mimeType:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
-    let result:R4.IAttachment = { contentType: mimeType }
-    id ? result.id = id : result.id = uuidRandom()
-    if (url) result.url = url
-    if (title) result.title = title
-    if (language) result.language = language
-    if (hashSHA1) result.hash = hashSHA1
-    if (size) result.size = size
-    if (base64Data) result.data = base64Data
+// mimeType should be mandatory
+export function createFhirAttachment(mimeType?:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
+    // let attachment:R4.IAttachment = { contentType: mimeType }
+    let attachment:R4.IAttachment = {}
+    if (mimeType) attachment.contentType = mimeType
+    id ? attachment.id = id : attachment.id = uuidRandom()
+    if (url) attachment.url = url
+    if (title) attachment.title = title
+    if (language) attachment.language = language
+    if (hashSHA1) attachment.hash = hashSHA1
+    if (size) attachment.size = size
+    if (base64Data) attachment.data = base64Data
     // TODO: validateFhirDateTime
-    if (creationDateTime) result.creation = creationDateTime
-    return result
+    if (creationDateTime) attachment.creation = creationDateTime
+    return attachment
 }
 
 export function getBytesEmbedded(fhirAttachment:R4.IAttachment): Uint8Array {

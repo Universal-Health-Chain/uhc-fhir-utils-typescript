@@ -1,6 +1,7 @@
 import { IndexLOINC } from "../models";
 export declare class Loinc {
     constructor();
+    aboRhCodeLOINC: () => string;
     getDisplayOrTextByCodeLOINC: (code: string, loincLanguageFile?: any) => string;
     healthSections: () => string[];
     laboratoryTestTopCommonSI: () => string[];
@@ -28,6 +29,11 @@ export declare enum medicalHistoryClassification {
     symptoms = "10187-3",
     outpatient = "46240-8",
     advanceDirectives = "42348-3"
+}
+export declare enum terminologyCodesLOINC {
+    serologyTestsGroup = "LG51018-6",
+    naatTestsGroup = "LG51017-8",
+    aboRH = "882-1"
 }
 export declare enum covidLaboratoryTestGroups {
     serologyTestsGroup = "LG51018-6",
