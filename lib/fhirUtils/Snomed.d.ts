@@ -10,7 +10,7 @@ export declare class Snomed {
 }
 export declare const SNOMED_TO_ICD10: any;
 export declare const SNOMED_TO_ICD11: any;
-export declare enum covid19DiseaseTermsSNOMED {
+export declare enum covid19DiseaseTerminologySNOMED {
     covid19Disease = "840539006",
     suspectedCovid19 = "840544004",
     exposureToCovid19 = "840546002"

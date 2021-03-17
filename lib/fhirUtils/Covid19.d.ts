@@ -1,6 +1,14 @@
+import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Covid19 {
     constructor();
     covid19Tag: () => string;
+    /** Alert Communications */
+    createCovid19DiseaseAlertCommunication: (priorityCode?: string | undefined) => R4.ICommunication;
+    createCovid19SuspectedAlertCommunication: (priorityCode?: string | undefined) => R4.ICommunication;
+    createCovid19ExposureAlertCommunication: (priorityCode?: string | undefined) => R4.ICommunication;
+    isCovid19DiseaseAlertCommunication: (communication: R4.ICommunication) => boolean;
+    isCovid19SuspectedAlertCommunication: (communication: R4.ICommunication) => boolean;
+    isCovid19ExposureAlertCommunication: (communication: R4.ICommunication) => boolean;
     /** Get specific codes by HL7 */
     vaccineCodesCVX: () => string[];
     /** Get specific codes by system WHO's ATC */
@@ -41,3 +49,9 @@ export declare class Covid19 {
     isCovid19OrSuspectedDisease: (code: string) => boolean;
     laboratoryTestCodes: () => string[];
 }
+export declare function createCovid19DiseaseAlertCommunication(priorityCode?: string): R4.ICommunication;
+export declare function createCovid19SuspectedAlertCommunication(priorityCode?: string): R4.ICommunication;
+export declare function createCovid19ExposureAlertCommunication(priorityCode?: string): R4.ICommunication;
+export declare function isCovid19DiseaseAlertCommunication(communication: R4.ICommunication): boolean;
+export declare function isCovid19SuspectedAlertCommunication(communication: R4.ICommunication): boolean;
+export declare function isCovid19ExposureAlertCommunication(communication: R4.ICommunication): boolean;

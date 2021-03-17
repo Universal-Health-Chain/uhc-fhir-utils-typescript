@@ -4,6 +4,7 @@ export const systemICD10 = "http://hl7.org/fhir/sid/icd-10"
 export const systemLOINC = "http://loinc.org"
 export const systemSNOMED = "http://snomed.info/sct"
 export const systemUCUM = "http://unitsofmeasure.org"
+export const systemUUID = "urn:ietf:rfc:3986"
 
 export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing"
 export const FHIR_DATE_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"

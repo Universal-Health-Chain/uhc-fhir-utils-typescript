@@ -1,6 +1,7 @@
 
 import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { getVaccinesCovid19CVX, GroupedHL7, getDisplayOrTextByCodeHL7 } from "../../src/fhirUtils/Hl7";
+import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/fhirUtils/Hl7";
+import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects
 const Hl7LabelsEN:any = require ("../../languages/international/hl7UHC.json") 
@@ -15,7 +16,7 @@ describe("translate HL7 codes", () => {
         expect(vaccineCovid19CVX.length).toBeGreaterThan(0)
         // console.log("first procedureCodesCovid19Spain = ", procedureCodesCovid19Spain[0])    
 
-        let groupedSectionName = GroupedHL7.cvxCovid19
+        let groupedSectionName = CodingSystem.cvxCovid19
         expect(groupedSectionName).toBeDefined
 
         // It searchs and gets the labels by a specific groupedSectionName (more efficient)

@@ -67,7 +67,7 @@ export function addTypeToIdentifier(){
     
 }
 
-export function createIdentifierWithoutType(value:string, system:string, use:R4.IdentifierUseKind, periodStart:string, periodEnd:string){
+export function createIdentifierWithoutType(value:string, system:string, use?:R4.IdentifierUseKind, periodStart?:string, periodEnd?:string){
     let identifier:R4.IIdentifier = {
         period: {end:periodEnd, start:periodStart},
         system: system,

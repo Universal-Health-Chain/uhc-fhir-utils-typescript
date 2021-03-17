@@ -33,7 +33,7 @@ export const SNOMED_TO_ICD11:any = {
     "840544004": "RA01.1",  // Suspected disease caused by Severe acute respiratory coronavirus 2 (situation)
 }
 
-export enum covid19DiseaseTermsSNOMED {
+export enum covid19DiseaseTerminologySNOMED {
     covid19Disease      = "840539006",  // COVID-19 (disorder)
     suspectedCovid19    = "840544004",  // Suspected COVID-19 (situation)
     exposureToCovid19   = "840546002"   // Exposure to SARS-CoV-2 (event)

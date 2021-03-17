@@ -2,9 +2,10 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { GlobalIndexHL7 } from "./Hl7"
+import { GlobalIndexFHIR } from "./Hl7"
 import { validateUUIDv4 } from "./commonUtils"
 import { systemLOINC } from "./CommonFHIR"
+import { CodingSystem } from "../models"
 
 export class Composition {
     
@@ -212,7 +213,7 @@ export function putSectionInComposition(composition:R4.IComposition, newSection:
     }
     else {
         // some section(s) exists so replace it if the section is found or add the section if it is not found
-        let codes:string[] = getCodesOfSections(newComposition.section,  GlobalIndexHL7.codeSystem.loinc)
+        let codes:string[] = getCodesOfSections(newComposition.section,  CodingSystem.loinc)
         if (!codes.includes(newSection.code.coding[0].code)) newComposition.section.push(newSection)
         else newComposition = replaceSectionInComposition(newComposition, newSection)
     }

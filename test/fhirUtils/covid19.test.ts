@@ -1,7 +1,58 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { FhirUtils, GroupedHL7 } from "../../src/"
+import { FhirUtils, CodingSystem } from "../../src/"
+import { R4 } from "@ahryman40k/ts-fhir-types"
+import { getCodeListInArrayOfCodeableConcepts } from "../../src/fhirUtils/CodeableConcept"
 const fhirUtils = new FhirUtils()
+
+describe("test COVID-19 alert communications", () => {
+
+    it("should create confirmed COVID-19 alert communication", () => {
+        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19DiseaseAlertCommunication()
+        // console.log("COVID-19 communication = ", JSON.stringify(communication))
+        expect(communication.category).toHaveLength(1)
+        expect(communication.reasonCode).toHaveLength(1)
+
+        let categoryCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.category)
+        expect(categoryCodes.includes("alert")).toBeTruthy()
+
+        let reasonCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.reasonCode)
+        expect(reasonCodes.includes(fhirUtils.covid19.confirmedDiseaseSNOMED())).toBeTruthy()
+
+        expect(fhirUtils.covid19.isCovid19DiseaseAlertCommunication(communication)).toBeTruthy
+    })
+
+    it("should create suspected COVID-19 alert communication", () => {
+        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19SuspectedAlertCommunication()
+        // console.log("COVID-19 communication = ", JSON.stringify(communication))
+        expect(communication.category).toHaveLength(1)
+        expect(communication.reasonCode).toHaveLength(1)
+
+        let categoryCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.category)
+        expect(categoryCodes.includes("alert")).toBeTruthy()
+
+        let reasonCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.reasonCode)
+        expect(reasonCodes.includes(fhirUtils.covid19.suspectedDiseaseSNOMED())).toBeTruthy()
+
+        expect(fhirUtils.covid19.isCovid19SuspectedAlertCommunication(communication)).toBeTruthy
+    })
+
+    it("should create exposure to COVID-19 alert communication", () => {
+        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19ExposureAlertCommunication()
+        // console.log("COVID-19 communication = ", JSON.stringify(communication))
+        expect(communication.category).toHaveLength(1)
+        expect(communication.reasonCode).toHaveLength(1)
+
+        let categoryCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.category)
+        expect(categoryCodes.includes("alert")).toBeTruthy()
+
+        let reasonCodes:string[] = getCodeListInArrayOfCodeableConcepts(communication.reasonCode)
+        expect(reasonCodes.includes(fhirUtils.covid19.exposureToDiseaseSNOMED())).toBeTruthy()
+
+        expect(fhirUtils.covid19.isCovid19ExposureAlertCommunication(communication)).toBeTruthy
+    })
+
+})
 
 describe("get specific COVID-19 related code(s) by system(s)", () => {
 
@@ -160,7 +211,7 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
 
     it("should display vaccineCodesCVX", () => {
         let codes:string[] = fhirUtils.covid19.vaccineCodesCVX()
-        let displayCode = fhirUtils.hl7.getDisplayOrTextInGroupedSection(codes[0], undefined, GroupedHL7.cvx)
+        let displayCode = fhirUtils.hl7.getDisplayOrTextInGroupedSection(codes[0], undefined, CodingSystem.cvx)
         // console.log("display code HL7 CVX " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })

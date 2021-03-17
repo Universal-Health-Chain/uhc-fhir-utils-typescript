@@ -74,9 +74,8 @@ export function validateUUIDv4(uuidv4:string): boolean{
     return (validate(uuidv4) && (version(uuidv4))==4)
 }
 
-export function getValidOrNewUUIDv4(uuidv4:string): string {
-    let validUUIDV4:string
-    if (validateUUIDv4(uuidv4)) validUUIDV4 = uuidv4
-    else validUUIDV4 = v4()
-    return validUUIDV4
+export function getValidOrNewRandomUUID(uuidv4?:string): string {
+    if (!uuidv4) return v4()
+    if (validateUUIDv4(uuidv4)) return uuidv4
+    return v4()
 }

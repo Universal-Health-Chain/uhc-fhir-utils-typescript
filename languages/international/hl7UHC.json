@@ -101,6 +101,12 @@
         "187": "zoster vaccine recombinant",
         "121": "zoster vaccine, live"
     },
+    "communicationCategory": {
+        "alert":"Alert",
+        "notification":"Notification",
+        "reminder":"Reminder",
+        "instruction":"Instruction"
+    },
     "diagnosticServiceSections": {
         "AU": "Audiology",
         "BG": "Blood Gases",
