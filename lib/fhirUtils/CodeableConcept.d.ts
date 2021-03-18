@@ -1,12 +1,9 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class CodeableConcept {
     constructor();
-    getCodingsBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding[];
-    getSingleCodingBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding;
-    getCodingsLOINC(codeableConcept: R4.ICodeableConcept): R4.ICoding[];
-    getSingleCodingLOINC(codeableConcept: R4.ICodeableConcept): R4.ICoding;
-    getCodingsSNOMED(codeableConcept: R4.ICodeableConcept): R4.ICoding[];
-    getSingleCodingSNOMED(codeableConcept: R4.ICodeableConcept): R4.ICoding;
+    getCodings(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding[];
+    getSingleCoding(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding;
+    getSingleCodingInArrayOfCodeableConepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
     createCoding(code: string, system: string): R4.ICoding;
     getExistingTargetCodesInCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], targetCodes: string[]): string[];
     addExistingTargetCodesInCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], targetCodes: string[], currentCodes: string[]): string[];
@@ -17,12 +14,9 @@ export declare class CodeableConcept {
     createArrayOfCodeableConceptsOfSystem(inputCodes: string[], codeSystem: string, customLanguageFile?: any): R4.ICodeableConcept[];
 }
 /** Coding  */
+export declare function getSingleCodingInArrayOfCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
 export declare function getCodingsBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding[];
 export declare function getSingleCodingBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding;
-export declare function getCodingsLOINC(codeableConcept: R4.ICodeableConcept): R4.ICoding[];
-export declare function getSingleCodingLOINC(codeableConcept: R4.ICodeableConcept): R4.ICoding;
-export declare function getCodingsSNOMED(codeableConcept: R4.ICodeableConcept): R4.ICoding[];
-export declare function getSingleCodingSNOMED(codeableConcept: R4.ICodeableConcept): R4.ICoding;
 export declare function createDisplayOrTextOfCodeable(code: string, system: string, customLanguageFile?: any): string;
 export declare function createCoding(code: string, system: string, display?: string, systemVersion?: string, userSelected?: boolean): R4.ICoding;
 /** Codeable Concepts */

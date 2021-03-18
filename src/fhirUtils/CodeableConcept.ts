@@ -10,14 +10,19 @@ export class CodeableConcept {
     constructor() {
     }
 
-    getCodingsBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
+    getCodings(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
         return getCodingsBySystem(codeableConcept, system)
     }
 
-    getSingleCodingBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding{
+    getSingleCoding(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding{
         return getSingleCodingBySystem(codeableConcept, system)
     }
 
+    getSingleCodingInArrayOfCodeableConepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
+        return getSingleCodingInArrayOfCodeableConcepts(codeableConcepts, system)
+    }
+
+    /*
     getCodingsLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
         return getCodingsLOINC(codeableConcept)
     }
@@ -33,6 +38,7 @@ export class CodeableConcept {
     getSingleCodingSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding{
         return getSingleCodingSNOMED(codeableConcept)
     }
+    */
 
     createCoding(code:string, system:string): R4.ICoding {
         return createCoding(code, system)
@@ -68,6 +74,21 @@ export class CodeableConcept {
 }
 
 /** Coding  */
+export function getSingleCodingInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
+    let result:R4.ICoding = {}
+    let found = false
+    codeableConcepts.forEach( function(codeableConcept:R4.ICodeableConcept){
+        if (!found) {
+            const coding = getSingleCodingBySystem(codeableConcept, system)
+            if (coding) {
+                result = coding
+                found = true
+            }
+        }
+    })
+    // console.log("getGetSingleCodingInArrayOfCodeableConcepts = ", JSON.stringify(result))
+    return result
+}
 
 export function getCodingsBySystem(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
     let results:R4.ICoding[] = []
@@ -84,6 +105,7 @@ export function getSingleCodingBySystem(codeableConcept:R4.ICodeableConcept, sys
     return getCodingsBySystem(codeableConcept, system)[0]
 }
 
+/*
 export function getCodingsLOINC(codeableConcept:R4.ICodeableConcept): R4.ICoding[]{
     return getCodingsBySystem(codeableConcept, systemLOINC)
 }
@@ -99,6 +121,7 @@ export function getCodingsSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICodin
 export function getSingleCodingSNOMED(codeableConcept:R4.ICodeableConcept): R4.ICoding{
     return getSingleCodingBySystem(codeableConcept, systemSNOMED)
 }
+*/
 
 // 'display' SHALL BE English (default) but 'text' can be any custom language
 export function createDisplayOrTextOfCodeable(code:string, system:string, customLanguageFile?:any):string {

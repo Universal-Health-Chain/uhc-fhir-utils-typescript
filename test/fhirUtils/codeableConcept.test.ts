@@ -5,6 +5,7 @@ import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
+import { CodingSystem } from '../../src/models/FhirUtilsModels';
 const fhirUtils = new FhirUtils()
 
 const customLanguageFileSpanishSNOMED:any = {
@@ -21,7 +22,7 @@ describe("test CodeableConcept", () => {
         expect(codeableConcept).toBeDefined
         expect(codeableConcept.text).toBe(customLanguageFileSpanishSNOMED["840544004"])
         
-        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingSNOMED(codeableConcept)
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCoding(codeableConcept, CodingSystem.snomed)
         expect(coding.code).toBe(code)
         expect(coding.display).toBe(internationalDisplay)
 
@@ -40,8 +41,25 @@ describe("test CodeableConcept", () => {
         const codes = fhirUtils.codeableConcept.getCodeListInArrayOfCodeableConcepts(codeableConcepts)
         expect(codes[0]).toBe(code)
 
-        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingSNOMED(codeableConcepts[0])
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCoding(codeableConcepts[0], CodingSystem.snomed)
         const displaySNOMED = fhirUtils.snomed.getDisplayOrTextByCodeSNOMED(code)
         expect(coding.display).toBe(displaySNOMED)
     })
+
+
+    it("should get a single coding from an array of codeable concepts", () => {
+        const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
+        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+            snomedCodes,
+            systemSNOMED,
+            customLanguageFileSpanishSNOMED
+        )
+        // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
+        expect(codeableConcepts.length).toBeGreaterThan(1)
+        
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingInArrayOfCodeableConepts(codeableConcepts, CodingSystem.snomed)
+        expect(coding).toBeDefined()
+        console.log("single coding by array of codeable concepts = ", JSON.stringify(coding))
+    })
+
 })
