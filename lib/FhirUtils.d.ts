@@ -1,4 +1,5 @@
 import { Attachment } from "./fhirUtils/Attachment";
+import { AuditEvent } from "./fhirUtils/AuditEvent";
 import { Bundle } from "./fhirUtils/Bundle";
 import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
@@ -19,6 +20,7 @@ import { Quantity } from "./fhirUtils/Quantity";
 import { Sections } from "./fhirUtils/Sections";
 export declare class FhirUtils {
     attachment: Attachment;
+    auditEvent: AuditEvent;
     bundle: Bundle;
     bundleMessage: BundleMessage;
     codeableConcept: CodeableConcept;

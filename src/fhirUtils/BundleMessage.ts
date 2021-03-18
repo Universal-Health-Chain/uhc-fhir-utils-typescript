@@ -3,46 +3,54 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { validateUUIDv4 } from "./commonUtils"
-
-const Bundle = require ("./Bundle")
+import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle } from "./Bundle"
 
 export class BundleMessage {
     constructor() {
     }
 
-    createPlainMessageFHIR(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
-        return createPlainMessageFHIR(senderId, messageId, bundleDoc, textMessage, attachments, entityTitle, entityDescription)
+    create(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
+        return createBundleMessage(senderId, messageId, bundleDoc, textMessage, attachments, entityTitle, entityDescription)
     }
 
-    getBundleDocumentInFhirMessage(bundleMessage:R4.IBundle): R4.IBundle{
-        return getBundleDocumentInFhirMessage(bundleMessage)
+    createBasicBundleMessage(messageId:string, textMessage?:string, attachments?:R4.IAttachment[]): R4.IBundle {
+        return createBasicBundleMessage(messageId, textMessage, attachments)
     }
 
-    addCommunicationTextToMessageFHIR(fhirMessage:R4.IBundle, text:string): R4.IBundle {
-        return addCommunicationTextToMessageFHIR(fhirMessage, text)
+    createEmptyMessage = (): R4.IBundle => createEmptyMessage()
+
+    // It creates the mandatory MessageHeader with id equal to the messageId (which is like a document ID in CouchDB / PouchDB)
+    createMessageHeader = (messageId:string) : R4.IMessageHeader => createMessageHeader(messageId)
+
+    getBundleDocumentInBundleMessage(bundleMessage:R4.IBundle): R4.IBundle{
+        return getBundleDocumentInBundleMessage(bundleMessage)
     }
 
-    getTextInDecodedMessageFHIR(fhirMessage:R4.IBundle): string {
-        return getTextInDecodedMessageFHIR(fhirMessage)
+    addCommunicationTextToBundleMessage(fhirMessage:R4.IBundle, text:string): R4.IBundle {
+        return addCommunicationTextToBundleMessage(fhirMessage, text)
     }
 
-    addAttachmentsToDecodedMessageFHIR(fhirMessage:R4.IBundle, attachments:R4.IAttachment[]): R4.IBundle {
-        return addAttachmentsToDecodedMessageFHIR(fhirMessage, attachments)
+    getTextInBundleMessage(fhirMessage:R4.IBundle): string {
+        return getTextInBundleMessage(fhirMessage)
     }
 
-    getAttachmentsInDecodedMessageFHIR(fhirMessage:R4.IBundle): R4.IAttachment[] {
-        return getAttachmentsInDecodedMessageFHIR(fhirMessage)
+    addAttachmentsToBundleMessage(fhirMessage:R4.IBundle, attachments:R4.IAttachment[]): R4.IBundle {
+        return addAttachmentsToBundleMessage(fhirMessage, attachments)
     }
 
-    addAuditEventToDecodedMessageFHIR(fhirMessage:R4.IBundle, auditEvent:R4.IAuditEvent): R4.IBundle {
-        return addAuditEventToDecodedMessageFHIR(fhirMessage, auditEvent)
+    getAttachmentsInBundleMessage(fhirMessage:R4.IBundle): R4.IAttachment[] {
+        return getAttachmentsInBundleMessage(fhirMessage)
+    }
+
+    addAuditEventToBundleMessage(fhirMessage:R4.IBundle, auditEvent:R4.IAuditEvent): R4.IBundle {
+        return addAuditEventToBundleMessage(fhirMessage, auditEvent)
     }
     
 }
 
 // export function createBundleMessage(resources?:any[]): R4.IBundle { return createEmptyBundleOfType(R4.BundleTypeKind._message, resources)}
 
-function createEmptyDecodedMessageFHIR(): R4.IBundle{
+function createEmptyMessage(): R4.IBundle{
     let bundle: R4.IBundle = {
         resourceType: "Bundle",
         type: R4.BundleTypeKind._message,
@@ -52,45 +60,45 @@ function createEmptyDecodedMessageFHIR(): R4.IBundle{
     return bundle
 }
 
-function createBodyMessageHeaderFHIR(encryptedMessageId:string) : R4.IMessageHeader {
+function createMessageHeader(messageId:string) : R4.IMessageHeader {
     let messageHeader:R4.IMessageHeader = {
         resourceType: "MessageHeader",
-        id: encryptedMessageId,
+        id: messageId,
         source: {
-            endpoint: encryptedMessageId
+            endpoint: messageId
         }
      }
     return messageHeader
 }
 
-function createBasicMessageFHIR(messageId:string, textMessage?:string, attachments?:R4.IAttachment[]): R4.IBundle {
-    let messageBundle:R4.IBundle = createEmptyDecodedMessageFHIR()
+function createBasicBundleMessage(messageId:string, textMessage?:string, attachments?:R4.IAttachment[]): R4.IBundle {
+    let messageBundle:R4.IBundle = createEmptyMessage()
  
     // It creates the mandatory MessageHeader with id equal to the messageId (which is a document in pouchDB)
-    let messageHeader:R4.IMessageHeader = createBodyMessageHeaderFHIR(messageId)
-    messageBundle = Bundle.addAdditionalResourcesToBundle(messageBundle, [messageHeader])
+    let messageHeader:R4.IMessageHeader = createMessageHeader(messageId)
+    messageBundle = addAdditionalResourcesToBundle(messageBundle, [messageHeader])
  
     // it adds a text sended by the user (if any)
-    if (textMessage) addCommunicationTextToMessageFHIR(messageBundle, textMessage)
+    if (textMessage) addCommunicationTextToBundleMessage(messageBundle, textMessage)
  
     // it adds attachments like additional PDFs or photos if the user attached them
-    if (attachments) addAttachmentsToDecodedMessageFHIR(messageBundle, attachments)
+    if (attachments) addAttachmentsToBundleMessage(messageBundle, attachments)
  
     return messageBundle
  }
  
- export function createPlainMessageFHIR(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
+ export function createBundleMessage(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
      if (!messageId || !validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
     
-    let messageFHIR:R4.IBundle = createBasicMessageFHIR(messageId, textMessage, attachments)
+    let BundleMessage:R4.IBundle = createBasicBundleMessage(messageId, textMessage, attachments)
     
     // it adds a bundle document as payload into a Patient Record Audit Event (if a biograhy entry is present)
     if (bundleDoc) {
         // TODO: create or add to a "Communication" resource with 'contentReference' for a Patient Record Audit Event
         let patientRecordAudit:R4.IAuditEvent = createPatientRecordAuditEvent(senderId, entityTitle, entityDescription)
-        messageFHIR = Bundle.addAdditionalResourcesToBundle(messageFHIR, [patientRecordAudit, bundleDoc])
+        BundleMessage = addAdditionalResourcesToBundle(BundleMessage, [patientRecordAudit, bundleDoc])
     }
-    return messageFHIR
+    return BundleMessage
  }
 
 // It creates the 'entity' of a Patient Record Audit Event
@@ -167,15 +175,15 @@ function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, e
     return auditEvent
 }
 
-export function getBundleDocumentInFhirMessage(bundleMessage:R4.IBundle): R4.IBundle{
-    let bundleDocuments:R4.IBundle[] = Bundle.getResourcesByTypes(bundleMessage, ["Bundle"])
+export function getBundleDocumentInBundleMessage(bundleMessage:R4.IBundle): R4.IBundle{
+    let bundleDocuments:R4.IBundle[] = getResourcesByTypes(bundleMessage, ["Bundle"])
     if (bundleDocuments.length && bundleDocuments.length > 0) {
         return bundleDocuments[0]
     }
     return {} as R4.IBundle
 }
 
-export function addCommunicationTextToMessageFHIR(fhirMessage:R4.IBundle, text:string): R4.IBundle {
+export function addCommunicationTextToBundleMessage(fhirMessage:R4.IBundle, text:string): R4.IBundle {
 
     let newCommunicationPayload:R4.ICommunication_Payload= { contentString: text }
 
@@ -185,13 +193,13 @@ export function addCommunicationTextToMessageFHIR(fhirMessage:R4.IBundle, text:s
         payload: [newCommunicationPayload]
     }
     // It adds the new communication to the bundle of the message and returns a valid bundle
-    let newMessage:R4.IBundle = Bundle.addResourceToBundle(fhirMessage, newCommunication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+    let newMessage:R4.IBundle = addResourceToBundle(fhirMessage, newCommunication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
     // //console.log("newMessage = ", JSON.stringify(newMessage))
     return newMessage
 }
 
-export function getTextInDecodedMessageFHIR(fhirMessage:R4.IBundle): string {
-    let resources:any[] = Bundle.getResourcesByTypes(fhirMessage, ["Communication"])
+export function getTextInBundleMessage(fhirMessage:R4.IBundle): string {
+    let resources:any[] = getResourcesByTypes(fhirMessage, ["Communication"])
     if (resources.length < 1) {
         // //console.log(("No communication resource was found in message"))
         return {} as string
@@ -216,7 +224,7 @@ export function getTextInDecodedMessageFHIR(fhirMessage:R4.IBundle): string {
     else return text
 }
 
-export function addAttachmentsToDecodedMessageFHIR(fhirMessage:R4.IBundle, attachments:R4.IAttachment[]): R4.IBundle {
+export function addAttachmentsToBundleMessage(fhirMessage:R4.IBundle, attachments:R4.IAttachment[]): R4.IBundle {
     if (attachments.length > 1) throw new Error ("Empty attachment")
     
     let communication:R4.ICommunication = { resourceType:"Communication" }
@@ -229,13 +237,13 @@ export function addAttachmentsToDecodedMessageFHIR(fhirMessage:R4.IBundle, attac
     })
     
     // It adds the new communication to the bundle of the message and returns a valid bundle
-    let newMessage:R4.IBundle = Bundle.addResourceToBundle(fhirMessage, communication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+    let newMessage:R4.IBundle = addResourceToBundle(fhirMessage, communication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
     // //console.log("newMessage = ", JSON.stringify(newMessage))
     return newMessage
 }
 
-export function getAttachmentsInDecodedMessageFHIR(fhirMessage:R4.IBundle): R4.IAttachment[] {
-    let resources:any[] = Bundle.getResourcesByTypes(fhirMessage, ["Communication"])
+export function getAttachmentsInBundleMessage(fhirMessage:R4.IBundle): R4.IAttachment[] {
+    let resources:any[] = getResourcesByTypes(fhirMessage, ["Communication"])
     if (resources.length < 1) {
         // //console.log(("No communication resource was found in message"))
         return {} as R4.IAttachment[]
@@ -256,7 +264,7 @@ export function getAttachmentsInDecodedMessageFHIR(fhirMessage:R4.IBundle): R4.I
     return attachments
 }
 
-export function addAuditEventToDecodedMessageFHIR(fhirMessage:R4.IBundle, auditEvent:R4.IAuditEvent): R4.IBundle {
+export function addAuditEventToBundleMessage(fhirMessage:R4.IBundle, auditEvent:R4.IAuditEvent): R4.IBundle {
         // It adds the audit event to the bundle of the message and returns a valid bundle
-        return Bundle.addResourceToBundle(fhirMessage, auditEvent)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+        return addResourceToBundle(fhirMessage, auditEvent)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
 }

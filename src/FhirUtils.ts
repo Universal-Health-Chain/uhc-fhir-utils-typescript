@@ -1,6 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { Attachment } from "./fhirUtils/Attachment";
+import { AuditEvent } from "./fhirUtils/AuditEvent";
 import { Bundle } from "./fhirUtils/Bundle";
 import { BundleMessage } from "./fhirUtils/BundleMessage";
 import { CodeableConcept } from "./fhirUtils/CodeableConcept";
@@ -24,6 +25,7 @@ import { Sections } from "./fhirUtils/Sections";
 
 export class FhirUtils {
     public attachment: Attachment
+    public auditEvent: AuditEvent
     public bundle: Bundle
     public bundleMessage: BundleMessage
     public codeableConcept: CodeableConcept
@@ -46,6 +48,7 @@ export class FhirUtils {
 
     constructor() {
         this.attachment = new Attachment()
+        this.auditEvent = new AuditEvent()
         this.bundle = new Bundle()
         this.bundleMessage = new BundleMessage()
         this.codeableConcept = new CodeableConcept()
