@@ -163,32 +163,32 @@ function findValuesHelper(obj:any, key:string, list:any[]) {
     return list;
 }
 
-// It returns the array of labels (e.g. to create "SelectOption" component)
-export function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile:any, groupedSectionName?: string): string[] {  
+// Only for hl7UHC.json file: It returns the array of labels (e.g. to create "SelectOption" component)
+export function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile:any, targetGroupedSection?: string): string[] {  
     if (!codes.length || codes.length<1) return []
     let labels:string[] = []
-    let codeLabelsKeys = Object.keys(hl7LanguageFile)
-    //console.log("Keys in codeLabels = ", keys)
+    let groupedSections:string[] = Object.keys(hl7LanguageFile)
+    //console.log("groupedSections in languageFile = ", groupedSections)
 
-    if (codeLabelsKeys.length && codeLabelsKeys.length > 0){
+    if (groupedSections.length && groupedSections.length > 0){
         // efficient search
-        if (groupedSectionName && codeLabelsKeys.includes(groupedSectionName)) {
-            codeLabelsKeys.forEach( function(keyName:any, index:number, object:any) {
+        if (targetGroupedSection && groupedSections.includes(targetGroupedSection)) {
+            groupedSections.forEach( function(section:any, index:number, object:any) {
                 // it looks for the specific keySection
-                if (keyName == groupedSectionName) {
+                if (section == targetGroupedSection) {
                     // console.log("get labels in groupedSection = ", groupedSectionName)
                     codes.forEach(function(code:string) {
                         // console.log("label of code " + code + " is = ", codeLabels[groupedSectionName][code])
-                        labels.push(hl7LanguageFile[groupedSectionName][code])
+                        labels.push(hl7LanguageFile[targetGroupedSection][code])
                     })
                 } // else checks next
             })
         }
         // less efficient search
         else {
-            // no "groupedSectionName" was given, so it looks for every "code" in all the sections (keys) of the "codeLabels" object            
+            // no "targetGroupedSection" was given, so it looks for every "code" in all the sections (keys) of the JSON file            
             codes.forEach(function(code:string) {
-                codeLabelsKeys.forEach( function(currentSectionName:any) {
+                groupedSections.forEach( function(currentSectionName:any) {
                     // console.log("looking labels for codes in groupedSectionName = ", currentSectionName)
                     let elements = Object.keys(hl7LanguageFile[currentSectionName])
                     if (elements.length && elements.length > 0){

@@ -14,4 +14,4 @@ export declare class CommonFHIR {
     getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
 }
 export declare function anonymizeResource(fhirResource: any): any;
-export declare function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile: any, groupedSectionName?: string): string[];
+export declare function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile: any, targetGroupedSection?: string): string[];

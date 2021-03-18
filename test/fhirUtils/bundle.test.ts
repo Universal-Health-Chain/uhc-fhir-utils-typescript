@@ -3,11 +3,13 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
 import { systemLOINC } from "../../src/fhirUtils/CommonFHIR";
-import { FhirUtils } from '../../src/FhirUtils';
 
 // importbundleUtils = require('../../src/fhirUtils/Bundle')
-import { Bundle } from '../../src/fhirUtils/Bundle';
-const bundleUtils = new Bundle()
+// import { Bundle } from '../../src/fhirUtils/Bundle';
+// const bundleUtils = new Bundle()
+
+import { FhirUtils } from '../../src/FhirUtils';
+import { CodingSystem } from "../../src";
 const fhirUtils = new FhirUtils()
 
 const authorReferenceIdForTesting = "author-reference-uuid"
@@ -17,7 +19,7 @@ const patientSubject = "2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
 const targetDisease:string = "840539006"
 
 // -- Observation --
-const healthHistorySectionCodeForTesting = "11369-6" // IndexHL7.category.healthSection.DiagnosticResults
+const healthHistorySectionCodeForTesting = "11369-6" // DiagnosticResults
 
 const observationForTesting:R4.IObservation = {
     resourceType: "Observation",
@@ -34,10 +36,39 @@ const observationForTesting:R4.IObservation = {
     }
 }
 
+const DiagnosticReportCovid19:R4.IDiagnosticReport={
+    resourceType: "DiagnosticReport",
+    status: R4.DiagnosticReportStatusKind._final,
+    id: "diagnostic-report-covid-for-testing-uuid",
+    code: {
+        text: "Locale code text for testing",
+        coding: [
+            {
+                code: fhirUtils.covid19.serologyTestsGroupCodeLOINC(),
+                display: fhirUtils.loinc.getDisplayOrTextByCodeLOINC(fhirUtils.covid19.serologyTestsGroupCodeLOINC()),
+                system: CodingSystem.loinc
+            }
+        ]
+    },
+    conclusionCode: [
+        {
+            text: "Resultado en texto local",
+            coding: [
+                {
+                    code: fhirUtils.covid19.confirmedDiseaseSNOMED(),
+                    display: fhirUtils.snomed.getDisplayOrTextByCodeSNOMED(fhirUtils.covid19.confirmedDiseaseSNOMED()),
+                    system: CodingSystem.snomed
+                }
+            ]
+        }
+    ]
+}
+
 
 describe("create FHIR Document Bundle and operates with it", () => { 
   it("should build an empty FHIR Bundle", (done) => {
-      const result = bundleUtils.createBundleDocumentWithTypeLOINC() as any
+      // const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
+      const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
       expect(result.resourceType).toBe("Bundle")
       expect(result.id).toBeDefined()
       expect(result.entry.length).toBe(1)
@@ -45,8 +76,8 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
   it("should add a FHIR resource to a FHIR Bundle", (done) => {
-      let bundle = bundleUtils.createBundleDocumentWithTypeLOINC() as any
-      bundle = bundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
+      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [DiagnosticReportCovid19])
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       // expect(bundle.entry).toBeDefined()
@@ -54,11 +85,11 @@ describe("create FHIR Document Bundle and operates with it", () => {
       expect(bundle.entry).toHaveLength(2)    // updated with the composition resource included
       const resourceEntry = bundle.entry[1]
       expect(resourceEntry).toHaveProperty("resource")      
-      expect(resourceEntry.resource).toEqual(observationForTesting)
+      expect(resourceEntry.resource).toEqual(DiagnosticReportCovid19)
       done()
   });
   it("should create a FHIR bundle from an observation", (done) => {
-      let bundle = bundleUtils.createBundleDocumentWithTypeLOINC([observationForTesting]) as any
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([observationForTesting]) as any
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       expect(bundle.entry).toBeDefined()
@@ -68,17 +99,17 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });    
   it("should get FHIR resources from a FHIR Bundle", (done) => {
-      let bundle = bundleUtils.createBundleDocumentWithTypeLOINC()
-      bundle = bundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resources = bundleUtils.getAllResources(bundle)
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resources = fhirUtils.bundle.getAllResources(bundle)
       expect(resources).toHaveLength(2)   // updated with the composition resource included
       expect(resources[1].resourceType).toEqual(observationForTesting.resourceType)
       done()
   });    
   it("should get FHIR resources by type from a FHIR Bundle", (done) => {
-      let bundle = bundleUtils.createBundleDocumentWithTypeLOINC()
-      bundle = bundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resources = bundleUtils.getResourcesByTypes(bundle, ["Observation"])
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resources = fhirUtils.bundle.getResourcesByTypes(bundle, ["Observation"])
       // //console.log("Resources = ", resources)
       expect(resources).toHaveLength(1)
       expect(resources[0]).toBe(observationForTesting)
@@ -86,9 +117,9 @@ describe("create FHIR Document Bundle and operates with it", () => {
   });
 
   it("should get a FHIR resource by ID from a FHIR Bundle", (done) => {
-      let bundle =bundleUtils.createBundleDocumentWithTypeLOINC()
-      bundle =bundleUtils.addAdditionalResourcesToBundle(bundle, [observationForTesting])
-      let resource =bundleUtils.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
+      let bundle =fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      bundle =fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      let resource =fhirUtils.bundle.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
       expect(resource).toEqual(observationForTesting)
       done()
   });
@@ -101,7 +132,7 @@ describe("create bundle Documents and operates with it", () => {
         //console.log("IndexHL7.category", IndexHL7.category)
 
         // It creates an IPS Bundle document       
-        let ipsDocument =bundleUtils.createEmptyIPS(authorReferenceIdForTesting) as any
+        let ipsDocument =fhirUtils.bundle.createEmptyIPS(authorReferenceIdForTesting) as any
         //console.log("first ipsDocument = ", JSON.stringify(ipsDocument))
         expect(ipsDocument.id).toBeDefined()
         expect(ipsDocument.resourceType).toBe("Bundle")
@@ -109,11 +140,11 @@ describe("create bundle Documents and operates with it", () => {
         expect(ipsDocument.entry[0].resource.resourceType).toBe("Composition")
 
         // It checks isIPS()
-        let checkIPS =bundleUtils.isIPS(ipsDocument)
+        let checkIPS =fhirUtils.bundle.isIPS(ipsDocument)
         expect(checkIPS==true).toBe(true)
 
         // It checks if the "Composition" is of type "IPS"
-        let compositions =bundleUtils.getResourcesByTypes(ipsDocument, ["Composition"]) as any
+        let compositions =fhirUtils.bundle.getResourcesByTypes(ipsDocument, ["Composition"]) as any
         expect(compositions[0]).toBeDefined
         // console.log("composition[0] = ", JSON.stringify(compositions[0]))
         
@@ -122,19 +153,19 @@ describe("create bundle Documents and operates with it", () => {
         expect(compositionCodes.includes("60591-5")).toBeTruthy // or expect(compositionCodes).toContain("60591-5")
 
         // It adds an observation in the section
-        let modifiedIPS =bundleUtils.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, systemLOINC, [observationForTesting]) as any
+        let modifiedIPS =fhirUtils.bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, systemLOINC, [observationForTesting]) as any
         //console.log("IPS Document with added observation = ", JSON.stringify(modifiedIPS))
         expect(modifiedIPS.entry[1].resource).toEqual(observationForTesting)
         // TODO: check if the composition contains the reference to the added resource
 
         // It gets the observation from the IPS document
-        let resources =bundleUtils.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, systemLOINC) as any
+        let resources =fhirUtils.bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, systemLOINC) as any
         //expect(resources[0]).toEqual(observationForTesting)
 
         // It replaces the observation by its id into the IPS document
         let newObservation = observationForTesting
         newObservation.language = "newLanguage"
-        let newIPS =bundleUtils.replaceResourceById(newObservation, modifiedIPS) as any
+        let newIPS =fhirUtils.bundle.replaceResourceById(newObservation, modifiedIPS) as any
         //console.log("newIPS = ", JSON.stringify(newIPS))
         expect(newIPS.entry[1].resource).toBe(newObservation)
         done()
@@ -142,32 +173,83 @@ describe("create bundle Documents and operates with it", () => {
 
     // see also fhirMessageUtils.test.ts
 
-    /*
+    
     it("should add COVID-19 data to an IPS Document ", (done) => {
-        let fhirIPS:R4.IBundle = ipsForTesting as R4.IBundle // JSON.parse(ipsForTesting) // as R4.IBundle
+        let documentIPS:R4.IBundle = require("../examples/Bundle-IPS-examples-Bundle-01.json")
         // It checks isIPS()
-        let checkIPS = isIPS(fhirIPS)
+        let checkIPS = fhirUtils.bundle.isIPS(documentIPS)
         expect(checkIPS==true).toBe(true)
 
-        // Getting (creating) an Immunization and a Lab test
-        let fhirImmunization =  createImmunization(immunizationFormCovid19ForTesting)
-        let fhirDiagnosticReport = (advancedCovid19DiagnosticReportFormForTesting)
-
         // It adds an immunization to the section
-        let immunizationSection = helpers.immunizationHelper.getSectionImmunizationLOINC()
-        let modifiedIPS = addResourcesBySection(fhirIPS, immunizationSection, IndexHL7.CODE_SYSTEMS.LOINC, [fhirImmunization]) as any
+        let immunizationSection = fhirUtils.sections.getSectionImmunizationLOINC()
+        let modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, immunizationSection, CodingSystem.loinc, [ImmunizationCovid19]) as any
         //console.log("IPS Document with added immunization = ", JSON.stringify(modifiedIPS))
         // TODO: check if the composition contains the reference to the added resource
 
         // It adds a lab test to the section
-        let diagnosticResultsSection = helpers.diagnosticReportHelper.getSectionDiagnosticResultsLOINC()
-        modifiedIPS = addResourcesBySection(fhirIPS, diagnosticResultsSection, IndexHL7.CODE_SYSTEMS.LOINC, [fhirDiagnosticReport]) as any
+        let diagnosticResultsSection = fhirUtils.sections.getSectionDiagnosticResultsLOINC()
+        modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, diagnosticResultsSection, CodingSystem.loinc, [DiagnosticReportCovid19]) as any
         
         // console.log("IPS Document = ", JSON.stringify(modifiedIPS))
         // TODO: check if the composition contains the reference to the added resource
 
+        // the tags are get by the frontend and shown to the practitioner
+        let uhcCodeTags = fhirUtils.bundle.getTagsOfBundleDocument(documentIPS)
+        // console.log("uhcCodeTags = ", uhcCodeTags)
+        expect(uhcCodeTags.length).toBeGreaterThan(0)
+        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
+        expect(uhcCodeTags.includes("DiagnosticReport")).toBeTruthy()
+        expect(uhcCodeTags.includes("Immunization")).toBeTruthy()
+        
+        // the practitioner selects COVID-19 tag and then DiagnosticReport tag
+        let covid19DiagnosticReports = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(modifiedIPS) as any
+        expect(covid19DiagnosticReports[0]).toEqual(DiagnosticReportCovid19)
+
+        // the practitioner selects COVID-19 tag and then Immunization tag
+        let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(modifiedIPS) as any
+        expect(covid19Immunizations[0]).toEqual(ImmunizationCovid19)
+
         done()
-    }) 
-    */
+    })
 
 })
+
+const ImmunizationCovid19:R4.IImmunization =  {
+    "doseQuantity": {
+      "code": "ml",
+      "system": "http://unitsofmeasure.org",
+      "value": 0.3
+    },
+    "id": "immunization-for-testing",
+    "lotNumber": "lot-1234",
+    "occurrenceDateTime": "2020-02-18",
+    "patient": {
+      "reference": "Patient/universal-health-id"
+    },
+    "protocolApplied": [
+      {
+        "doseNumberPositiveInt": 1,
+        "seriesDosesPositiveInt": 2,
+        "targetDisease": [
+          {
+            "coding": [
+              {
+                "code": "840539006",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "resourceType": "Immunization",
+    "status": "completed",
+    "vaccineCode": {
+      "coding": [
+        {
+          "code": "207",
+          "system": "http://hl7.org/fhir/sid/cvx"
+        }
+      ]
+    }
+}

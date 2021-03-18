@@ -3,19 +3,23 @@
 
 import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups } from "./Loinc"
 import { covid19DiseaseTerminologySNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
-    negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED, resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED } from "./Snomed"
-import { GlobalIndexFHIR } from "./Hl7"
+    negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED,
+    resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED } from "./Snomed"
+import { GlobalIndexFHIR, getVaccinesCovid19CVX } from "./Hl7"
 import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "./Icd"
 import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts } from "./CodeableConcept"
+import { getResourcesByTypes } from "./Bundle"
+import { CodingSystem } from "../models/FhirUtilsModels"
+
 export class Covid19{
     
     constructor(){
     }
 
-    covid19Tag = ():string => "COVID-19"
+    covid19Tag = ():string => covid19Tag() // "COVID-19"
 
     /** Alert Communications */
     
@@ -38,71 +42,54 @@ export class Covid19{
         isCovid19ExposureAlertCommunication(communication)
 
     /** Get specific codes by HL7 */
-    vaccineCodesCVX = ():string[] => GlobalIndexFHIR.groupedCodes.cvxCovid19.codes
+    vaccineCodesCVX = ():string[] => vaccineCodesCVX()
 
     /** Get specific codes by system WHO's ATC */
-    vaccineCodeATC = ():string => "J07BX03"
+    vaccineCodeATC = ():string => vaccineCodeATC()
     
     /** Get LOINC laboratory test group code: serology or naat group code */
-    naatTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.naatTestsGroup
-    serologyTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.serologyTestsGroup
+    naatTestsGroupCodeLOINC = ():string => naatTestsGroupCodeLOINC()
+    serologyTestsGroupCodeLOINC = ():string => serologyTestsGroupCodeLOINC()
 
     /** Get all or specific LOINC laboratory tests */
-    laboratoryTestsCodesLOINC = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+    laboratoryTestsCodesLOINC = ():string[] => laboratoryTestsCodesLOINC()
     naatTestsCodesLOINC = ():string[] => getFullNaatTestCovid19LOINC()
     serologyTestsCodesLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
 
     /** Get specific codes by system SNOMED */
-    naatResultsCodesSNOMED = ():string[] => [
-        resultCovid19NaatCodesSNOMED.detected, resultCovid19NaatCodesSNOMED.notDetected
-    ]
-    serologyResultsCodesSNOMED = ():string[] => [
-        resultCovid19SerologyCodesSNOMED.positive, resultCovid19SerologyCodesSNOMED.negative
-    ]
-
+    naatResultsCodesSNOMED = ():string[] => naatResultsCodesSNOMED()
+    serologyResultsCodesSNOMED = ():string[] => serologyResultsCodesSNOMED()
     positiveOrDetectedCodesSNOMED = ():string[] => positiveOrDetectedCodesSNOMED()
     negativeOrNotDetectedCodesSNOMED = ():string[] => negativeOrNotDetectedCodesSNOMED()
     suspectedOrInconclusiveCodesSNOMED = ():string[] => suspectedOrInconclusiveCodesSNOMED()
     probablyNotPresentCodesSNOMED = ():string[] => probablyNotPresentCodesSNOMED()
-    
-    vaccinationProcedureCodesInternationalSNOMED = ():string[] => getVaccinationProcedureCovid19CodesSNOMED("INTERNATIONAL")
-    vaccinationProcedureCodesSpainSNOMED = ():string[] => getVaccinationProcedureCovid19CodesSNOMED("ES")
-    confirmedDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.covid19Disease
-    suspectedDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.suspectedCovid19
-    exposureToDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.exposureToCovid19
+    vaccinationProcedureCodesInternationalSNOMED = ():string[] => vaccinationProcedureCodesInternationalSNOMED()
+    vaccinationProcedureCodesSpainSNOMED = ():string[] => vaccinationProcedureCodesSpainSNOMED()
+    confirmedDiseaseSNOMED = ():string => confirmedDiseaseSNOMED()
+    suspectedDiseaseSNOMED = ():string => suspectedDiseaseSNOMED()
+    exposureToDiseaseSNOMED = ():string => exposureToDiseaseSNOMED()
 
     /** Get specific codes by system ICD10 and ICD11 */
-    confirmedDiseaseICD10 = ():string => covid19DiseaseTermsICD10.covid19Disease
-    suspectedDiseaseICD10 = ():string => covid19DiseaseTermsICD10.suspectedCovid19
-    confirmedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.covid19Disease
-    suspectedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.suspectedCovid19
+    confirmedDiseaseICD10 = ():string => confirmedDiseaseICD10()
+    suspectedDiseaseICD10 = ():string => suspectedDiseaseICD10()
+    confirmedDiseaseICD11 = ():string => confirmedDiseaseICD11()
+    suspectedDiseaseICD11 = ():string => suspectedDiseaseICD11()
 
     /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-    vaccineCodes = ():string[] =>  [...this.vaccineCodesCVX(), this.vaccineCodeATC()]
-    isCovid19Vaccine = (code:string):boolean => this.vaccineCodes().includes(code) ? true : false
-    
-    vaccinationProcedureCodes = ():string[] => [
-        ...getVaccinationProcedureCovid19CodesSNOMED("GLOBAL")
-    ]
+    vaccineCodes = ():string[] =>  vaccineCodes()
+    isCovid19Vaccine = (code:string):boolean => isCovid19Vaccine(code)
+    vaccinationProcedureCodes = ():string[] => vaccinationProcedureCodes()
+    diseaseCodes = ():string[] => diseaseCodes()
+    isCovid19Disease= (code:string):boolean => isCovid19Disease(code)
+    suspectedDiseaseCodes = ():string[] => suspectedDiseaseCodes()
+    isSuspectedDisease = (code:string):boolean => isSuspectedDisease(code)
+    diseaseOrSuspectedDiseaseCodes = ():string[] => diseaseOrSuspectedDiseaseCodes()
+    isCovid19OrSuspectedDisease = (code:string):boolean => isCovid19OrSuspectedDisease(code)
+    laboratoryTestCodes = ():string[] => laboratoryTestCodes()
 
-    diseaseCodes = ():string[] => [
-        this.confirmedDiseaseSNOMED(),
-        this.confirmedDiseaseICD10(),
-        this.confirmedDiseaseICD11(),
-    ]
-    isCovid19Disease= (code:string):boolean => this.diseaseCodes().includes(code) ? true : false
-    
-    suspectedDiseaseCodes = ():string[] => [
-        this.suspectedDiseaseSNOMED(),
-        this.suspectedDiseaseICD10(),
-        this.suspectedDiseaseICD11()
-    ]
-    isSuspectedDisease = (code:string):boolean => this.suspectedDiseaseCodes().includes(code) ? true : false
-    
-    diseaseOrSuspectedDiseaseCodes = ():string[] => [...this.diseaseCodes(), ...this.suspectedDiseaseCodes()]
-    isCovid19OrSuspectedDisease = (code:string):boolean => this.diseaseOrSuspectedDiseaseCodes().includes(code) ? true : false
-        
-    laboratoryTestCodes = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+    /** Get COVID-19 specific resoruces */
+    getCovid19DiagnosticReportsInDocument = (bundleDocument:R4.IBundle): R4.IDiagnosticReport[] => getCovid19DiagnosticReportsInDocument(bundleDocument)
+    getCovid19ImmunizationsInDocument = (bundleDocument: R4.IBundle): R4.IImmunization[] => getCovid19ImmunizationsInDocument(bundleDocument)
 }
 
 // identifier should be the same as the UHC Message ID, concepts in english by default
@@ -152,4 +139,81 @@ export function isCovid19ExposureAlertCommunication(communication:R4.ICommunicat
     if (!reasonCodes.includes(covid19DiseaseTerminologySNOMED.exposureToCovid19)) return false
 
     return true // both "alert" and "exposureToCovid19" are present
+}
+
+export const covid19Tag = ():string => "COVID-19"
+
+/** Get specific codes by HL7 */
+const vaccineCodesCVX = ():string[] => GlobalIndexFHIR.groupedCodes.cvxCovid19.codes
+
+/** Get specific codes by system WHO's ATC */
+const vaccineCodeATC = ():string => "J07BX03"
+
+/** Get LOINC laboratory test group code: serology or naat group code */
+const naatTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.naatTestsGroup
+const serologyTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.serologyTestsGroup
+
+/** Get all or specific LOINC laboratory tests */
+const laboratoryTestsCodesLOINC = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+
+/** Get specific codes by system SNOMED */
+const naatResultsCodesSNOMED = ():string[] => [
+    resultCovid19NaatCodesSNOMED.detected, resultCovid19NaatCodesSNOMED.notDetected
+]
+const serologyResultsCodesSNOMED = ():string[] => [
+    resultCovid19SerologyCodesSNOMED.positive, resultCovid19SerologyCodesSNOMED.negative
+]
+const vaccinationProcedureCodesInternationalSNOMED = ():string[] => getVaccinationProcedureCovid19CodesSNOMED("INTERNATIONAL")
+const vaccinationProcedureCodesSpainSNOMED = ():string[] => getVaccinationProcedureCovid19CodesSNOMED("ES")
+const confirmedDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.covid19Disease
+const suspectedDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.suspectedCovid19
+const exposureToDiseaseSNOMED = ():string => covid19DiseaseTerminologySNOMED.exposureToCovid19
+
+/** Get specific codes by system ICD10 and ICD11 */
+const confirmedDiseaseICD10 = ():string => covid19DiseaseTermsICD10.covid19Disease
+const suspectedDiseaseICD10 = ():string => covid19DiseaseTermsICD10.suspectedCovid19
+const confirmedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.covid19Disease
+const suspectedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.suspectedCovid19
+
+/** Merge codes from distinct systems (if several ones, e.g. for searching) */
+export const vaccineCodes = ():string[] =>  [...vaccineCodesCVX(), vaccineCodeATC()]
+const isCovid19Vaccine = (code:string):boolean => vaccineCodes().includes(code) ? true : false
+export const vaccinationProcedureCodes = ():string[] => [...getVaccinationProcedureCovid19CodesSNOMED("GLOBAL")]
+export const diseaseCodes = ():string[] => [confirmedDiseaseSNOMED(),confirmedDiseaseICD10(), confirmedDiseaseICD11()]
+const isCovid19Disease= (code:string):boolean => diseaseCodes().includes(code) ? true : false
+export const suspectedDiseaseCodes = ():string[] => [suspectedDiseaseSNOMED(),suspectedDiseaseICD10(),suspectedDiseaseICD11()]
+const isSuspectedDisease = (code:string):boolean => suspectedDiseaseCodes().includes(code) ? true : false
+export const diseaseOrSuspectedDiseaseCodes = ():string[] => [...diseaseCodes(), ...suspectedDiseaseCodes()]
+const isCovid19OrSuspectedDisease = (code:string):boolean => diseaseOrSuspectedDiseaseCodes().includes(code) ? true : false
+export const laboratoryTestCodes = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+
+// it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
+export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[] {
+    let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypes(bundleDoc, ["DiagnosticReport"])
+    const covid19Codes: string[] = laboratoryTestCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
+    let covid19DiagnosticReports: R4.IDiagnosticReport[] = []
+    diagnosticReports.forEach(function (item: R4.IDiagnosticReport) {
+        // TODO: must ckeck the entire codes into the CodeableConcept "DiagnosticReport.code", not only the first one
+        // let diagnosticReportCodes = getCodesBySystemInCodeableConcept(item.code)
+        if (item.code && item.code.coding && item.code.coding[0].system == CodingSystem.loinc && item.code.coding[0].code) {
+            if (covid19Codes.includes(item.code.coding[0].code)) covid19DiagnosticReports.push(item)
+        }
+    })
+    return covid19DiagnosticReports
+}
+
+// it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
+export function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IImmunization[] {
+    let immunizations: R4.IImmunization[] = getResourcesByTypes(bundleDoc, ["Immunization"])
+    const covid19Codes: string[] = vaccineCodes()   // full COVID-10 vaccine codes: ATC and SNOMED codes
+    // console.log("FullCovid19VaccineCodes = ", covid19Codes)
+    let covid19Immunizations: R4.IImmunization[] = []
+    immunizations.forEach(function (item: R4.IImmunization) {
+        // TODO: must ckeck the entire codes into the CodeableConcept "DiagnosticReport.code", not only the first one
+        // let diagnosticReportCodes = getCodesBySystemInCodeableConcept(item.code)
+        if (item.vaccineCode && item.vaccineCode.coding && item.vaccineCode.coding[0].system ==  GlobalIndexFHIR.groupedCodes.cvx.system && item.vaccineCode.coding[0].code) {
+            if (covid19Codes.includes(item.vaccineCode.coding[0].code)) covid19Immunizations.push(item)
+        }
+    })
+    return covid19Immunizations
 }

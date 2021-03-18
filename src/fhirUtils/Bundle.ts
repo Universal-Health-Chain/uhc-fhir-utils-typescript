@@ -6,8 +6,7 @@ import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
-import { Covid19 } from "./Covid19"
-const covid19Utils = new Covid19()
+import { vaccineCodes, laboratoryTestCodes, covid19Tag } from "./Covid19"
 
 export class Bundle {
     constructor() {
@@ -110,34 +109,32 @@ export function getTimestamp(fhirBundle:R4.IBundle): string {
 }
 
 export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
+    const tagCovid19:string = covid19Tag()
     let uhcCodeTags:string[] = []
     let resources:any = getAllResourcesInBundleEntries(bundleDocument)
     if (resources && resources.length && resources.length > 1) {
         resources.forEach( function(resource:any) {
             if (resource.resourceType != "Composition") {
-                // It adds the resource found to the tags list
-                uhcCodeTags.push(resource.resourceType)
+                // It adds the resource found to the tags list if it does not exists in that list
+                if (!uhcCodeTags.includes(resource.resourceType)) uhcCodeTags.push(resource.resourceType)
                 let codesCovid19:string[] = []
   
                 switch(resource.resourceType) {
                     case ("Immunization"): {
                         // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
-                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19Utils.vaccineCodes(), codesCovid19)
+                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], vaccineCodes(), codesCovid19)
                         // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
                         break
                     }
                     case ("DiagnosticReport"): {
                         // It checks for all COVID-19 laboratory test codes (LOINC)
-                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], covid19Utils.laboratoryTestCodes(), codesCovid19)
+                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], laboratoryTestCodes(), codesCovid19)
                         // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
                         break
                     }
-                    // case ("Immunization"): {}
-                    default:{
-                        // console.log("COVID-19 codes found result: ", codesCovid19)
-                        if (codesCovid19 && codesCovid19.length && codesCovid19.length>0) uhcCodeTags.push(covid19Utils.covid19Tag())
-                    }
                 }
+                // Adding the COVID-19 tag to the list if some COVID-19 code was detected and if the tag does not exists in the list
+                if (codesCovid19 && codesCovid19.length && codesCovid19.length>0 && !uhcCodeTags.includes(tagCovid19)) uhcCodeTags.push(tagCovid19)
             }
         })
     }
