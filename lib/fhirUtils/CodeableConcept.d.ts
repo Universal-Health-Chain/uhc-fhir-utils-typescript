@@ -3,7 +3,8 @@ export declare class CodeableConcept {
     constructor();
     getCodings(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding[];
     getSingleCoding(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding;
-    getSingleCodingInArrayOfCodeableConepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
+    getCodingInArrayOfCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
+    getCodeableConceptInArray(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICodeableConcept;
     createCoding(code: string, system: string): R4.ICoding;
     getExistingTargetCodesInCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], targetCodes: string[]): string[];
     addExistingTargetCodesInCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], targetCodes: string[], currentCodes: string[]): string[];
@@ -14,7 +15,8 @@ export declare class CodeableConcept {
     createArrayOfCodeableConceptsOfSystem(inputCodes: string[], codeSystem: string, customLanguageFile?: any): R4.ICodeableConcept[];
 }
 /** Coding  */
-export declare function getSingleCodingInArrayOfCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
+export declare function getCodeableConceptInArray(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICodeableConcept;
+export declare function getCodingInArrayOfCodeableConcepts(codeableConcepts: R4.ICodeableConcept[], system: string): R4.ICoding;
 export declare function getCodingsBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding[];
 export declare function getSingleCodingBySystem(codeableConcept: R4.ICodeableConcept, system: string): R4.ICoding;
 export declare function createDisplayOrTextOfCodeable(code: string, system: string, customLanguageFile?: any): string;

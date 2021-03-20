@@ -18,8 +18,12 @@ export class CodeableConcept {
         return getSingleCodingBySystem(codeableConcept, system)
     }
 
-    getSingleCodingInArrayOfCodeableConepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
-        return getSingleCodingInArrayOfCodeableConcepts(codeableConcepts, system)
+    getCodingInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
+        return getCodingInArrayOfCodeableConcepts(codeableConcepts, system)
+    }
+
+    getCodeableConceptInArray(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICodeableConcept{
+        return getCodeableConceptInArray(codeableConcepts, system)
     }
 
     /*
@@ -74,7 +78,23 @@ export class CodeableConcept {
 }
 
 /** Coding  */
-export function getSingleCodingInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
+export function getCodeableConceptInArray(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICodeableConcept{
+    let result:R4.ICodeableConcept = {}
+    let found = false
+    codeableConcepts.forEach( function(codeableConcept:R4.ICodeableConcept){
+        if (!found) {
+            const coding = getSingleCodingBySystem(codeableConcept, system)
+            if (coding) {
+                result = codeableConcept
+                found = true
+            }
+        }
+    })
+    // console.log("getGetSingleCodingInArrayOfCodeableConcepts = ", JSON.stringify(result))
+    return result    
+}
+
+export function getCodingInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], system:string): R4.ICoding{
     let result:R4.ICoding = {}
     let found = false
     codeableConcepts.forEach( function(codeableConcept:R4.ICodeableConcept){

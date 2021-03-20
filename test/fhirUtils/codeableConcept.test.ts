@@ -57,9 +57,26 @@ describe("test CodeableConcept", () => {
         // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
         expect(codeableConcepts.length).toBeGreaterThan(1)
         
-        const coding:R4.ICoding = fhirUtils.codeableConcept.getSingleCodingInArrayOfCodeableConepts(codeableConcepts, CodingSystem.snomed)
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getCodingInArrayOfCodeableConcepts(codeableConcepts, CodingSystem.snomed)
         expect(coding).toBeDefined()
         console.log("single coding by array of codeable concepts = ", JSON.stringify(coding))
+    })
+
+    it("should get a single codeable concept from an array of codeable concepts", () => {
+        const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
+        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+            snomedCodes,
+            systemSNOMED,
+            customLanguageFileSpanishSNOMED
+        )
+        // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
+        expect(codeableConcepts.length).toBeGreaterThan(1)
+        
+        const codeableConcept:R4.ICodeableConcept = fhirUtils.codeableConcept.getCodeableConceptInArray(codeableConcepts, CodingSystem.snomed)
+        expect(codeableConcept).toBeDefined()
+
+        const coding:R4.ICoding = fhirUtils.codeableConcept.getCodingInArrayOfCodeableConcepts([codeableConcept], CodingSystem.snomed)
+        expect(coding).toBeDefined()
     })
 
 })
