@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
-import { createArrayOfCodeableConceptsOfSystem, getCodeListInArrayOfCodeableConcepts, getSingleCodingSNOMED } from '../../src/fhirUtils/CodeableConcept';
+import { createArrayOfCodeableConceptsOfSystem, getCodeListInArrayOfCodeableConcepts } from '../../src/fhirUtils/CodeableConcept';
 import { getDisplayOrTextByCodeSNOMED } from '../../src/fhirUtils/Snomed';
 
 import { FhirUtils } from '../../src/FhirUtils';

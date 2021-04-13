@@ -7,6 +7,10 @@ export class Reference {
     constructor(){
     }
 
+    getReferenceType(reference:R4.IReference):string {
+        return getReferenceType(reference)
+    } 
+
     getStringsReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
         return getStringsReferencesByIdentifierAndSystem(referencesFHIR, system)
     }
@@ -27,6 +31,15 @@ export class Reference {
         return createByIdentifiersAndSystem(identifiers, system)
     }
 
+}
+
+export function getReferenceType(reference:R4.IReference):string {
+    if (reference.type) return reference.type
+    if (reference.reference) {
+        const referenceParts:string[] = reference.reference.split('/')  // e.g. 'Patient/uuid' has length = 2
+        if (referenceParts && referenceParts.length && referenceParts.length>=2) return referenceParts[0]
+    }
+    return ""
 }
 
 export function getStringsReferencesByIdentifierAndSystem(referencesFHIR:R4.IReference[], system:string) : string[] {
