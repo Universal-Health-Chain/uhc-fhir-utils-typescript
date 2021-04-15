@@ -1,6 +1,6 @@
 {
     "_version": 2021031101,
-    "eventStatus": {
+    "http://hl7.org/fhir/event-status": {
         "preparation": "Preparation",
         "in-progress": "In Progress",
         "not-done": "Not Done",
@@ -10,7 +10,7 @@
         "entered-in-error": "Entered in Error",
         "unknown": "Unknown"
     },
-    "cvx": {
+    "http://hl7.org/fhir/sid/cvx": {
         "143": "Adenovirus, type 4 and type 7, live, oral",
         "24": "anthrax vaccine",
         "19": "Bacillus Calmette-Guerin vaccine",
@@ -101,13 +101,13 @@
         "187": "zoster vaccine recombinant",
         "121": "zoster vaccine, live"
     },
-    "communicationCategory": {
+    "http://terminology.hl7.org/CodeSystem/communication-category": {
         "alert":"Alert",
         "notification":"Notification",
         "reminder":"Reminder",
         "instruction":"Instruction"
     },
-    "diagnosticServiceSections": {
+    "http://terminology.hl7.org/CodeSystem/v2-0074": {
         "AU": "Audiology",
         "BG": "Blood Gases",
         "BLB": "Blood Bank",
@@ -150,7 +150,7 @@
         "VUS": "Vascular Ultrasound",
         "XRC": "Cineradiograph"
     },
-    "deviceSafety": {
+    "http://ncithesaurus-stage.nci.nih.gov": {
         "C106038": "Not Made with Natural Rubber Latex",
         "C101673": "Labeled as Containing Natural Rubber Latex",
         "C113844": "Labeling does not Contain MRI Safety Information",
@@ -158,7 +158,7 @@
         "C106045": "Magnetic Resonance Safe",
         "C106046": "Magnetic Resonance Conditional"
     },
-    "identifierType": {
+    "http://terminology.hl7.org/CodeSystem/v2-0203": {
         "AC":"Accreditation/Certification  Identifier",
         "ACSN":"Accession  ID",
         "AM":"American  Express",
@@ -287,7 +287,7 @@
         "XV":"Health  Plan  Identifier",
         "XX":"Organization  identifier"
     },
-    "organizationTypes": {
+    "http://terminology.hl7.org/CodeSystem/organization-type": {
         "prov": "Healthcare Provider",
         "dept":	"Hospital Department",
         "bus": "Non-Healthcare Business or Corporation",
