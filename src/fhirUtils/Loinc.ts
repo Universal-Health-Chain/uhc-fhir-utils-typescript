@@ -82,7 +82,7 @@ export function getFullNaatTestCovid19LOINC(): string[] {
     return [
         // "LG51014-5",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
         // "LG51017-8",    // "SARSCoV2 virus detection"
-        ...GlobalIndexLOINC.categorization.laboratory.covid19LoincGroupCodes
+        ...GlobalIndexLOINC.categorization.laboratory.covid19LoincNaatCodes
         // GlobalIndexLOINC.Covid19NaatTestCodes()  // It is not a fuction
     ]
 }
