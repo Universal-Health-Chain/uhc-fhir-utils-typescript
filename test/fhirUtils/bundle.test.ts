@@ -203,10 +203,12 @@ describe("create bundle Documents and operates with it", () => {
         
         // the practitioner selects COVID-19 tag and then DiagnosticReport tag
         let covid19DiagnosticReports = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(modifiedIPS) as any
+        expect(covid19DiagnosticReports.length).toBeGreaterThan(0)
         expect(covid19DiagnosticReports[0]).toEqual(DiagnosticReportCovid19)
 
         // the practitioner selects COVID-19 tag and then Immunization tag
         let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(modifiedIPS) as any
+        expect(covid19Immunizations.length).toBeGreaterThan(0)
         expect(covid19Immunizations[0]).toEqual(ImmunizationCovid19)
 
         done()

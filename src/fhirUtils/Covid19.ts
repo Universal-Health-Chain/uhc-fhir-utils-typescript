@@ -86,6 +86,7 @@ export class Covid19{
     diseaseOrSuspectedDiseaseCodes = ():string[] => diseaseOrSuspectedDiseaseCodes()
     isCovid19OrSuspectedDisease = (code:string):boolean => isCovid19OrSuspectedDisease(code)
     laboratoryTestCodes = ():string[] => laboratoryTestCodes()
+    laboratoryTestAndGroupsCodes = ():string[] => laboratoryTestAndGroupsCodes()
 
     /** Get COVID-19 specific resoruces */
     getCovid19DiagnosticReportsInDocument = (bundleDocument:R4.IBundle): R4.IDiagnosticReport[] => getCovid19DiagnosticReportsInDocument(bundleDocument)
@@ -186,11 +187,17 @@ const isSuspectedDisease = (code:string):boolean => suspectedDiseaseCodes().incl
 export const diseaseOrSuspectedDiseaseCodes = ():string[] => [...diseaseCodes(), ...suspectedDiseaseCodes()]
 const isCovid19OrSuspectedDisease = (code:string):boolean => diseaseOrSuspectedDiseaseCodes().includes(code) ? true : false
 export const laboratoryTestCodes = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+export const laboratoryTestAndGroupsCodes = ():string[] => [
+    covidLaboratoryTestGroups.serologyTestsGroup,
+    covidLaboratoryTestGroups.serologyTestsGroup,
+    ... GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+]
 
 // it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
 export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[] {
     let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypes(bundleDoc, ["DiagnosticReport"])
-    const covid19Codes: string[] = laboratoryTestCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
+    // console.log("diagnosticReports found = ", diagnosticReports)
+    const covid19Codes: string[] = laboratoryTestAndGroupsCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
     let covid19DiagnosticReports: R4.IDiagnosticReport[] = []
     diagnosticReports.forEach(function (item: R4.IDiagnosticReport) {
         // TODO: must ckeck the entire codes into the CodeableConcept "DiagnosticReport.code", not only the first one

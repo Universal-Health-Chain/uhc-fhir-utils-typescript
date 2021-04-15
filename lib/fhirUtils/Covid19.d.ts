@@ -48,6 +48,7 @@ export declare class Covid19 {
     diseaseOrSuspectedDiseaseCodes: () => string[];
     isCovid19OrSuspectedDisease: (code: string) => boolean;
     laboratoryTestCodes: () => string[];
+    laboratoryTestAndGroupsCodes: () => string[];
     /** Get COVID-19 specific resoruces */
     getCovid19DiagnosticReportsInDocument: (bundleDocument: R4.IBundle) => R4.IDiagnosticReport[];
     getCovid19ImmunizationsInDocument: (bundleDocument: R4.IBundle) => R4.IImmunization[];
@@ -66,5 +67,6 @@ export declare const diseaseCodes: () => string[];
 export declare const suspectedDiseaseCodes: () => string[];
 export declare const diseaseOrSuspectedDiseaseCodes: () => string[];
 export declare const laboratoryTestCodes: () => string[];
+export declare const laboratoryTestAndGroupsCodes: () => string[];
 export declare function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[];
 export declare function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IImmunization[];

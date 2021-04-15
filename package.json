@@ -1,6 +1,6 @@
 {
   "name": "uhc-fhir-utils-typescript",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "UHC's FHIR utils (Typescript)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
