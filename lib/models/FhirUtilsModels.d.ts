@@ -2,34 +2,31 @@ export interface GlobalIndex {
     categorization?: any;
     groupedCodes: any;
 }
-export interface IndexLOINC extends GlobalIndex {
+export interface IndexLOINC {
     readonly healthSections: string[];
     readonly covid19SerologyTestCodes: string[];
     readonly covid19NaatTestCodes: string[];
-    categorization: {
-        healthSection: any;
-        documents: any;
-        laboratory: {
-            covid19LoincGroupCodes: string[];
-            covid19LoincNaatCodes: string[];
-            covid19LoincSerologyCodes: string[];
-        };
-    };
+    categorization: CategorizationLOINC;
     groupedCodes: GroupedCodesLOINC;
 }
+export interface CategorizationLOINC {
+    healthSection: any;
+    documents: any;
+    laboratory: LaboratoryCategoriesLOINC;
+}
+export interface LaboratoryCategoriesLOINC {
+    covid19LoincGroupCodes: string[];
+    covid19LoincNaatCodes: string[];
+    covid19LoincSerologyCodes: string[];
+}
 export interface GroupedCodesLOINC {
-    healthSection: {
-        codes: string[];
-    };
-    documentType: {
-        codes: string[];
-    };
-    laboratoryTestCovid19: {
-        codes: string[];
-    };
-    laboratoryTestTopCommonSI: {
-        codes: string[];
-    };
+    healthSection: Codes;
+    documentType: Codes;
+    laboratoryTestCovid19: Codes;
+    laboratoryTestTopCommonSI: Codes;
+}
+interface Codes {
+    codes: string[];
 }
 export interface IndexSNOMED extends GlobalIndex {
     categorization: any;
@@ -79,6 +76,7 @@ export interface IndexFHIR extends GlobalIndex {
 }
 export declare const ExtensionsFHIR: any;
 export declare const GroupedCodesFHIR: any;
+export {};
 /**
     category: {
         // see https://hl7.org/fhir/r4/v2/0203/index.html AND https://www.hl7.org/fhir/v2/0203/index.html

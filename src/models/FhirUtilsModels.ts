@@ -4,27 +4,35 @@ export interface GlobalIndex {
     groupedCodes:   any
 }
 
-export interface IndexLOINC extends GlobalIndex {
+export interface IndexLOINC {   // extends GlobalIndex {
     readonly healthSections:            string[]
     readonly covid19SerologyTestCodes:  string[]
     readonly covid19NaatTestCodes:      string[]
-    categorization: {
-        healthSection:  any
-        documents:      any
-        laboratory: {
-            covid19LoincGroupCodes:     string[] // antibody (serum) or virus (RNA) detection
-            covid19LoincNaatCodes:      string[] // "SARSCoV2 detection (group code) - Nucleic acid amplification test"
-            covid19LoincSerologyCodes:  string[] // 
-        }
-    },
-    groupedCodes: GroupedCodesLOINC
+    categorization:                     CategorizationLOINC
+    groupedCodes:                       GroupedCodesLOINC
+}
+
+export interface CategorizationLOINC {
+    healthSection:  any
+    documents:      any
+    laboratory:     LaboratoryCategoriesLOINC
+}
+
+export interface LaboratoryCategoriesLOINC {
+    covid19LoincGroupCodes:     string[] // antibody (serum) or virus (RNA) detection
+    covid19LoincNaatCodes:      string[] // "SARSCoV2 detection (group code) - Nucleic acid amplification test"
+    covid19LoincSerologyCodes:  string[] // 
 }
 
 export interface GroupedCodesLOINC {
-    healthSection:              {codes:  string[]}
-    documentType:               {codes:  string[]}
-    laboratoryTestCovid19:      {codes:  string[]}
-    laboratoryTestTopCommonSI:  {codes:  string[]}
+    healthSection:              Codes
+    documentType:               Codes
+    laboratoryTestCovid19:      Codes
+    laboratoryTestTopCommonSI:  Codes
+}
+
+interface Codes {
+    codes:  string[]    
 }
 
 export interface IndexSNOMED extends GlobalIndex {
