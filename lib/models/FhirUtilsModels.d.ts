@@ -10,7 +10,9 @@ export interface IndexLOINC extends GlobalIndex {
         healthSection: any;
         documents: any;
         laboratory: {
-            covid19: any;
+            covid19LoincGroupCodes: string[];
+            covid19LoincNaatCodes: string[];
+            covid19LoincSerologyCodes: string[];
         };
     };
     groupedCodes: GroupedCodesLOINC;

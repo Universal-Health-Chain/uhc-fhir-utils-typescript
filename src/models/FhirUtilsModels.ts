@@ -12,7 +12,9 @@ export interface IndexLOINC extends GlobalIndex {
         healthSection:  any
         documents:      any
         laboratory: {
-            covid19:    any  // Classified SARSCoV2 Tests by type: antibody (serum) or virus (RNA) detection
+            covid19LoincGroupCodes:     string[] // antibody (serum) or virus (RNA) detection
+            covid19LoincNaatCodes:      string[] // "SARSCoV2 detection (group code) - Nucleic acid amplification test"
+            covid19LoincSerologyCodes:  string[] // 
         }
     },
     groupedCodes: GroupedCodesLOINC

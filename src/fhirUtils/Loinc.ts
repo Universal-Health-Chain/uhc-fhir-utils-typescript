@@ -72,8 +72,8 @@ export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:any)
 export function getFullSerologyTestCovid19LOINC(): string[] {
     return [
         // "LG51015-2",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
-        "LG51018-6",    // DISPLAY "SARSCoV2 antibody detection"
-        ...GlobalIndexLOINC.categorization.laboratory.covid19["LG51015-2"]["LG51018-6"] 
+        // "LG51018-6",    // DISPLAY "SARSCoV2 antibody detection"
+        ...GlobalIndexLOINC.categorization.laboratory.covid19LoincSerologyCodes
         // GlobalIndexLOINC.Covid19SerologyTestCodes()  // It is not a function
     ]
 }
@@ -81,8 +81,8 @@ export function getFullSerologyTestCovid19LOINC(): string[] {
 export function getFullNaatTestCovid19LOINC(): string[] {
     return [
         // "LG51014-5",    // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
-        "LG51017-8",    // "SARSCoV2 virus detection"
-        ...GlobalIndexLOINC.categorization.laboratory.covid19["LG51014-5"]["LG51017-8"]
+        // "LG51017-8",    // "SARSCoV2 virus detection"
+        ...GlobalIndexLOINC.categorization.laboratory.covid19LoincGroupCodes
         // GlobalIndexLOINC.Covid19NaatTestCodes()  // It is not a fuction
     ]
 }
@@ -90,9 +90,15 @@ export function getFullNaatTestCovid19LOINC(): string[] {
 // TODO: define interface for GlobalIndex objects
 // It contains all the Covid19 test codes by serum or RNA detection
 export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/json2csv
-    get healthSections():string[] { return this.groupedCodes.healthSection.codes },
-    get covid19SerologyTestCodes():string[] { return this.categorization.laboratory.covid19["LG51015-2"]["LG51018-6"] },
-    get covid19NaatTestCodes():string[] { return this.categorization.laboratory.covid19["LG51014-5"]["LG51017-8"] },
+    get healthSections():string[] {
+        return this.groupedCodes.healthSection.codes
+    },
+    get covid19SerologyTestCodes():string[] {
+        return this.categorization.laboratory.covid19LoincSerologyCodes
+    },
+    get covid19NaatTestCodes():string[] {
+        return this.categorization.laboratory.covid19LoincNaatCodes
+    },
     // get "Category"() { return this["_Category"] },
     // set "Category"(value) { this["_Category"] = value },
     
@@ -126,18 +132,13 @@ export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/
         documents: { // custom classification of document codes
         },
         laboratory: {
-            covid19: {  // Classified SARSCoV2 Tests by type: antibody (serum) or virus (RNA) detection
-                "LG51015-2": {      // DISPLAY "SARSCoV2 antibody detection (parent group code) - by Immunoassay or pVNT"
-                    "LG51018-6": [  // DISPLAY "SARSCoV2 antibody detection (group code) - by Immunoassay or pVNT"
-                        "94505-5", "94506-3", "94507-1", "94508-9", "94547-7", "94562-6", "94563-4", "94564-2", "94661-6", "94720-0", "94761-4", "94762-2", "94768-9", "94769-7", "95125-1", "95410-7", "95411-5", "95416-4"
-                    ]
-                },
-                "LG51014-5": {      // DISPLAY: "SARSCoV2 virus detection (parent group code) - Nucleic acid amplification test"
-                    "LG51017-8": [  // DISPLAY: "SARSCoV2 detection (group code) - Nucleic acid amplification test"
-                        "94307-6", "94308-4", "94309-2", "94311-8", "94312-6", "94314-2", "94316-7", "94500-6", "94510-5", "94511-3", "94533-7", "94534-5", "94558-4", "94559-2", "94565-9", "94639-2", "94640-0", "94641-8", "94642-6", "94643-4", "94644-2", "94645-9", "94646-7", "94660-8", "94745-7", "94746-5", "94756-4", "94757-2", "94759-8", "94760-6", "94763-0", "94764-8", "94766-3", "94767-1", "94819-0", "94822-4", "94845-5", "95406-5", "95409-9"
-                    ]
-                }
-            }
+            covid19LoincGroupCodes: ["LG51018-6","LG51017-8"],
+            covid19LoincSerologyCodes: [    
+                "94505-5", "94506-3", "94507-1", "94508-9", "94547-7", "94562-6", "94563-4", "94564-2", "94661-6", "94720-0", "94761-4", "94762-2", "94768-9", "94769-7", "95125-1", "95410-7", "95411-5", "95416-4"
+            ],
+            covid19LoincNaatCodes: [
+                "94307-6", "94308-4", "94309-2", "94311-8", "94312-6", "94314-2", "94316-7", "94500-6", "94510-5", "94511-3", "94533-7", "94534-5", "94558-4", "94559-2", "94565-9", "94639-2", "94640-0", "94641-8", "94642-6", "94643-4", "94644-2", "94645-9", "94646-7", "94660-8", "94745-7", "94746-5", "94756-4", "94757-2", "94759-8", "94760-6", "94763-0", "94764-8", "94766-3", "94767-1", "94819-0", "94822-4", "94845-5", "95406-5", "95409-9"
+            ]
         }
     },
 
