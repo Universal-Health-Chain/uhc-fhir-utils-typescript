@@ -18,6 +18,7 @@ export declare class Covid19 {
     serologyTestsGroupCodeLOINC: () => string;
     /** Get all or specific LOINC laboratory tests */
     laboratoryTestsCodesLOINC: () => string[];
+    activeLaboratoryTestsLOINC: () => string[];
     naatTestsCodesLOINC: () => string[];
     serologyTestsCodesLOINC: () => string[];
     /** Get specific codes by system SNOMED */

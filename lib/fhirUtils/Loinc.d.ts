@@ -47,6 +47,7 @@ export declare enum GroupedLOINC {
     laboratoryTestTopCommonSI = "laboratoryTestTopCommonSI"
 }
 export declare function getDisplayOrTextByCodeLOINC(code: string, loincLanguageFile?: any): string;
+export declare function getActiveLaboratoryTestsCovid19(): string[];
 export declare function getFullSerologyTestCovid19LOINC(): string[];
 export declare function getFullNaatTestCovid19LOINC(): string[];
 export declare const GlobalIndexLOINC: IndexLOINC;

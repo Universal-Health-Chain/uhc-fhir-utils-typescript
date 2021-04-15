@@ -1,7 +1,7 @@
 
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups } from "./Loinc"
+import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups, getActiveLaboratoryTestsCovid19 } from "./Loinc"
 import { covid19DiseaseTerminologySNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
     negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED,
     resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED } from "./Snomed"
@@ -53,6 +53,7 @@ export class Covid19{
 
     /** Get all or specific LOINC laboratory tests */
     laboratoryTestsCodesLOINC = ():string[] => laboratoryTestsCodesLOINC()
+    activeLaboratoryTestsLOINC = ():string [] => getActiveLaboratoryTestsCovid19()
     naatTestsCodesLOINC = ():string[] => getFullNaatTestCovid19LOINC()
     serologyTestsCodesLOINC = ():string[] => getFullSerologyTestCovid19LOINC()
 
