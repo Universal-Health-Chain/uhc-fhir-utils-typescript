@@ -44,6 +44,7 @@ export declare enum test {
 }
 export declare enum CodingSystem {
     icd10 = "http://hl7.org/fhir/sid/icd-10",
+    icd11 = "http://hl7.org/fhir/sid/icd-11",
     loinc = "http://loinc.org",
     snomed = "http://snomed.info/sct",
     ucum = "http://unitsofmeasure.org",

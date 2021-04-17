@@ -52,6 +52,7 @@ export enum test {
 // It provides the 'target grouped section' within a HL7 JSON file or others with sections
 export enum CodingSystem {
     icd10                       = "http://hl7.org/fhir/sid/icd-10", // Target disease ICD10: https://www.hl7.org/fhir/valueset-icd-10.html
+    icd11                       = "http://hl7.org/fhir/sid/icd-11", // not official
     loinc                       = "http://loinc.org",
     snomed                      = "http://snomed.info/sct", // http://hl7.org/fhir/uv/ips/ValueSet-vaccines-gps-uv-ips.html
     ucum                        = "http://unitsofmeasure.org",
