@@ -1,3 +1,4 @@
+import { LocationStatusKind } from "@ahryman40k/ts-fhir-types/lib/R4"
 
 export interface GlobalIndex {
     categorization?:any
@@ -83,6 +84,17 @@ export enum CodingSystem {
     communicationCategory       = "http://terminology.hl7.org/CodeSystem/communication-category",
     eventStatus                 = "http://hl7.org/fhir/event-status",
     organizationType            = "http://terminology.hl7.org/CodeSystem/organization-type",
+    locationMode                = "http://hl7.org/fhir/location-mode",
+    locationStatusKind          = "http://hl7.org/fhir/location-status",
+    locationPhysicalType        = "http://terminology.hl7.org/CodeSystem/location-physical-type",
+    locationBedStatus           = "http://terminology.hl7.org/CodeSystem/v2-0116",
+    daysOfWeek                  = "http://hl7.org/fhir/days-of-week",
+    serviceDeliveryLocationRoleType = "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+    serviceCategory             = "http://terminology.hl7.org/CodeSystem/service-category",
+    serviceType                 = "http://terminology.hl7.org/CodeSystem/service-type",
+    serviceProvisionConditions  = "http://terminology.hl7.org/CodeSystem/service-provision-conditions",
+    servicePrograms             = "http://terminology.hl7.org/CodeSystem/program",
+    serviceReferralMethod       = "http://terminology.hl7.org/CodeSystem/service-referral-method"
 }
 
 export interface IndexFHIR extends GlobalIndex {
