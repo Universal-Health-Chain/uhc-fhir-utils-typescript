@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { IndexSNOMED } from "../models/FhirUtilsModels"
+import { IndexSNOMED } from "../models/SnomedModels"
 
 const vaccinationProcedureCovid19International = "840534001"
 

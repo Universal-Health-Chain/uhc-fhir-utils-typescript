@@ -1,4 +1,4 @@
-import { IndexSNOMED } from "../models/FhirUtilsModels";
+import { IndexSNOMED } from "../models/SnomedModels";
 export declare class Snomed {
     constructor();
     getDisplayOrTextByCodeSNOMED: (code: string, snomedLanguageFile?: any) => string;

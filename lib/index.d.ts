@@ -1,5 +1,5 @@
 export * from "./models/DicomModels";
-export * from "./models/FhirUtilsModels";
+export * from "./models/UtilsModels";
 export * from "./FhirUtils";
 export { GlobalIndexFHIR as GlobalIndexHL7, GlobalIndexFHIR } from "./fhirUtils/Hl7";
 export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./fhirUtils/Loinc";

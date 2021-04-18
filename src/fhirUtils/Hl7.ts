@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { ExtensionsFHIR, GroupedCodesFHIR, IndexFHIR } from "../models/FhirUtilsModels"
+import { ExtensionsFHIR, GroupedCodesFHIR, IndexFHIR } from "../models/FhirModels"
 import { getLabelsOfGroupedCodes } from "./CommonFHIR"
 
 export class Hl7 {

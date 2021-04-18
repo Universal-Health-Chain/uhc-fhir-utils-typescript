@@ -3,7 +3,7 @@
 // exports interfaces
 // export * from "./models";
 export * from "./models/DicomModels";
-export * from "./models/FhirUtilsModels";
+export * from "./models/UtilsModels";
 
 // export classes
 export * from "./FhirUtils";

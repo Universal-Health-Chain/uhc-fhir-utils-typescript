@@ -1,4 +1,4 @@
-import { IndexLOINC } from "../models";
+import { IndexLOINC } from "../models/LoincModels";
 export declare class Loinc {
     constructor();
     aboRhCodeLOINC: () => string;

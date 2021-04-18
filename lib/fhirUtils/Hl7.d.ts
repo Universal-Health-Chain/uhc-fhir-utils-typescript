@@ -1,4 +1,4 @@
-import { IndexFHIR } from "../models/FhirUtilsModels";
+import { IndexFHIR } from "../models/FhirModels";
 export declare class Hl7 {
     constructor();
     getDisplayOrTextInGroupedSection(code: string, hl7LanguageFile?: any, groupedSectionName?: string): string;

@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { IndexLOINC } from "../models"
+import { IndexLOINC } from "../models/LoincModels"
 
 // covid19 related method are in the specific class
 export class Loinc {

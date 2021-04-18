@@ -12,7 +12,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts } from "./CodeableConcept"
 import { getResourcesByTypes } from "./Bundle"
-import { CodingSystem } from "../models/FhirUtilsModels"
+import { CodingSystem } from "../models/UtilsModels"
 
 export class Covid19{
     

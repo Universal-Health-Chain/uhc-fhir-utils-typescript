@@ -5,7 +5,7 @@ import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
-import { CodingSystem } from '../../src/models/FhirUtilsModels';
+import { CodingSystem } from '../../src/models/UtilsModels';
 const fhirUtils = new FhirUtils()
 
 const customLanguageFileSpanishSNOMED:any = {

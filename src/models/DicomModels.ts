@@ -1,3 +1,5 @@
+/* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
+
 export interface CommonDicomdirDatasetContent {
     id:         string  // 'id' is the order of this DICOM's dataset within the DICOMDIR
     uid:        string  // DICOM's UID for this content
