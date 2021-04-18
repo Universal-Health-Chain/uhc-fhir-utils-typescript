@@ -211,7 +211,7 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
 
     it("should display vaccineCodesCVX", () => {
         let codes:string[] = fhirUtils.covid19.vaccineCodesCVX()
-        let displayCode = fhirUtils.hl7.getDisplayOrTextInGroupedSection(codes[0], undefined, CodingSystem.cvx)
+        let displayCode = fhirUtils.hl7.getDisplayOrTextInGroupedSection(codes[0], CodingSystem.cvx)
         // console.log("display code HL7 CVX " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })
