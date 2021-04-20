@@ -90,9 +90,9 @@ export const probablyNotPresentCodesSNOMED = ():string[] => [
 ]
 
 // display code SHALL ALWAYS BE English (international)
-export function getDisplayOrTextByCodeSNOMED(code:string, snomedLanguageFile?:any): string {
+export function getDisplayOrTextByCodeSNOMED(code:string, snomedLanguageFile?:object): string {
     if (!snomedLanguageFile) snomedLanguageFile = require("../../languages/international/snomedGPS.json")
-    return snomedLanguageFile[code] // getDisplayOrTextByCode(code, snomedLanguageFile)
+    return (snomedLanguageFile as any)[code]
 }
 
 // TODO: define interface for GlobalIndex objects

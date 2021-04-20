@@ -45,7 +45,7 @@ export declare const positiveOrDetectedCodesSNOMED: () => string[];
 export declare const negativeOrNotDetectedCodesSNOMED: () => string[];
 export declare const suspectedOrInconclusiveCodesSNOMED: () => string[];
 export declare const probablyNotPresentCodesSNOMED: () => string[];
-export declare function getDisplayOrTextByCodeSNOMED(code: string, snomedLanguageFile?: any): string;
+export declare function getDisplayOrTextByCodeSNOMED(code: string, snomedLanguageFile?: object): string;
 export declare function getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): string[];
 export declare const RegionalIndexSNOMED: any;
 export declare const GlobalIndexSNOMED: IndexSNOMED;

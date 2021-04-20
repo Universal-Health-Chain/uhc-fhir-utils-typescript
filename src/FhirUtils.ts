@@ -1,5 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { Atc } from "./fhirUtils/Atc";
 import { Attachment } from "./fhirUtils/Attachment";
 import { AuditEvent } from "./fhirUtils/AuditEvent";
 import { Bundle } from "./fhirUtils/Bundle";
@@ -24,6 +25,7 @@ import { Sections } from "./fhirUtils/Sections";
 
 
 export class FhirUtils {
+    public atc: Atc
     public attachment: Attachment
     public auditEvent: AuditEvent
     public bundle: Bundle
@@ -47,6 +49,7 @@ export class FhirUtils {
     public sections: Sections
 
     constructor() {
+        this.atc = new Atc()
         this.attachment = new Attachment()
         this.auditEvent = new AuditEvent()
         this.bundle = new Bundle()

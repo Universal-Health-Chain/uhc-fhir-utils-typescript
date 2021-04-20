@@ -1,3 +1,4 @@
+import { Atc } from "./fhirUtils/Atc";
 import { Attachment } from "./fhirUtils/Attachment";
 import { AuditEvent } from "./fhirUtils/AuditEvent";
 import { Bundle } from "./fhirUtils/Bundle";
@@ -19,6 +20,7 @@ import { Reference } from "./fhirUtils/Reference";
 import { Quantity } from "./fhirUtils/Quantity";
 import { Sections } from "./fhirUtils/Sections";
 export declare class FhirUtils {
+    atc: Atc;
     attachment: Attachment;
     auditEvent: AuditEvent;
     bundle: Bundle;

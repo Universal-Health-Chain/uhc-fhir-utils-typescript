@@ -65,9 +65,9 @@ export enum GroupedLOINC {
 }
 
 // display code SHALL ALWAYS BE English (international)
-export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:any): string {
+export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:object): string {
     if (!loincLanguageFile) loincLanguageFile = require("../../languages/international/loinc.json")
-    return loincLanguageFile[code] // getDisplayOrTextByCode(code, loincLanguageFile)
+    return (loincLanguageFile as any)[code]
 }
 
 export function getActiveLaboratoryTestsCovid19():string[]{
