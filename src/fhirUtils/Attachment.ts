@@ -5,6 +5,13 @@ import { v4 as uuidRandom} from "uuid"
 import { decode as decodeBase64 } from "@stablelib/base64"
 // import { validateFhirDateTime } from "./CommonFHIR"
 
+export enum MimeType {
+    jpeg = "image/jpeg",
+    pdf = "application/pdf",
+    png = "image/png",
+    fhirJson = "application/fhir+json",
+    fhirXml = "application/fhir+xml"
+}
 
 export class Attachment {
     constructor() {
