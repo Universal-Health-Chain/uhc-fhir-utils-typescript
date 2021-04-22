@@ -45,18 +45,22 @@ export class CommonFHIR {
 }
 
 export function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]> {
-    const classifiedBundle:any = new Map<string, R4.IBundle[]>()
+    const classifiedData:any = new Map<string, R4.IBundle[]>()
     
     if (fhirDocument.entry && fhirDocument.entry.length && fhirDocument.entry.length>1){
         fhirDocument.entry.forEach( function(entry:R4.IBundle_Entry){
             if (entry.resource && entry.resource.resourceType){
-                classifiedBundle[entry.resource.resourceType]
-                    ? classifiedBundle[entry.resource.resourceType].push(entry.resource)
-                    : classifiedBundle[entry.resource.resourceType] = [entry.resource]             
+
+                let classifiedResourcesByType = classifiedData.get(entry.resource.resourceType)
+                classifiedResourcesByType
+                    ? classifiedResourcesByType.push(entry.resource)
+                    : classifiedResourcesByType = [entry.resource]
+                
+                classifiedData.set(entry.resource.resourceType, classifiedResourcesByType)            
             }
         })
     }
-    return classifiedBundle
+    return classifiedData
 }
 
 // composition.section.entry will be empty in an IPS document, also observation.hasMembers (fix it?)

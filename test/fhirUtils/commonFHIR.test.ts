@@ -1,9 +1,23 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { R4 } from "@ahryman40k/ts-fhir-types";
 import { anonymizeResource } from "../../src/fhirUtils/CommonFHIR";
 import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
+import { FhirUtils } from "../../src"
 
-const ipsDocument:any = require("../examples/Bundle-IPS-examples-Bundle-01.json")
+const fhirUtils = new FhirUtils()
+
+const ipsDocument:R4.IBundle = require("../examples/Bundle-IPS-examples-Bundle-01.json")
+
+describe("fhir organization of bundles", () => {
+    it("should organize bundle by resource type", (done) => {
+        const map = fhirUtils.commonFHIR.classifyBundleByResourceTypes(ipsDocument)
+        console.log("classifyFhirBundleByResourceType map = ", map)
+        expect(map.get("Composition")).not.toBeUndefined()
+        done()
+    })
+
+})
 
 describe("anonymize FHIR data", () => {
 
