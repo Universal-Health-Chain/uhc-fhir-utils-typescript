@@ -4,9 +4,10 @@ import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
 import { CodingSystem } from '../../src/models/UtilsModels';
+
 const fhirUtils = new FhirUtils()
 
-const customLanguageFileSpanishSNOMED:any = {
+const customLanguageFileSpanishSNOMED:object = {
     "840544004":"Sospecha de COVID-19"
 }
 

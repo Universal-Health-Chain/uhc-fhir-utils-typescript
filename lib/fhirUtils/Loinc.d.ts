@@ -20,6 +20,7 @@ export declare enum medicalHistoryClassification {
     procedures = "47519-4",
     diet = "61144-2",
     diagnosticResults = "30954-2",
+    radiologyStudies = "18726-0",
     medicalDevices = "46264-8",
     socialHistory = "29762-2",
     mentalStatus = "10190-7",
