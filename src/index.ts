@@ -7,7 +7,8 @@ export { ExtensionsFHIR } from "./models/FhirModels"
 export { CodingSystem } from "./models/UtilsModels"
 
 // export classes
-export * from "./FhirUtils";
+export * from "./FhirUtils";    // global class
+export * from "./fhirUtils";    // independent classes
 
 // export consts and enums (and functions outside classes)
 export { MimeType } from "./fhirUtils/Attachment"

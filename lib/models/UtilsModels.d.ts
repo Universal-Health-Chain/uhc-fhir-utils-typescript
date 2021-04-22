@@ -14,7 +14,7 @@ export interface Codes {
     codes: string[];
 }
 export interface CodesAndSystem extends Codes {
-    system?: string;
+    system: string;
 }
 export declare enum CodingSystem {
     icd10 = "http://hl7.org/fhir/sid/icd-10",

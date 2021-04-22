@@ -45,7 +45,7 @@ export class CommonFHIR {
 }
 
 export function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]> {
-    const classifiedData:any = new Map<string, R4.IBundle[]>()
+    const classifiedData = new Map<string, R4.IBundle[]>()
     
     if (fhirDocument.entry && fhirDocument.entry.length && fhirDocument.entry.length>1){
         fhirDocument.entry.forEach( function(entry:R4.IBundle_Entry){
@@ -53,8 +53,8 @@ export function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<str
 
                 let classifiedResourcesByType = classifiedData.get(entry.resource.resourceType)
                 classifiedResourcesByType
-                    ? classifiedResourcesByType.push(entry.resource)
-                    : classifiedResourcesByType = [entry.resource]
+                    ? classifiedResourcesByType.push(entry.resource as R4.IBundle)
+                    : classifiedResourcesByType = [entry.resource as R4.IBundle]
                 
                 classifiedData.set(entry.resource.resourceType, classifiedResourcesByType)            
             }

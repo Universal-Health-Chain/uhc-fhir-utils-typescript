@@ -96,7 +96,8 @@ export const GlobalIndexFHIR:IndexFHIR = {
         vaccineManufacturer:{
             codes: [ // ACTIVE codes (China, Russia and Spain are not present)
                 "BTP","MIP","DVC","GEO","SKB","KGC","MBL","MED","MSD","NAB","NVX","OTC","PMC","WAL","OTH","UNK","PFR","JNJ","IDB","GRF","KED","PAX","SEQ","VAL","DVX","TVA","BN","MOD","ASZ","JSN"
-            ]
+            ],
+            system: "http://terminology.hl7.org/CodeSystem/MVX"
         }
     }
 }

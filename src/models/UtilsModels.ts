@@ -19,7 +19,7 @@ export interface Codes {
 }
 
 export interface CodesAndSystem extends Codes {
-    system?: string
+    system: string
 }
 
 // It provides the 'target grouped section' within a HL7 JSON file or others with sections
