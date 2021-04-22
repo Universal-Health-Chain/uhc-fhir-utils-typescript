@@ -28,6 +28,7 @@ export declare enum CodingSystem {
     cpt = "http://www.ama-assn.org/go/cpt",
     cvx = "http://hl7.org/fhir/sid/cvx",
     cvxCovid19 = "http://hl7.org/fhir/sid/cvx",
+    mvx = "https://terminology.hl7.org/ValueSet-v3-VaccineManufacturer.html",
     immunizationFunding = "http://terminology.hl7.org/CodeSystem/immunization-funding-source",
     immunizationEligibilty = "http://terminology.hl7.org/CodeSystem/immunization-program-eligibility",
     immunizationOrigin = "http://terminology.hl7.org/CodeSystem/immunization-origin",
