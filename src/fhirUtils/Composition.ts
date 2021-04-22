@@ -2,10 +2,10 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { GlobalIndexFHIR } from "./Hl7"
-import { validateUUIDv4 } from "./commonUtils"
-import { systemLOINC } from "./CommonFHIR"
 import { CodingSystem } from "../models"
+import { Uuid } from "uhc-common-utils-typescript"
+
+const uuidUtils = new Uuid() 
 
 export class Composition {
     
@@ -81,13 +81,13 @@ export function createDefaultComposition(authorReferenceId?:string, typeDocument
         resourceType: "Composition",
         type: {
             coding: [{
-                system: systemLOINC,
+                system: CodingSystem.loinc,
                 code: typeDocumentCodeLOINC
             }]
         },
         author: [{reference: authorReferenceId}]
     }
-    if (id && validateUUIDv4(id)) composition.id = id
+    if (id && uuidUtils.validateUUIDv4(id)) composition.id = id
     else composition.id = uuidv4()
     return composition
 }

@@ -1,15 +1,20 @@
+const {defaults} = require('jest-config');
 module.exports = {
     globals: {
         "ts-jest": {
-            tsconfig: "tsconfig.json"
+            tsConfig: "tsconfig.json"
         }
     },
-    moduleFileExtensions: [
-        "ts","js","json"
-    ],
+    moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
     transform: {
-        "^.+\\.(ts|tsx)$": "ts-jest"
+        // "^.+\\.(ts|tsx)$": "ts-jest",
+        "^.+\\.[t|j]sx?$": "babel-jest"
     },
+    transformIgnorePatterns: [
+        `[/\\\\]node_modules[/\\\\](?!${[
+            'uhc-common-utils-typescript'
+        ].join('|')})`,
+    ],
     testMatch: [
         "**/test/**/*.test.(ts|js)"
     ],

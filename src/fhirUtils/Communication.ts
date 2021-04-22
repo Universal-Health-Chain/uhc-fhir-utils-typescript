@@ -1,13 +1,15 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { systemUUID } from "./CommonFHIR"
-import { getValidOrNewRandomUUID } from "./commonUtils"
 import { createCodeableConcept } from "./CodeableConcept"
 import { createIdentifierWithoutType } from "./Identifier"
 import { CodingSystem } from "../models"
 import { getDisplayOrTextByCodeHL7 } from "./Hl7"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
+
+import { Uuid } from "uhc-common-utils-typescript"
+
+const uuidUtils = new Uuid() 
 
 export class Communication {
     
@@ -16,7 +18,7 @@ export class Communication {
 
     // identifier should be the same as the UHC Message ID
     create(statusCode:string, categoryCode:string, uuidv4?:string, reasonCode?:string, priorityCode?:string, payloadString?:string): R4.ICommunication{
-        const randomUUID = getValidOrNewRandomUUID(uuidv4)
+        const randomUUID = uuidUtils.getValidOrNewRandomUUID(uuidv4)
         return createCommunication(statusCode, categoryCode, randomUUID, reasonCode, priorityCode, payloadString)
     }
 
@@ -30,7 +32,7 @@ export class Communication {
 
 // identifier should be the same as the UHC Message ID, concepts in english by default
 export function createCommunication(statusCode:string, categoryCode:string, randomUUID:string, reasonCode?:string, priorityCode?:string, payloadString?:string): R4.ICommunication{
-    let communicationIdentifier:R4.IIdentifier = createIdentifierWithoutType("urn:uuid:"+randomUUID, systemUUID)
+    let communicationIdentifier:R4.IIdentifier = createIdentifierWithoutType("urn:uuid:"+randomUUID, CodingSystem.ucum)
     
     let categoryDisplayHL7:string = getDisplayOrTextByCodeHL7(categoryCode)
     let categoryConceptHL7:R4.ICodeableConcept = createCodeableConcept(categoryCode, CodingSystem.communicationCategory, categoryDisplayHL7)

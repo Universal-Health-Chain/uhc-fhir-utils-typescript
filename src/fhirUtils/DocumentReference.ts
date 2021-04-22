@@ -2,6 +2,8 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidRandom} from "uuid"
+import { fhirAttachmentFromBytes } from "./Attachment"
+import { createCoding } from "./CodeableConcept"
 
 export class DocumentReference {
     constructor(){
@@ -20,10 +22,42 @@ export class DocumentReference {
         return getFhirAttachmentsInDocumentReference(documentReference)
     }
     
-    createDocumentReference(contents:R4.IDocumentReference_Content[], id?:string, identifiers?:R4.IIdentifier[]): R4.IDocumentReference {
-        return createDocumentReference(contents, id, identifiers)
+    createDocumentReference(contents:R4.IDocumentReference_Content[], id?:string, categoryCodeLOINC?:string, identifiers?:R4.IIdentifier[]): R4.IDocumentReference {
+        return createDocumentReference(contents, id, categoryCodeLOINC, identifiers)
     }
 
+}
+
+// TODO: urn identifier
+export function DocumentReferenceCertificate(
+    documentIdentifier:     string,     // universal ID of the document (UUID v4 format), it can have several certified / verifiable versions (VC)
+    masterIdentifierVC:     string,     // assigned by the source of the document and specific to this version of the document
+    certifiedBytesAsBase64: Uint8Array, // the original bytes but now encoded in Base64
+    mimeType:               string,     // MIME type of the content bytes
+    subjectReferenceString: string,     // 'Patient/universal-health-identifier'
+    categoryLOINC?:         string,     // medical history section to wich the document corresponds
+    documentTypeLOINC?:     string,     // LOINC Document Class and HITSP C80 Table 2-144 Document Class
+    documentLanguage?:      string,
+    documentTitle?:         string,
+    documentDescription?:   string,
+    contentTitle?:          string,
+    contentFormatURN?:      string      // URN format defined by IHE or HL7
+): R4.IDocumentReference {
+    try {
+        let fhirAttachment:R4.IAttachment = fhirAttachmentFromBytes(certifiedBytesAsBase64, mimeType)
+        let fhirContent:R4.IDocumentReference_Content = {attachment: fhirAttachment}
+        if (!!contentFormatURN) {
+            const coding:R4.ICoding = createCoding(contentFormatURN,"http://ihe.net/fhir/ihe.formatcode.fhir/ValueSet/formatcode")
+            fhirContent.format = coding
+        }
+
+        // TODO: urn identifier
+
+        let documentReference:R4.IDocumentReference = createDocumentReference([fhirContent], categoryLOINC, documentIdentifier)
+        return documentReference
+    } catch (e){
+        return e
+    }
 }
 
 /*
@@ -75,7 +109,7 @@ export function getFhirAttachmentsInDocumentReference(documentReference:R4.IDocu
     return attachments
 }
 
-export function createDocumentReference(contents:R4.IDocumentReference_Content[], id?:string, identifiers?:R4.IIdentifier[]): R4.IDocumentReference {
+export function createDocumentReference(contents:R4.IDocumentReference_Content[], categoryCodeLOINC?:string, id?:string, identifiers?:R4.IIdentifier[]): R4.IDocumentReference {
     if (!id) id = uuidRandom()
     let documentReference: R4.IDocumentReference = {
         id: id,

@@ -109,7 +109,7 @@ export function getTimestamp(fhirBundle:R4.IBundle): string {
 }
 
 export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
-    const tagCovid19:string = covid19Tag()
+    const tagCovid19:string = covid19Tag
     let uhcCodeTags:string[] = []
     let resources:any = getAllResourcesInBundleEntries(bundleDocument)
     if (resources && resources.length && resources.length > 1) {

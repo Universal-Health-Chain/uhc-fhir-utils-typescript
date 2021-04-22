@@ -18,8 +18,8 @@ export interface Codes {
     codes:  string[]    
 }
 
-export enum test {
-
+export interface CodesAndSystem extends Codes {
+    system?: string
 }
 
 // It provides the 'target grouped section' within a HL7 JSON file or others with sections

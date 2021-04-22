@@ -2,8 +2,11 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { validateUUIDv4 } from "./commonUtils"
+// import { validateUUIDv4 } from "./commonUtils"
 import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle } from "./Bundle"
+import { Uuid } from "uhc-common-utils-typescript"
+
+const uuidUtils = new Uuid() 
 
 export class BundleMessage {
     constructor() {
@@ -88,7 +91,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
  }
  
  export function createBundleMessage(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
-     if (!messageId || !validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
+     if (!messageId || !uuidUtils.validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
     
     let BundleMessage:R4.IBundle = createBasicBundleMessage(messageId, textMessage, attachments)
     

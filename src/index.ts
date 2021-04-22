@@ -1,17 +1,18 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 // exports interfaces
-// export * from "./models";
-export * from "./models/DicomModels";
-export * from "./models/UtilsModels";
+export * from "./models";
+// export * from "./models/DicomModels";
+export { ExtensionsFHIR } from "./models/FhirModels"
+export { CodingSystem } from "./models/UtilsModels"
 
 // export classes
 export * from "./FhirUtils";
 
 // export consts and enums (and functions outside classes)
 export { MimeType } from "./fhirUtils/Attachment"
-export { getValidOrNewRandomUUID, sortObject, validateUUIDv4 } from "./fhirUtils/commonUtils"
-export { GlobalIndexFHIR as GlobalIndexHL7, GlobalIndexFHIR } from "./fhirUtils/Hl7"
+export { GlobalIndexATC } from "./fhirUtils/Atc"
+export { GlobalIndexFHIR } from "./fhirUtils/Hl7"
 export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./fhirUtils/Loinc";
 export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED,
     resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED,

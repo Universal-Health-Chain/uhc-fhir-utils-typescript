@@ -1,66 +1,32 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { CodingSystem, GlobalIndex } from "./UtilsModels"
+import { CodesAndSystem, CodingSystem, GlobalIndex } from "./UtilsModels"
 
 export interface IndexFHIR extends GlobalIndex {
-    extension:      any
-    groupedCodes:   any
+    extension:      typeof ExtensionsFHIR
+    groupedCodes:   GroupedCodesFHIR
 }
 
-export const ExtensionsFHIR:any = {
-    mothersFamily: "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family"
+export enum ExtensionsFHIR {
+    mothersFamily = "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family",
+    mothersMaidenName = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
 }
 
-// FHIR 'ValueSets' can contain codes from distinct coding systems, UHC 'grouped codes' are groups of codes from the same coding system
-export const GroupedCodesFHIR:any = {  // https://csvjson.com/json2csv
-    identifierBusiness: {
-        codes: ["TAX","PRN"],
-        system: CodingSystem.identifierBusiness
-    },
-    identifierPersonal:{
-        codes: ["NN","DL","HC","JHN","SB","PPN","PRC","SP","WP"],
-        system: CodingSystem.identifierPersonal
-    },
-    identiferPatient: {  // see https://www.dshs.texas.gov/IDCU/investigation/ELR/Texas-HL7-2_5_1-ELR_Specification_-2016_Final-Draft-4-29-16.pdf
-        codes:["DR","MA","MC","MR","PI","SS","PIN"],
-        system: CodingSystem.identiferPatient
-    },
-    identifierProfessional: {
-        codes:["MD","RN","RPH","TRL","UPIN"],
-        system: CodingSystem.identifierProfessional
-    },
-    identifierGeneral: {
-        codes:["RI"],   // "Resource Identifier" e.g. ES CIAS in old HL7 v2 messages
-        system: CodingSystem.identifierGeneral
-    },
-    diagnosticServiceSections:  {   // https://www.hl7.org/fhir/valueset-diagnostic-service-sections.html
-        codes: ["LAB","AU","BG","BLB","CG","CH","CP","CT","CTH","CUS","EC","EN","GE","HM","ICU","IMM","LAB","MB","MCB","MYC", "NMR","NMS","NRS","OSL","OT","OTH","OUS","PF","PHR","PHY","PT","RAD","RC","RT","RUS","RX","SP","SR","TX","VR","VUS","XRC"],
-        system: CodingSystem.diagnosticServiceSections
-    },
-    deviceSafety: { 
-        codes: ["C106038","C101673","C113844","C106047","C106045","C106046"],
-        system: CodingSystem.deviceSafety
-    },
-    cvx: {
-        codes: ["143","24","19","173","174","172","56","146","28","198","20","106","130","120","195","110","102","49","48","169","104","193","52","83","189","43","44","08","62","165","176","175","160","135","197","186","171","158","150","161","166","149","205","141","140","201","202","200","134","03","94","191","192","162","163","136","114","203","178","170","179","177","133","33","10","119","116","207","208","210","144","168","185","155","206","09","113","196","115","77","190","25","101","75","21","37","183","187","121"],
-        system: CodingSystem.cvx
-    },
-    cvxCovid19: {
-        codes: ["207","208","210"],
-        system: CodingSystem.cvxCovid19
-    },
-    communicationCategory: {
-        codes: ["alert","notification","reminder","instruction"],
-        system: CodingSystem.communicationCategory
-    },
-    eventStatus: {
-        codes: ["preparation","in-progress","completed","not-done","on-hold","stopped","entered-in-error","unknown"],
-        system: CodingSystem.eventStatus
-    },
-    organizationType: {
-        codes: ["prov","dept","bus","ins","govt","cg","edu","pay","team","reli","crs","other"],
-        system: CodingSystem.organizationType
-    }
+// for indexing the ACTIVE codes
+export interface GroupedCodesFHIR {  // https://csvjson.com/json2csv
+    identifierBusiness:         CodesAndSystem
+    identifierPersonal:         CodesAndSystem
+    identiferPatient:           CodesAndSystem
+    identifierProfessional:     CodesAndSystem
+    identifierGeneral:          CodesAndSystem
+    diagnosticServiceSections:  CodesAndSystem
+    deviceSafety:               CodesAndSystem
+    cvx:                        CodesAndSystem
+    cvxCovid19:                 CodesAndSystem
+    communicationCategory:      CodesAndSystem
+    eventStatus:                CodesAndSystem
+    organizationType:           CodesAndSystem
+    vaccineManufacturer:        CodesAndSystem
 }
 
 /**

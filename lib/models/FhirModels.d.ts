@@ -1,10 +1,27 @@
-import { GlobalIndex } from "./UtilsModels";
+import { CodesAndSystem, GlobalIndex } from "./UtilsModels";
 export interface IndexFHIR extends GlobalIndex {
-    extension: any;
-    groupedCodes: any;
+    extension: typeof ExtensionsFHIR;
+    groupedCodes: GroupedCodesFHIR;
 }
-export declare const ExtensionsFHIR: any;
-export declare const GroupedCodesFHIR: any;
+export declare enum ExtensionsFHIR {
+    mothersFamily = "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family",
+    mothersMaidenName = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+}
+export interface GroupedCodesFHIR {
+    identifierBusiness: CodesAndSystem;
+    identifierPersonal: CodesAndSystem;
+    identiferPatient: CodesAndSystem;
+    identifierProfessional: CodesAndSystem;
+    identifierGeneral: CodesAndSystem;
+    diagnosticServiceSections: CodesAndSystem;
+    deviceSafety: CodesAndSystem;
+    cvx: CodesAndSystem;
+    cvxCovid19: CodesAndSystem;
+    communicationCategory: CodesAndSystem;
+    eventStatus: CodesAndSystem;
+    organizationType: CodesAndSystem;
+    vaccineManufacturer: CodesAndSystem;
+}
 /**
     category: {
         // see https://hl7.org/fhir/r4/v2/0203/index.html AND https://www.hl7.org/fhir/v2/0203/index.html

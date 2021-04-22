@@ -1,3 +1,4 @@
+import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Immunization {
     constructor();
     systemVaccineATC: () => string;
@@ -12,3 +13,5 @@ export declare class Immunization {
     systemRouteOfAdministration: () => string;
     systemImmunizationSubpotent: () => string;
 }
+export declare function createCovid19BundleDocumentWithImmunizationAndAttachmentsByGroupATC(attachments: R4.IAttachment[]): R4.IBundle;
+export declare function createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(atcCode: string, attachments: R4.IAttachment[]): R4.IBundle;

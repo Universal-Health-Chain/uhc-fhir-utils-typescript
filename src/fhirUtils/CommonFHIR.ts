@@ -1,10 +1,14 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { R4 } from "@ahryman40k/ts-fhir-types"
+
+/*
 export const systemICD10 = "http://hl7.org/fhir/sid/icd-10"
 export const systemLOINC = "http://loinc.org"
 export const systemSNOMED = "http://snomed.info/sct"
 export const systemUCUM = "http://unitsofmeasure.org"
 export const systemUUID = "urn:ietf:rfc:3986"
+*/
 
 export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing"
 export const FHIR_DATE_REGEX = "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"
@@ -24,6 +28,8 @@ export class CommonFHIR {
         return anonymizeResource(fhirResource)
     }
 
+    classifyBundleByResourceTypes = (fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]> => classifyBundleByResourceTypes(fhirDocument)
+    
     /*
     // TODO:
     validateFhirDateTime(dateTime:string): boolean {
@@ -38,6 +44,20 @@ export class CommonFHIR {
     
 }
 
+export function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]> {
+    const classifiedBundle:any = new Map<string, R4.IBundle[]>()
+    
+    if (fhirDocument.entry && fhirDocument.entry.length && fhirDocument.entry.length>1){
+        fhirDocument.entry.forEach( function(entry:R4.IBundle_Entry){
+            if (entry.resource && entry.resource.resourceType){
+                classifiedBundle[entry.resource.resourceType]
+                    ? classifiedBundle[entry.resource.resourceType].push(entry.resource)
+                    : classifiedBundle[entry.resource.resourceType] = [entry.resource]             
+            }
+        })
+    }
+    return classifiedBundle
+}
 
 // composition.section.entry will be empty in an IPS document, also observation.hasMembers (fix it?)
 // TODO: remove identifier, performer should be empty

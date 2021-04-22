@@ -1,4 +1,3 @@
-
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups, getActiveLaboratoryTestsCovid19 } from "./Loinc"
@@ -9,17 +8,23 @@ import { GlobalIndexFHIR, getVaccinesCovid19CVX } from "./Hl7"
 import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "./Icd"
 import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { getValidOrNewRandomUUID } from "./commonUtils"
+// import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts } from "./CodeableConcept"
 import { getResourcesByTypes } from "./Bundle"
 import { CodingSystem } from "../models/UtilsModels"
+import { Uuid } from "uhc-common-utils-typescript"
+
+const uuidUtils = new Uuid() 
+
+export const covid19Tag = "COVID-19"
+export const vaccineCodeATC = "J07BX03"
 
 export class Covid19{
     
     constructor(){
     }
 
-    covid19Tag = ():string => covid19Tag() // "COVID-19"
+    covid19Tag = ():string => covid19Tag // "COVID-19"
 
     /** Alert Communications */
     
@@ -45,7 +50,7 @@ export class Covid19{
     vaccineCodesCVX = ():string[] => vaccineCodesCVX()
 
     /** Get specific codes by system WHO's ATC */
-    vaccineCodeATC = ():string => vaccineCodeATC()
+    vaccineCodeATC = ():string => vaccineCodeATC
     
     /** Get LOINC laboratory test group code: serology or naat group code */
     naatTestsGroupCodeLOINC = ():string => naatTestsGroupCodeLOINC()
@@ -96,15 +101,15 @@ export class Covid19{
 
 // identifier should be the same as the UHC Message ID, concepts in english by default
 export function createCovid19DiseaseAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.covid19Disease, priorityCode)
+    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.covid19Disease, priorityCode)
 }
 
 export function createCovid19SuspectedAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.suspectedCovid19, priorityCode)
+    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.suspectedCovid19, priorityCode)
 }
 
 export function createCovid19ExposureAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.exposureToCovid19, priorityCode)
+    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.exposureToCovid19, priorityCode)
 }
 
 export function isCovid19DiseaseAlertCommunication(communication:R4.ICommunication): boolean {
@@ -143,13 +148,8 @@ export function isCovid19ExposureAlertCommunication(communication:R4.ICommunicat
     return true // both "alert" and "exposureToCovid19" are present
 }
 
-export const covid19Tag = ():string => "COVID-19"
-
 /** Get specific codes by HL7 */
 const vaccineCodesCVX = ():string[] => GlobalIndexFHIR.groupedCodes.cvxCovid19.codes
-
-/** Get specific codes by system WHO's ATC */
-const vaccineCodeATC = ():string => "J07BX03"
 
 /** Get LOINC laboratory test group code: serology or naat group code */
 const naatTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.naatTestsGroup
@@ -177,8 +177,9 @@ const suspectedDiseaseICD10 = ():string => covid19DiseaseTermsICD10.suspectedCov
 const confirmedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.covid19Disease
 const suspectedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.suspectedCovid19
 
+
 /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-export const vaccineCodes = ():string[] =>  [...vaccineCodesCVX(), vaccineCodeATC()]
+export const vaccineCodes = ():string[] =>  [...vaccineCodesCVX(), vaccineCodeATC]
 const isCovid19Vaccine = (code:string):boolean => vaccineCodes().includes(code) ? true : false
 export const vaccinationProcedureCodes = ():string[] => [...getVaccinationProcedureCovid19CodesSNOMED("GLOBAL")]
 export const diseaseCodes = ():string[] => [confirmedDiseaseSNOMED(),confirmedDiseaseICD10(), confirmedDiseaseICD11()]

@@ -1,7 +1,5 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
-
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
@@ -18,7 +16,7 @@ describe("test CodeableConcept", () => {
         const internationalDisplay = fhirUtils.snomed.getDisplayOrTextByCodeSNOMED(code)
         const customText = customLanguageFileSpanishSNOMED[code]
        
-        const codeableConcept = createCodeableConcept(code, systemSNOMED, internationalDisplay, "systemVersion", false, customText)
+        const codeableConcept = createCodeableConcept(code, CodingSystem.snomed, internationalDisplay, "systemVersion", false, customText)
         expect(codeableConcept).toBeDefined
         expect(codeableConcept.text).toBe(customLanguageFileSpanishSNOMED["840544004"])
         
@@ -31,7 +29,7 @@ describe("test CodeableConcept", () => {
         const code = fhirUtils.covid19.suspectedDiseaseSNOMED()
         const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             [code],
-            systemSNOMED,
+            CodingSystem.snomed,
             customLanguageFileSpanishSNOMED
         )
         // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
@@ -51,7 +49,7 @@ describe("test CodeableConcept", () => {
         const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
         const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             snomedCodes,
-            systemSNOMED,
+            CodingSystem.snomed,
             customLanguageFileSpanishSNOMED
         )
         // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))
@@ -66,7 +64,7 @@ describe("test CodeableConcept", () => {
         const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
         const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             snomedCodes,
-            systemSNOMED,
+            CodingSystem.snomed,
             customLanguageFileSpanishSNOMED
         )
         // console.log("codeable concepts = ", JSON.stringify(codeableConcepts))

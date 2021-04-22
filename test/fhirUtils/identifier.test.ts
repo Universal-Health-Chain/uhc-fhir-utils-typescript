@@ -1,12 +1,9 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { systemSNOMED } from '../../src/fhirUtils/CommonFHIR';
-import { createArrayOfCodeableConceptsOfSystem, getCodeListInArrayOfCodeableConcepts } from '../../src/fhirUtils/CodeableConcept';
-import { getDisplayOrTextByCodeSNOMED } from '../../src/fhirUtils/Snomed';
 
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
-import { GlobalIndexHL7 } from '../../src';
+import { GlobalIndexFHIR } from '../../src';
 const fhirUtils = new FhirUtils()
 
 const customLanguageFileSpanishHL7:any = {
@@ -22,7 +19,7 @@ describe("test Identifer", () => {
         const identifierTypeCode = hl7CodeType + "ESP" // HL7 type code: Spanish National Person Identifier
         const identifierConcept:R4.ICodeableConcept = fhirUtils.codeableConcept.createCodeableConceptWithLanguageFile(
             identifierTypeCode,
-            GlobalIndexHL7.groupedCodes.identifierPersonal.system, // "http://hl7.org/fhir/v2/0203/"
+            GlobalIndexFHIR.groupedCodes.identifierPersonal.system, // "http://hl7.org/fhir/v2/0203/"
             customLanguageFileSpanishHL7
         )
         // console.log("identifier.type = ", JSON.stringify(identifierType))

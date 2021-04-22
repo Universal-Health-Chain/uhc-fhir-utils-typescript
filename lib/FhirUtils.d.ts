@@ -10,15 +10,16 @@ import { Composition } from "./fhirUtils/Composition";
 import { Covid19 } from "./fhirUtils/Covid19";
 import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
 import { DocumentReference } from "./fhirUtils/DocumentReference";
+import { Hl7 } from "./fhirUtils/Hl7";
 import { Identifier } from "./fhirUtils/Identifier";
 import { ImagingStudy } from "./fhirUtils/ImagingStudy";
 import { Immunization } from "./fhirUtils/Immunization";
-import { Hl7 } from "./fhirUtils/Hl7";
 import { Loinc } from "./fhirUtils/Loinc";
-import { Snomed } from "./fhirUtils/Snomed";
-import { Reference } from "./fhirUtils/Reference";
+import { Personal } from "./fhirUtils/Personal";
 import { Quantity } from "./fhirUtils/Quantity";
+import { Reference } from "./fhirUtils/Reference";
 import { Sections } from "./fhirUtils/Sections";
+import { Snomed } from "./fhirUtils/Snomed";
 export declare class FhirUtils {
     atc: Atc;
     attachment: Attachment;
@@ -32,14 +33,15 @@ export declare class FhirUtils {
     covid19: Covid19;
     diagnosticReport: DiagnosticReport;
     documentReference: DocumentReference;
+    hl7: Hl7;
     identifier: Identifier;
     imagingStudy: ImagingStudy;
     immunization: Immunization;
-    hl7: Hl7;
     loinc: Loinc;
-    snomed: Snomed;
-    reference: Reference;
+    personal: Personal;
     quantity: Quantity;
+    reference: Reference;
     sections: Sections;
+    snomed: Snomed;
     constructor();
 }

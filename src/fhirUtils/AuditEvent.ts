@@ -1,5 +1,8 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { getValidOrNewRandomUUID } from "./commonUtils"
+// import { getValidOrNewRandomUUID } from "./commonUtils"
+import { Uuid } from "uhc-common-utils-typescript"
+
+const uuidUtils = new Uuid() 
 
 export class AuditEvent{
 
@@ -70,7 +73,7 @@ function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, e
     }
 
     let auditEvent:R4.IAuditEvent = {
-        id: getValidOrNewRandomUUID(),
+        id: uuidUtils.getValidOrNewRandomUUID(),
         resourceType: "AuditEvent",
         type: {
             code: "110110"  // Patient record audit event: Patient Record has been created, read, updated, or deleted

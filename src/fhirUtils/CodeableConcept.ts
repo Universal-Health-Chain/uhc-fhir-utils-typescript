@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { systemLOINC, systemSNOMED } from "./CommonFHIR"
+import { CodingSystem } from "../models"
 import { getDisplayOrTextByCodeHL7 } from "./Hl7"
 import { getDisplayOrTextByCodeLOINC } from "./Loinc"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
@@ -152,12 +152,12 @@ export function createDisplayOrTextOfCodeable(code:string, system:string, custom
     // it checks if HL7 or others
     let result:string = ""
     switch (String(systemType)) {
-        case systemLOINC: {
+        case CodingSystem.loinc: {
             result = getDisplayOrTextByCodeLOINC(code, customLanguageFile)
             // console.log("getDisplayOrTextByCodeLOINC = ", result)
             break
         }
-        case systemSNOMED: {
+        case CodingSystem.snomed: {
             result = getDisplayOrTextByCodeSNOMED(code, customLanguageFile)
             // console.log("getDisplayOrTextByCodeSNOMED = ", result)
             break

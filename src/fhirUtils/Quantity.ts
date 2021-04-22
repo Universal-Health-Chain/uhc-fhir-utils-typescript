@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { systemUCUM } from "./CommonFHIR"
+import { CodingSystem } from "../models"
 
 export class Quantity {
     constructor() {
@@ -33,7 +33,7 @@ export function createSimpleQuantityByCodeMl(number:number){
 export function createSimpleQuantity(number:number, code:string){
     let simpleQuantityInMl:R4.IQuantity = {
         value: number,
-        system: systemUCUM, // System that defines coded unit form
+        system: CodingSystem.ucum, // System that defines coded unit form
         code:   code  // Coded form of the unit ("mg", "ml", ...)
         // unit: "mL", // Unit string representation
     }

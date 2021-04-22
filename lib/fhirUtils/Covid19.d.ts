@@ -1,4 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
+export declare const covid19Tag = "COVID-19";
+export declare const vaccineCodeATC = "J07BX03";
 export declare class Covid19 {
     constructor();
     covid19Tag: () => string;
@@ -60,7 +62,6 @@ export declare function createCovid19ExposureAlertCommunication(priorityCode?: s
 export declare function isCovid19DiseaseAlertCommunication(communication: R4.ICommunication): boolean;
 export declare function isCovid19SuspectedAlertCommunication(communication: R4.ICommunication): boolean;
 export declare function isCovid19ExposureAlertCommunication(communication: R4.ICommunication): boolean;
-export declare const covid19Tag: () => string;
 /** Merge codes from distinct systems (if several ones, e.g. for searching) */
 export declare const vaccineCodes: () => string[];
 export declare const vaccinationProcedureCodes: () => string[];

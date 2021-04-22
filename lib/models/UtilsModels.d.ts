@@ -13,7 +13,8 @@ export interface LanguageFiles {
 export interface Codes {
     codes: string[];
 }
-export declare enum test {
+export interface CodesAndSystem extends Codes {
+    system?: string;
 }
 export declare enum CodingSystem {
     icd10 = "http://hl7.org/fhir/sid/icd-10",

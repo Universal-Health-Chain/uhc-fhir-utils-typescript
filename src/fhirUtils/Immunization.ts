@@ -1,5 +1,8 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { R4 } from "@ahryman40k/ts-fhir-types"
+import { vaccineCodeATC } from "./Covid19"
+
 export class Immunization {
     
     constructor() {
@@ -17,4 +20,13 @@ export class Immunization {
     systemRouteOfAdministration    = () => "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration"
     systemImmunizationSubpotent    = () => "http://terminology.hl7.org/CodeSystem/immunization-subpotent-reason"
 
+}
+
+export function createCovid19BundleDocumentWithImmunizationAndAttachmentsByGroupATC(attachments:R4.IAttachment[]):R4.IBundle {
+    return createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(vaccineCodeATC, attachments)
+}
+
+export function createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(atcCode:string, attachments:R4.IAttachment[]) : R4.IBundle {
+    let bundleDoc:R4.IBundle = {resourceType:"Bundle"}
+    return bundleDoc
 }
