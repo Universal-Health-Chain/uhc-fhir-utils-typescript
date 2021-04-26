@@ -1491,5 +1491,11 @@
         "MOD":"Moderna US, Inc.",
         "ASZ":"AstraZeneca",
         "JSN":"Janssen"
+    },
+    "http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier":{
+        "ABC":"Alphabetic",
+        "ABJ":"Abjad",
+        "IDE":"Ideographic",
+        "SYL":"Syllabic"
     }
 }

@@ -23,6 +23,7 @@ export declare enum CodingSystem {
     snomed = "http://snomed.info/sct",
     ucum = "http://unitsofmeasure.org",
     uuid = "urn:ietf:rfc:3986",
+    humanNameRepresentationISO = "http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation",
     deviceSafety = "http://ncithesaurus-stage.nci.nih.gov",
     atc = "http://www.whocc.no/atc",
     cpt = "http://www.ama-assn.org/go/cpt",

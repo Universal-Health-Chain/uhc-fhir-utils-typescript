@@ -31,6 +31,7 @@ export enum CodingSystem {
     ucum                        = "http://unitsofmeasure.org",
     uuid                        = "urn:ietf:rfc:3986",
 
+    humanNameRepresentationISO  = "http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation",
     deviceSafety                = "http://ncithesaurus-stage.nci.nih.gov",  // NCI Thesaurus is urn:oid:2.16.840.1.113883.3.26.1.1
 
     atc                         = "http://www.whocc.no/atc", // ATC Vaccine groups: https://www.whocc.no/ddd/lists_of_temporary_atc_ddds_and_alterations/atc_codes/
