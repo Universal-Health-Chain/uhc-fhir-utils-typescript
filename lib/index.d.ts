@@ -2,7 +2,7 @@ export * from "./models";
 export { ExtensionsFHIR } from "./models/FhirModels";
 export { CodingSystem } from "./models/UtilsModels";
 export * from "./FhirUtils";
-export * from "./fhirUtils";
+export * from "./fhirUtils/index";
 export { MimeType } from "./fhirUtils/Attachment";
 export { GlobalIndexATC } from "./fhirUtils/Atc";
 export { GlobalIndexFHIR } from "./fhirUtils/Hl7";
