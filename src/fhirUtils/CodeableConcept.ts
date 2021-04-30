@@ -68,12 +68,16 @@ export class CodeableConcept {
         return createCodeableConcept(typeCode, codeSystem, internationalDisplay, systemVersion, userSelected, customText)
     }
 
-    createCodeableConceptWithLanguageFile(typeCode:string, codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept {
-        return createCodeableConceptWithLanguageFile(typeCode, codeSystem, customLanguageFile)
+    createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept {
+        return createCodeableConceptWithOptionalLanguage(typeCode, codeSystem, customLanguageFile)
     }
 
-    createArrayOfCodeableConceptsOfSystem(inputCodes:string[], codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept[] {
-        return createArrayOfCodeableConceptsOfSystem(inputCodes, codeSystem, customLanguageFile)
+    createArrayOfCodeableConceptsOfSystem(inputCodes:string[]|undefined, codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept[] {
+        return createCodeableConceptsArrayOfSystem(inputCodes, codeSystem, customLanguageFile)
+    }
+
+    createCodingArrayOfSystem(inputCodes:string[]|undefined, codeSystem:string, englishData:object) : R4.ICoding[] {
+        return createCodingArrayOfSystem(inputCodes, codeSystem, englishData)
     }
 }
 
@@ -240,7 +244,8 @@ export function getCodeListInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeab
 }
 
 // It creates CodeableConcept with display in english and text also in english or in other language if language file is provided
-export function createCodeableConceptWithLanguageFile(typeCode:string, codeSystem:string, customLanguageFile?:any, systemVersion?:string, userSelected?:boolean) : R4.ICodeableConcept {
+export function createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any, systemVersion?:string, userSelected?:boolean) : R4.ICodeableConcept {
+    if (!typeCode) return [] as R4.ICodeableConcept
     // invert order of customLanguageFile and system because system is mandatory in coding
     const internationalDisplay:string = createDisplayOrTextOfCodeable(typeCode, codeSystem) // international display text in English by default, no customLanguageFile
     //console.log("createCodeableConceptBySystem display = ", display)
@@ -261,17 +266,36 @@ export function createCodeableConcept(typeCode:string, codeSystem:string, intern
     return codeableConcept    
 }
 
-export function createArrayOfCodeableConceptsOfSystem(inputCodes:string[], system:string, customLanguageFile?:any) : R4.ICodeableConcept[] {
-    if (!inputCodes.length || inputCodes.length < 1) throw new Error ("Missing codes")
-    
+// it does not throws an error if empty
+export function createCodeableConceptsArrayOfSystem(inputCodes:string[]|undefined, system:string, customLanguageFile?:any) : R4.ICodeableConcept[] {
     let output:R4.ICodeableConcept[] = []
+    if (!inputCodes || !inputCodes.length || inputCodes.length < 1) return output // throw new Error ("Missing codes")
 
     inputCodes.forEach(function(code){
-        let newCodeableConcept:R4.ICodeableConcept = createCodeableConceptWithLanguageFile(code, system, customLanguageFile)
+        let newCodeableConcept:R4.ICodeableConcept = createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile)
 
         // put the CodeableConcept in the output array
         if (!output) output = [newCodeableConcept]    // if not initialized
         else output.push(...output, newCodeableConcept)
+    })
+
+    return output
+}
+
+// it does not throws an error if empty; it is used to generate several target diseases in a code system for a single CodeableConcept
+export function createCodingArrayOfSystem(inputCodes:string[]|undefined, codeSystem:string, englishData:object) : R4.ICoding[] {
+    let output:R4.ICoding[] = []
+    if (!inputCodes || inputCodes.length || inputCodes.length < 1) return output // throw new Error ("Missing codes")
+
+    inputCodes.forEach(function(typeCode){
+        const internationalDisplay = createDisplayOrTextOfCodeable(typeCode, codeSystem, englishData)
+        // console.log("internationalDisplay = ", internationalDisplay)
+    
+        let newCoding:R4.ICoding = createCoding(typeCode, codeSystem, internationalDisplay)
+
+        // put the CodeableConcept in the output array
+        if (!output) output = [newCoding]   // if not initialized
+        else output.push(...output, newCoding)
     })
 
     return output

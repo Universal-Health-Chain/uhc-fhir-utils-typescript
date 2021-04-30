@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { createCodeableConceptWithLanguageFile, createCodeableConcept } from "./CodeableConcept"
+import { createCodeableConceptWithOptionalLanguage, createCodeableConcept } from "./CodeableConcept"
 
 export class Identifier {
     
@@ -52,7 +52,7 @@ export function addIdentifierToResource(fhirResource:any, system:string, value:s
 }
 
 export function createIdentifierType(code:string, system:string, customLanguageFile?:any):R4.ICodeableConcept{
-    return createCodeableConceptWithLanguageFile(code, system, customLanguageFile)
+    return createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile)
 }
 
 export function createIdentifierByType(typeCode:string, codeSystem:string, internationalDisplay:string, systemVersion?:string, userSelected?:boolean, customText?:string):R4.IIdentifier{

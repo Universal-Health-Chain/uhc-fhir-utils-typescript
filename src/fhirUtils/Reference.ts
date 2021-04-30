@@ -23,7 +23,7 @@ export class Reference {
         return createWithStringReference(strReference, type, display)
     }
     
-    createByStringsReferences(literalReferences:string[]): R4.IReference[]{
+    createByStringsReferences(literalReferences:string[]|undefined): R4.IReference[]{
         return createByStringsReferences(literalReferences)
     }
     
@@ -72,10 +72,10 @@ export function createWithStringReference(strReference:string, type?:string, dis
     return fhirReference
 }
 
-export function createByStringsReferences(literalReferences:string[]): R4.IReference[]{
-    if (!literalReferences.length || literalReferences.length < 1) throw new Error ("Missing literal references")
-
+// no error if empty because it accepts undefined as input
+export function createByStringsReferences(literalReferences:string[]|undefined): R4.IReference[]{
     let referencesFHIR:R4.IReference[] = []
+    if (!literalReferences || !literalReferences.length || literalReferences.length < 1) return referencesFHIR
 
     literalReferences.forEach(function(item){
         let newReference:R4.IReference = { reference: item }

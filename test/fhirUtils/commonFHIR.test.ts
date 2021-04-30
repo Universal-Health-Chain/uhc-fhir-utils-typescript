@@ -12,7 +12,7 @@ const ipsDocument:R4.IBundle = require("../examples/Bundle-IPS-examples-Bundle-0
 describe("fhir organization of bundles", () => {
     it("should organize bundle by resource type", (done) => {
         const map = fhirUtils.commonFHIR.classifyBundleByResourceTypes(ipsDocument)
-        console.log("classifyFhirBundleByResourceType map = ", map)
+        // console.log("classifyFhirBundleByResourceType map = ", map)
         expect(map.get("Composition")).not.toBeUndefined()
         done()
     })

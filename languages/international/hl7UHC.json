@@ -1497,5 +1497,32 @@
         "ABJ":"Abjad",
         "IDE":"Ideographic",
         "SYL":"Syllabic"
+    },
+    "http://terminology.hl7.org/CodeSystem/immunization-funding-source":{
+        "private":"Private",
+        "public":"Public"
+    },
+    "http://terminology.hl7.org/CodeSystem/v2-0443":{
+        "OP":"Ordering Provider",
+        "AP":"Administering Provider"	
+    },
+    "http://terminology.hl7.org/CodeSystem/immunization-program-eligibility":{
+        "ineligible":"Not Eligible",
+        "uninsured":"Uninsured"
+    },
+    "http://terminology.hl7.org/CodeSystem/v3-ActSite":{
+        "LA":"Left arm",
+        "RA":"Right arm"
+    },
+    "http://terminology.hl7.org/CodeSystem/v3-ActReason":{
+        "IMMUNE":"immunity",
+        "MEDPREC":"medical precaution",
+        "OSTOCK":"product out of stock",
+        "PATOBJ":"patient objection"
+    },
+    "http://terminology.hl7.org/CodeSystem/immunization-subpotent-reason":{
+        "partial":"Partial Dose",
+        "coldchainbreak":"Cold Chain Break",
+        "recall":"Manufacturer Recall"
     }
 }
