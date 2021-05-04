@@ -6,7 +6,7 @@ import { encode as encodeBase64, decode as decodeBase64 } from "@stablelib/base6
 // import { validateFhirDateTime } from "./CommonFHIR"
 import { CommonUtilsUHC } from "uhc-common-utils-typescript"
 
-const uhcUtils = new CommonUtilsUHC()
+const commonUtils = new CommonUtilsUHC()
 
 export enum MimeType {
     jpeg = "image/jpeg",
@@ -20,61 +20,43 @@ export class Attachment {
     constructor() {
     }
 
-    /*
-    createAttachmentFHIR(url: string, resourceLanguage?: string, size?: number, hash?: string, creation?: string, title?: string): R4.IAttachment {
-        return createAttachmentFHIR(url, resourceLanguage, size, hash, creation, title)
-    }
-    */
-
-    // MIME type is mandatory and it returns error if empty bytes
-    fhirAttachmentFromBytes(bytesArray:Uint8Array, mimeType:string, id?:string, url?:string, title?:string, language?:string, creationDateTime?:string): R4.IAttachment {
-        return fhirAttachmentFromBytes(bytesArray, mimeType, id, url, title, language, creationDateTime)
-    }
-
     createFhirAttachment(mimeType?:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
-        return createFhirAttachment(mimeType, id, url, title, language, hashSHA1, size, base64Data, creationDateTime)
+        // it is used also by DICOM
+        return createFhirAttachment(mimeType, id, url, title, language, hashSHA1, size, base64Data, creationDateTime)       
+    }
+
+    // TODO: sort
+    createFhirAttachmentWithOptionalBytes(mimeType?:string, id?:string, url?:string, title?:string, language?:string, bytes?:Uint8Array): R4.IAttachment {
+        let hashSHA1base64, bytesSize, base64data
+        if (bytes) {
+            hashSHA1base64 = commonUtils.hash.sha1Base64OfUint8Array(bytes)
+            bytesSize = bytes.length
+            base64data = encodeBase64(bytes)
+        }
+        // TODO: sort
+        return createFhirAttachment(mimeType, id, url, title, language, hashSHA1base64, bytesSize, base64data, new Date().toISOString())
+    }
+
+    // TODO: sort
+    createFhirAttachmentWithOptionalBase64Data(mimeType?:string, id?:string, url?:string, title?:string, language?:string, base64data?:string): R4.IAttachment {
+        let hashSHA1base64, bytesSize
+        if (base64data) {
+            const bytes:Uint8Array = decodeBase64(base64data)
+            hashSHA1base64 = commonUtils.hash.sha1Base64OfUint8Array(bytes)
+            bytesSize = bytes.length
+        }
+        // TODO: sort
+        return createFhirAttachment(mimeType, id, url, title, language, hashSHA1base64, bytesSize, base64data, new Date().toISOString())
     }
 
     // It returns error if no bytes
     getBytesEmbedded(fhirAttachment:R4.IAttachment): Uint8Array {
-        return getBytesEmbedded(fhirAttachment)
+        if (!fhirAttachment.data) throw new Error ("No embedded data") // return [] as unknown as Uint8Array
+        return decodeBase64(fhirAttachment.data)
     }
 }
 
-// MIME type is mandatory and it returns error if empty bytes
-export function fhirAttachmentFromBytes(bytesArray:Uint8Array, mimeType:string, id?:string, url?:string, title?:string, language?:string, creationDateTime?:string): R4.IAttachment {
-    let attachment:R4.IAttachment = {}
-    if (!bytesArray || !bytesArray.length || bytesArray.length<=0) throw new Error ('Empty bytes received when creating the FHIR attachment')
-    
-    if (creationDateTime)   attachment.creation = creationDateTime  // TODO: validateFhirDateTime
-    if (mimeType)           attachment.contentType = mimeType
-
-    attachment.data = encodeBase64(bytesArray)
-    attachment.hash = uhcUtils.hash.sha1Base64OfUint8Array(bytesArray)
-    uhcUtils.uuid.validateUUIDv4(id) ? attachment.id = id : attachment.id = uuidRandom()
-    
-    if (language)   attachment.language = language   
-    attachment.size = bytesArray.length
-    
-    if (url)        attachment.url = url
-    if (title)      attachment.title = title
-    
-    return attachment   // already sorted
-}
-
-/*
-export function createAttachmentFHIR(url: string, resourceLanguage?: string, size?: number, hash?: string, creation?: string, title?: string): R4.IAttachment {
-    let fhirAttachment: R4.IAttachment = {url: url}
-    if (resourceLanguage) fhirAttachment.language = resourceLanguage
-    if (title) fhirAttachment.title = title
-    if (size && size > 0) fhirAttachment.size = size
-    if (hash) fhirAttachment.hash = hash
-    if (creation) fhirAttachment.creation = creation
-    return fhirAttachment
-}
-*/
-
-// mimeType should be mandatory
+// it is used by DICOM
 export function createFhirAttachment(mimeType?:string, id?:string, url?:string, title?:string, language?:string, hashSHA1?:string, size?:number, base64Data?:string, creationDateTime?:string): R4.IAttachment {
     // let attachment:R4.IAttachment = { contentType: mimeType }
     let attachment:R4.IAttachment = {}
@@ -89,9 +71,4 @@ export function createFhirAttachment(mimeType?:string, id?:string, url?:string, 
     // TODO: validateFhirDateTime
     if (creationDateTime) attachment.creation = creationDateTime
     return attachment
-}
-
-export function getBytesEmbedded(fhirAttachment:R4.IAttachment): Uint8Array {
-    if (!fhirAttachment.data) throw new Error ("No embedded data") // return [] as unknown as Uint8Array
-    return decodeBase64(fhirAttachment.data)
 }
