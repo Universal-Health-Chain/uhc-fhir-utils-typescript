@@ -138,7 +138,7 @@ export const GlobalIndexLOINC:IndexLOINC = {   // note: use https://csvjson.com/
         documents: { // custom classification of document codes
         },
         laboratory: {
-            covid19LoincGroupCodes: ["LG51018-6","LG51017-8"],
+            covid19LoincGroupCodes: [covidLaboratoryTestGroups.serologyTestsGroup, covidLaboratoryTestGroups.naatTestsGroup],
             covid19LoincSerologyCodes: [    
                 "94505-5", "94506-3", "94507-1", "94508-9", "94547-7", "94562-6", "94563-4", "94564-2", "94661-6", "94720-0", "94761-4", "94762-2", "94768-9", "94769-7", "95125-1", "95410-7", "95411-5", "95416-4"
             ],

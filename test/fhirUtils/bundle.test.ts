@@ -2,7 +2,6 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
-import { systemLOINC } from "../../src/fhirUtils/CommonFHIR";
 
 // importbundleUtils = require('../../src/fhirUtils/Bundle')
 // import { Bundle } from '../../src/fhirUtils/Bundle';
@@ -148,18 +147,18 @@ describe("create bundle Documents and operates with it", () => {
         expect(compositions[0]).toBeDefined
         // console.log("composition[0] = ", JSON.stringify(compositions[0]))
         
-        let compositionCodes = getCodeListInCodeableConcept(compositions[0].type, systemLOINC) as string[]
+        let compositionCodes = getCodeListInCodeableConcept(compositions[0].type, CodingSystem.loinc) as string[]
         //console.log("compositionCodes[] = ", compositionCodes)
         expect(compositionCodes.includes("60591-5")).toBeTruthy // or expect(compositionCodes).toContain("60591-5")
 
         // It adds an observation in the section
-        let modifiedIPS =fhirUtils.bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, systemLOINC, [observationForTesting]) as any
+        let modifiedIPS =fhirUtils.bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, CodingSystem.loinc, [observationForTesting]) as any
         //console.log("IPS Document with added observation = ", JSON.stringify(modifiedIPS))
         expect(modifiedIPS.entry[1].resource).toEqual(observationForTesting)
         // TODO: check if the composition contains the reference to the added resource
 
         // It gets the observation from the IPS document
-        let resources =fhirUtils.bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, systemLOINC) as any
+        let resources =fhirUtils.bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, CodingSystem.loinc) as any
         //expect(resources[0]).toEqual(observationForTesting)
 
         // It replaces the observation by its id into the IPS document
