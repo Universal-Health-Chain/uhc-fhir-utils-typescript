@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { convertUuidToUuid58 } from 'uuid58'
+// import { convertUuidToUuid58 } from 'uuid58'
 import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
@@ -147,7 +147,7 @@ function createEmptyBundle(bundleType:R4.BundleTypeKind, language?:string): R4.I
     let bundle: R4.IBundle = {
         resourceType: "Bundle",
         type: bundleType,
-        id: convertUuidToUuid58(uuidv4()),  // base58
+        id: uuidv4(), // convertUuidToUuid58(uuidv4()),  // base58
         timestamp: new Date().toISOString()
     }
     if (language) bundle.language = language
