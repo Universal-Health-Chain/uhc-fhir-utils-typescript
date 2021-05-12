@@ -5,9 +5,9 @@ export declare class DocumentReference {
     getFhirAttachmentsInDocumentReference(documentReference: R4.IDocumentReference): R4.IAttachment[];
     createDocumentReference(contents: R4.IDocumentReference_Content[], id?: string, categoryCodeLOINC?: string, identifiers?: R4.IIdentifier[]): R4.IDocumentReference;
 }
-export declare function DocumentReferenceCertificate(documentIdentifier: string, // universal ID of the document (UUID v4 format), it can have several certified / verifiable versions (VC)
+export declare function createDocumentReferenceToCertificate(documentIdentifier: string, // universal ID of the document (UUID v4 format), it can have several certified / verifiable versions (VC)
 masterIdentifierVC: string, // assigned by the source of the document and specific to this version of the document
-certifiedBytesAsBase64: Uint8Array, // the original bytes but now encoded in Base64
+certifiedBytesAsBase64: string, // the original bytes but now encoded in Base64
 mimeType: string, // MIME type of the content bytes
 subjectReferenceString: string, // 'Patient/universal-health-identifier'
 categoryLOINC?: string, // medical history section to wich the document corresponds

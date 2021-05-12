@@ -3,10 +3,10 @@
 import * as dicom from 'dicom-parser'
 import { DicomdirContentPatient, DicomdirContentStudy, DicomdirContentSerie, DicomdirContentInstance } from '../models/DicomModels'
 import { R4 } from '@ahryman40k/ts-fhir-types'
-import { createDocumentReference } from './DocumentReference'
 import { createFhirAttachment } from './Attachment'
 
 const Bundle = require ("./Bundle")
+// const Attachment = require ("./Attachment") // for using the method instead of another function
 
 export function getDicomdirContent(blobFileAsUint8ArrayOfBytes:Uint8Array): DicomdirContentPatient[] {
     let dataSetSecuentialArray = buildDicomSecuentialArray(blobFileAsUint8ArrayOfBytes)
@@ -14,7 +14,7 @@ export function getDicomdirContent(blobFileAsUint8ArrayOfBytes:Uint8Array): Dico
     return hierarchicalArray
 }
 
-export function  createFhirDocument(imagingStudy:R4.IImagingStudy, dcmResources?:R4.IDocumentReference[]): R4.IBundle {
+export function createFhirDocument(imagingStudy:R4.IImagingStudy, dcmResources?:R4.IDocumentReference[]): R4.IBundle {
     let fhirResources:any[] = []
     if (dcmResources && dcmResources.length && dcmResources.length > 0) fhirResources = [imagingStudy, ...dcmResources]
     else fhirResources = [imagingStudy]

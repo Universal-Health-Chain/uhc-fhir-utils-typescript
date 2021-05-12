@@ -2,7 +2,8 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidRandom} from "uuid"
-import { fhirAttachmentFromBytes } from "./Attachment"
+import { decode as decodeBase64 } from "@stablelib/base64"
+import { createFhirAttachment } from "./Attachment"
 import { createCoding } from "./CodeableConcept"
 
 export class DocumentReference {
@@ -29,10 +30,10 @@ export class DocumentReference {
 }
 
 // TODO: urn identifier
-export function DocumentReferenceCertificate(
+export function createDocumentReferenceToCertificate(
     documentIdentifier:     string,     // universal ID of the document (UUID v4 format), it can have several certified / verifiable versions (VC)
     masterIdentifierVC:     string,     // assigned by the source of the document and specific to this version of the document
-    certifiedBytesAsBase64: Uint8Array, // the original bytes but now encoded in Base64
+    certifiedBytesAsBase64: string,     // the original bytes but now encoded in Base64
     mimeType:               string,     // MIME type of the content bytes
     subjectReferenceString: string,     // 'Patient/universal-health-identifier'
     categoryLOINC?:         string,     // medical history section to wich the document corresponds
@@ -44,7 +45,7 @@ export function DocumentReferenceCertificate(
     contentFormatURN?:      string      // URN format defined by IHE or HL7
 ): R4.IDocumentReference {
     try {
-        let fhirAttachment:R4.IAttachment = fhirAttachmentFromBytes(certifiedBytesAsBase64, mimeType)
+        let fhirAttachment:R4.IAttachment = createFhirAttachment(mimeType, undefined, undefined, undefined, undefined,undefined, undefined, certifiedBytesAsBase64, undefined)
         let fhirContent:R4.IDocumentReference_Content = {attachment: fhirAttachment}
         if (!!contentFormatURN) {
             const coding:R4.ICoding = createCoding(contentFormatURN,"http://ihe.net/fhir/ihe.formatcode.fhir/ValueSet/formatcode")
