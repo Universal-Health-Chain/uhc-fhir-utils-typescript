@@ -9,7 +9,7 @@ import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "./Icd"
 import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
-import { getCodeListInArrayOfCodeableConcepts } from "./CodeableConcept"
+import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept, getExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
 import { getResourcesByTypes } from "./Bundle"
 import { CodingSystem } from "../models/UtilsModels"
 import { Uuid } from "uhc-common-utils-typescript"
@@ -200,14 +200,15 @@ export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4
     let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypes(bundleDoc, ["DiagnosticReport"])
     // console.log("diagnosticReports found = ", diagnosticReports)
     const covid19Codes: string[] = laboratoryTestAndGroupsCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
+
     let covid19DiagnosticReports: R4.IDiagnosticReport[] = []
     diagnosticReports.forEach(function (item: R4.IDiagnosticReport) {
-        // TODO: must ckeck the entire codes into the CodeableConcept "DiagnosticReport.code", not only the first one
-        // let diagnosticReportCodes = getCodesBySystemInCodeableConcept(item.code)
-        if (item.code && item.code.coding && item.code.coding[0].system == CodingSystem.loinc && item.code.coding[0].code) {
-            if (covid19Codes.includes(item.code.coding[0].code)) covid19DiagnosticReports.push(item)
+        let diagnosticCodes = getCodeListInCodeableConcept(item.code)
+        if (diagnosticCodes && diagnosticCodes.length && diagnosticCodes.length>0) {
+            if (covid19Codes.includes(diagnosticCodes[0])) covid19DiagnosticReports.push(item)
         }
     })
+
     return covid19DiagnosticReports
 }
 
@@ -216,13 +217,14 @@ export function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IIm
     let immunizations: R4.IImmunization[] = getResourcesByTypes(bundleDoc, ["Immunization"])
     const covid19Codes: string[] = vaccineCodes()   // full COVID-10 vaccine codes: ATC and SNOMED codes
     // console.log("FullCovid19VaccineCodes = ", covid19Codes)
+    
     let covid19Immunizations: R4.IImmunization[] = []
     immunizations.forEach(function (item: R4.IImmunization) {
-        // TODO: must ckeck the entire codes into the CodeableConcept "DiagnosticReport.code", not only the first one
-        // let diagnosticReportCodes = getCodesBySystemInCodeableConcept(item.code)
-        if (item.vaccineCode && item.vaccineCode.coding && item.vaccineCode.coding[0].system ==  GlobalIndexFHIR.groupedCodes.cvx.system && item.vaccineCode.coding[0].code) {
-            if (covid19Codes.includes(item.vaccineCode.coding[0].code)) covid19Immunizations.push(item)
+        let vaccineCodes = getCodeListInCodeableConcept(item.vaccineCode)
+        if (vaccineCodes && vaccineCodes.length && vaccineCodes.length>0) {
+            if (covid19Codes.includes(vaccineCodes[0])) covid19Immunizations.push(item)
         }
     })
+
     return covid19Immunizations
 }

@@ -241,3 +241,83 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
 
 
 })
+
+describe("get COVID-19 resources", () => {
+
+    it("should get COVID-19 Immunizations in a Bundle Document", () => {
+        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testImmunizationFHIR])
+        let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(bundleDocument)
+        expect(covid19Immunizations).toBeDefined()
+        expect(covid19Immunizations).toHaveLength(1)
+    })
+
+    it("should get COVID-19 DiagnosticReports in a Bundle Document", () => {
+        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testDiagnosticReportFHIR])
+        let covid19Diagnostics = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(bundleDocument)
+        expect(covid19Diagnostics).toBeDefined()
+        expect(covid19Diagnostics).toHaveLength(1)
+    })
+})
+
+// patient, vaccineCode and resourceType are mandatory
+const testImmunizationFHIR:R4.IImmunization =  {
+    "patient":{
+        "reference": "Patient/universal-health-uuid"
+    },
+    "resourceType":"Immunization",
+    "vaccineCode":{
+        "coding":[
+            {
+                "code":"207",
+                "system":"http://hl7.org/fhir/sid/cvx"
+            }
+        ]
+    },
+    "id":"universal-immunization-id",
+    "status":"completed",
+    "occurrenceDateTime":"2020-02-18",
+}
+
+const testDiagnosticReportFHIR:R4.IDiagnosticReport = {
+	"category": [
+		{
+			"coding": [
+				{
+					"code": "LAB",
+					"display": "Laboratory",
+					"system": "http://terminology.hl7.org/CodeSystem/v2-0074"
+				}
+			],
+			"text": "Laboratorio"
+		}
+	],
+	"code": {
+		"coding": [
+			{
+				"code": "94762-2",
+				"display": "SARS-CoV-2 (COVID-19) Ab [Presence] in Serum or Plasma by Immunoassay",
+				"system": "http://loinc.org"
+			}
+		],
+		"text": "SARS-CoV-2 (COVID-19) Ab [Presencia] en suero o plasma por inmunoensayo"
+	},
+    "conclusion": "Negativo",
+	"conclusionCode": [
+		{
+			"coding": [
+				{
+					"code": "260385009",
+                    "display": "Negative",
+					"system": "http://snomed.info/sct"
+				}
+			],
+			"text": "Negativo"
+		}
+	],
+	"effectiveDateTime": "2021-02-18",
+    "id":"universal-diagnostic-report-id",
+	"resourceType": "DiagnosticReport",
+	"subject": {
+		"reference": "Patient/<universal-health-identifier-patient-uuid>"
+	}
+}
