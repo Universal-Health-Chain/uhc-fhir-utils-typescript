@@ -41,7 +41,7 @@ export declare class Covid19 {
     confirmedDiseaseICD11: () => string;
     suspectedDiseaseICD11: () => string;
     /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-    vaccineCodes: () => string[];
+    vaccineCodesCovid19: () => string[];
     isCovid19Vaccine: (code: string) => boolean;
     vaccinationProcedureCodes: () => string[];
     diseaseCodes: () => string[];
@@ -63,12 +63,12 @@ export declare function isCovid19DiseaseAlertCommunication(communication: R4.ICo
 export declare function isCovid19SuspectedAlertCommunication(communication: R4.ICommunication): boolean;
 export declare function isCovid19ExposureAlertCommunication(communication: R4.ICommunication): boolean;
 /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-export declare const vaccineCodes: () => string[];
+export declare const vaccineCodesCovid19: () => string[];
 export declare const vaccinationProcedureCodes: () => string[];
 export declare const diseaseCodes: () => string[];
 export declare const suspectedDiseaseCodes: () => string[];
 export declare const diseaseOrSuspectedDiseaseCodes: () => string[];
-export declare const laboratoryTestCodes: () => string[];
-export declare const laboratoryTestAndGroupsCodes: () => string[];
+export declare const covid19LaboratoryTestsCodes: () => string[];
+export declare const covid19LaboratoryTestsAndGroupsCodes: () => string[];
 export declare function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[];
 export declare function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IImmunization[];

@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covidLaboratoryTestGroups, getActiveLaboratoryTestsCovid19 } from "./Loinc"
+import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covid19LaboratoryTestGroups, getActiveLaboratoryTestsCovid19 } from "./Loinc"
 import { covid19DiseaseTerminologySNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
     negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED,
     resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED } from "./Snomed"
@@ -82,7 +82,7 @@ export class Covid19{
     suspectedDiseaseICD11 = ():string => suspectedDiseaseICD11()
 
     /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-    vaccineCodes = ():string[] =>  vaccineCodes()
+    vaccineCodesCovid19 = ():string[] =>  vaccineCodesCovid19()
     isCovid19Vaccine = (code:string):boolean => isCovid19Vaccine(code)
     vaccinationProcedureCodes = ():string[] => vaccinationProcedureCodes()
     diseaseCodes = ():string[] => diseaseCodes()
@@ -91,8 +91,8 @@ export class Covid19{
     isSuspectedDisease = (code:string):boolean => isSuspectedDisease(code)
     diseaseOrSuspectedDiseaseCodes = ():string[] => diseaseOrSuspectedDiseaseCodes()
     isCovid19OrSuspectedDisease = (code:string):boolean => isCovid19OrSuspectedDisease(code)
-    laboratoryTestCodes = ():string[] => laboratoryTestCodes()
-    laboratoryTestAndGroupsCodes = ():string[] => laboratoryTestAndGroupsCodes()
+    laboratoryTestCodes = ():string[] => covid19LaboratoryTestsCodes()
+    laboratoryTestAndGroupsCodes = ():string[] => covid19LaboratoryTestsAndGroupsCodes()
 
     /** Get COVID-19 specific resoruces */
     getCovid19DiagnosticReportsInDocument = (bundleDocument:R4.IBundle): R4.IDiagnosticReport[] => getCovid19DiagnosticReportsInDocument(bundleDocument)
@@ -152,8 +152,8 @@ export function isCovid19ExposureAlertCommunication(communication:R4.ICommunicat
 const vaccineCodesCVX = ():string[] => GlobalIndexFHIR.groupedCodes.cvxCovid19.codes
 
 /** Get LOINC laboratory test group code: serology or naat group code */
-const naatTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.naatTestsGroup
-const serologyTestsGroupCodeLOINC = ():string => covidLaboratoryTestGroups.serologyTestsGroup
+const naatTestsGroupCodeLOINC = ():string => covid19LaboratoryTestGroups.naatTestsGroup
+const serologyTestsGroupCodeLOINC = ():string => covid19LaboratoryTestGroups.serologyTestsGroup
 
 /** Get all or specific LOINC laboratory tests */
 const laboratoryTestsCodesLOINC = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
@@ -179,8 +179,8 @@ const suspectedDiseaseICD11 = ():string => covid19DiseaseTermsICD11.suspectedCov
 
 
 /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-export const vaccineCodes = ():string[] =>  [...vaccineCodesCVX(), vaccineCodeATC]
-const isCovid19Vaccine = (code:string):boolean => vaccineCodes().includes(code) ? true : false
+export const vaccineCodesCovid19 = ():string[] =>  [...vaccineCodesCVX(), vaccineCodeATC]
+const isCovid19Vaccine = (code:string):boolean => vaccineCodesCovid19().includes(code) ? true : false
 export const vaccinationProcedureCodes = ():string[] => [...getVaccinationProcedureCovid19CodesSNOMED("GLOBAL")]
 export const diseaseCodes = ():string[] => [confirmedDiseaseSNOMED(),confirmedDiseaseICD10(), confirmedDiseaseICD11()]
 const isCovid19Disease= (code:string):boolean => diseaseCodes().includes(code) ? true : false
@@ -188,10 +188,10 @@ export const suspectedDiseaseCodes = ():string[] => [suspectedDiseaseSNOMED(),su
 const isSuspectedDisease = (code:string):boolean => suspectedDiseaseCodes().includes(code) ? true : false
 export const diseaseOrSuspectedDiseaseCodes = ():string[] => [...diseaseCodes(), ...suspectedDiseaseCodes()]
 const isCovid19OrSuspectedDisease = (code:string):boolean => diseaseOrSuspectedDiseaseCodes().includes(code) ? true : false
-export const laboratoryTestCodes = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
-export const laboratoryTestAndGroupsCodes = ():string[] => [
-    covidLaboratoryTestGroups.serologyTestsGroup,
-    covidLaboratoryTestGroups.serologyTestsGroup,
+export const covid19LaboratoryTestsCodes = ():string[] => GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
+export const covid19LaboratoryTestsAndGroupsCodes = ():string[] => [
+    covid19LaboratoryTestGroups.serologyTestsGroup,
+    covid19LaboratoryTestGroups.naatTestsGroup,
     ... GlobalIndexLOINC.groupedCodes.laboratoryTestCovid19.codes
 ]
 
@@ -199,12 +199,14 @@ export const laboratoryTestAndGroupsCodes = ():string[] => [
 export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[] {
     let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypes(bundleDoc, ["DiagnosticReport"])
     // console.log("diagnosticReports found = ", diagnosticReports)
-    const covid19Codes: string[] = laboratoryTestAndGroupsCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
+    const covid19Codes: string[] = covid19LaboratoryTestsAndGroupsCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
+    // console.log("covid19LaboratoryTestsAndGroupsCodes = ", covid19Codes)
 
     let covid19DiagnosticReports: R4.IDiagnosticReport[] = []
     diagnosticReports.forEach(function (item: R4.IDiagnosticReport) {
         let diagnosticCodes = getCodeListInCodeableConcept(item.code)
         if (diagnosticCodes && diagnosticCodes.length && diagnosticCodes.length>0) {
+            // only one code is expected
             if (covid19Codes.includes(diagnosticCodes[0])) covid19DiagnosticReports.push(item)
         }
     })
@@ -215,13 +217,14 @@ export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4
 // it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
 export function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IImmunization[] {
     let immunizations: R4.IImmunization[] = getResourcesByTypes(bundleDoc, ["Immunization"])
-    const covid19Codes: string[] = vaccineCodes()   // full COVID-10 vaccine codes: ATC and SNOMED codes
+    const covid19Codes: string[] = vaccineCodesCovid19()   // full COVID-10 vaccine codes: ATC and SNOMED codes
     // console.log("FullCovid19VaccineCodes = ", covid19Codes)
     
     let covid19Immunizations: R4.IImmunization[] = []
     immunizations.forEach(function (item: R4.IImmunization) {
         let vaccineCodes = getCodeListInCodeableConcept(item.vaccineCode)
         if (vaccineCodes && vaccineCodes.length && vaccineCodes.length>0) {
+            // only one code is expected
             if (covid19Codes.includes(vaccineCodes[0])) covid19Immunizations.push(item)
         }
     })

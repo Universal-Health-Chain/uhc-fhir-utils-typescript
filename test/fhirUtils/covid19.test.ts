@@ -5,6 +5,8 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getCodeListInArrayOfCodeableConcepts } from "../../src/fhirUtils/CodeableConcept"
 const fhirUtils = new FhirUtils()
 
+const diagnosticReportCodeLOINC:string = "LG51018-6" // "94762-2"
+
 describe("test COVID-19 alert communications", () => {
 
     it("should create confirmed COVID-19 alert communication", () => {
@@ -225,7 +227,7 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
     })
 
     it("should get CVX and ATC COVID-19 vaccineCodes", () => {
-        let codes = fhirUtils.covid19.vaccineCodes()
+        let codes = fhirUtils.covid19.vaccineCodesCovid19()
         expect(codes.length).toBeGreaterThan(0)
         expect(codes[0]==undefined).toBeFalsy() // TODO: check if distinct codes are included
     })
@@ -235,7 +237,7 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         expect(result).toBeTruthy()
         result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodeATC())
         expect(result).toBeTruthy()
-        result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodes()[0])
+        result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodesCovid19()[0])
         expect(result).toBeTruthy()
     })
 
@@ -246,6 +248,12 @@ describe("get COVID-19 resources", () => {
 
     it("should get COVID-19 Immunizations in a Bundle Document", () => {
         let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testImmunizationFHIR])
+        let uhcCodeTags = fhirUtils.bundle.getTagsOfBundleDocument(bundleDocument)
+        // console.log("uhcCodeTags = ", uhcCodeTags)
+        expect(uhcCodeTags.length).toBeGreaterThan(0)
+        expect(uhcCodeTags.includes("Immunization")).toBeTruthy()
+        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
+
         let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(bundleDocument)
         expect(covid19Immunizations).toBeDefined()
         expect(covid19Immunizations).toHaveLength(1)
@@ -253,9 +261,16 @@ describe("get COVID-19 resources", () => {
 
     it("should get COVID-19 DiagnosticReports in a Bundle Document", () => {
         let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testDiagnosticReportFHIR])
+        let uhcCodeTags = fhirUtils.bundle.getTagsOfBundleDocument(bundleDocument)
+        // console.log("uhcCodeTags = ", uhcCodeTags)
+        expect(uhcCodeTags.length).toBeGreaterThan(0)
+        expect(uhcCodeTags.includes("DiagnosticReport")).toBeTruthy()
+        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
+
         let covid19Diagnostics = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(bundleDocument)
         expect(covid19Diagnostics).toBeDefined()
         expect(covid19Diagnostics).toHaveLength(1)
+        // console.log("covid19Diagnostics[0] = ", covid19Diagnostics[0] )
     })
 })
 
@@ -294,7 +309,7 @@ const testDiagnosticReportFHIR:R4.IDiagnosticReport = {
 	"code": {
 		"coding": [
 			{
-				"code": "94762-2",
+				"code": diagnosticReportCodeLOINC,
 				"display": "SARS-CoV-2 (COVID-19) Ab [Presence] in Serum or Plasma by Immunoassay",
 				"system": "http://loinc.org"
 			}

@@ -36,7 +36,7 @@ export declare enum terminologyCodesLOINC {
     naatTestsGroup = "LG51017-8",
     aboRH = "882-1"
 }
-export declare enum covidLaboratoryTestGroups {
+export declare enum covid19LaboratoryTestGroups {
     serologyTestsGroup = "LG51018-6",
     naatTestsGroup = "LG51017-8"
 }
