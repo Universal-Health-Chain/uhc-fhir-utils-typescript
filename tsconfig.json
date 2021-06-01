@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": ["esnext"],
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "types": ["jest", "mocha", "node"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
