@@ -12,15 +12,35 @@ export class Snomed {
     getDisplayOrTextByCodeSNOMED = (code:string, snomedLanguageFile?:any): string => getDisplayOrTextByCodeSNOMED(code, snomedLanguageFile)
     
     // TODO: define interface for GlobalIndex objects
-    getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?:string){
-        return getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional)
-    }
-
+    getVaccinationProcedureCovid19CodesSNOMED = (globalOrRegional?:string) =>
+        getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional)
+    
+    getCovid19VaccineProphylaxisCodesSNOMED = ():string[] => covid19VaccineProphylaxisCodesSNOMED()
+    getCovid19LaboratoryOriginSamples = ():string[] => covid19LaboratoryOriginSamples()
+    
     getPositiveOrDetectedCodesSNOMED = ():string[] => positiveOrDetectedCodesSNOMED()
     getNegativeOrNotDetectedCodesSNOMED = ():string[] => negativeOrNotDetectedCodesSNOMED()
     getSuspectedOrInconclusiveCodesSNOMED = ():string[] => suspectedOrInconclusiveCodesSNOMED()
     getProbablyNotPresentCodesSNOMED = ():string[] => probablyNotPresentCodesSNOMED()
     
+}
+
+export function covid19LaboratoryOriginSamples(): string[] {
+    return [
+        "258500001",        // Nasopharyngeal swab
+        "461911000124106",  // Oropharyngeal swab
+        "472881004",        // Pharyngeal swab
+        "472901003", // Swab from nasal sinus
+        "119342007", // Saliva specimen
+        "119297000", // Blood specimen
+        "119361006", // Plasma specimen
+        "119364003", // Serum specimen
+        "122592007"  // Acellular blood
+    ]
+}
+
+export function covid19VaccineProphylaxisCodesSNOMED(): string[] {
+    return ["1119349007", "1119349007"] // antigen and nRNA vaccines
 }
 
 export const SNOMED_TO_ICD10:any = {
@@ -91,7 +111,7 @@ export const probablyNotPresentCodesSNOMED = ():string[] => [
 
 // display code SHALL ALWAYS BE English (international)
 export function getDisplayOrTextByCodeSNOMED(code:string, snomedLanguageFile?:object): string {
-    if (!snomedLanguageFile) snomedLanguageFile = require("../../languages/international/snomedGPS.json")
+    if (!snomedLanguageFile) snomedLanguageFile = require("../../languages/international/snomedGPS-UHC.json")
     return (snomedLanguageFile as any)[code]
 }
 

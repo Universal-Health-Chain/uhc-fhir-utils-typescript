@@ -1,4 +1,4 @@
-import { GlobalIndex } from "./UtilsModels";
+import { GlobalIndex } from "./CommonUtilsModels";
 export interface IndexSNOMED extends GlobalIndex {
     categorization: any;
     groupedCodes: GroupedCodesSNOMED;

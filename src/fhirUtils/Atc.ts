@@ -12,7 +12,7 @@ export class Atc {
 
 // display code SHALL ALWAYS BE English (international)
 export function getDisplayOrTextByCodeATC(code:string, atcLanguageFile?:object): string {  //, groupedSectionName?:string): string {
-    if (!atcLanguageFile) atcLanguageFile = require("../../languages/international/atc.json")
+    if (!atcLanguageFile) atcLanguageFile = require("../../languages/international/atcUHC.json")
     // return getLabelsOfGroupedCodes([code], atcLanguageFile, groupedSectionName)[0]
     return (atcLanguageFile as any)[code]
 }

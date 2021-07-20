@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { Codes } from "./UtilsModels";
+import { Codes } from "./CommonUtilsModels";
 
 export interface IndexATC {   // extends GlobalIndex {
     categorization:                     CategorizationATC

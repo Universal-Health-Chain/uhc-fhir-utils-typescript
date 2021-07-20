@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndex } from "./UtilsModels";
+import { GlobalIndex } from "./CommonUtilsModels";
 
 export interface IndexSNOMED extends GlobalIndex {
     categorization: any

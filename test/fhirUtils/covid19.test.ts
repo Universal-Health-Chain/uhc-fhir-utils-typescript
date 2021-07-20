@@ -211,33 +211,35 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         expect(codes[0]).toBe("65661000122107") // TODO: check if distinct codes are included
     })
 
-    it("should display vaccineCodesCVX", () => {
-        let codes:string[] = fhirUtils.covid19.vaccineCodesCVX()
+    it("should display vaccineProphylaxisCodesCVX", () => {
+        let codes:string[] = fhirUtils.covid19.vaccineProphylaxisCodesCVX()
         let displayCode = fhirUtils.hl7.getDisplayOrTextInGroupedSection(codes[0], CodingSystem.cvx)
         // console.log("display code HL7 CVX " + codes[0] + " = ", displayCode)
         expect(displayCode==undefined).toBeFalsy()
     })
 
     it("should get vaccineCodeATC", () => {
-        let code:string = fhirUtils.covid19.vaccineCodeATC()
+        let code:string = fhirUtils.covid19.vaccineProphylaxisCodeATC()
         expect(code==undefined).toBeFalsy()
         //let displayCode = fhirUtils.hl7.getDisplayCode(codes[0])
         // console.log("display code HL7 CVX " + codes[0] + " = ", displayCode)
         //expect(displayCode==undefined).toBeFalsy()
     })
 
-    it("should get CVX and ATC COVID-19 vaccineCodes", () => {
-        let codes = fhirUtils.covid19.vaccineCodesCovid19()
+    it("should get global CVX, EMA and ATC COVID-19 vaccineProphylaxisCodes", () => {
+        let codes = fhirUtils.covid19.vaccineProphylaxisCodesGlobal()
         expect(codes.length).toBeGreaterThan(0)
         expect(codes[0]==undefined).toBeFalsy() // TODO: check if distinct codes are included
     })
 
     it("should get isCovid19Vaccine", () => {
-        let result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodesCVX()[0])
+        let result = fhirUtils.covid19.isCovid19VaccineProphylaxis(fhirUtils.covid19.vaccineProphylaxisCodesCVX()[0])
         expect(result).toBeTruthy()
-        result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodeATC())
+        result = fhirUtils.covid19.isCovid19VaccineProphylaxis(fhirUtils.covid19.vaccineProphylaxisCodeATC())
         expect(result).toBeTruthy()
-        result = fhirUtils.covid19.isCovid19Vaccine(fhirUtils.covid19.vaccineCodesCovid19()[0])
+        result = fhirUtils.covid19.isCovid19VaccineProphylaxis(fhirUtils.covid19.vaccineProphylaxisCodesEMA()[0])
+        expect(result).toBeTruthy()
+        result = fhirUtils.covid19.isCovid19VaccineProphylaxis(fhirUtils.covid19.vaccineProphylaxisCodesGlobal()[0])
         expect(result).toBeTruthy()
     })
 

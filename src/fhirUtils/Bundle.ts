@@ -7,7 +7,7 @@ import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
-import { vaccineCodesCovid19, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
+import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
 
 export class Bundle {
     constructor() {
@@ -123,7 +123,7 @@ export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
                 switch(resource.resourceType) {
                     case ("Immunization"): {
                         // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
-                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], vaccineCodesCovid19(), codesCovid19)
+                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19VaccineProphylaxisCodesGlobal(), codesCovid19)
                         // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
                         break
                     }

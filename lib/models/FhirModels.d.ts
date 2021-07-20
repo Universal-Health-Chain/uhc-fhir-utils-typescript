@@ -1,4 +1,11 @@
-import { CodesAndSystem, GlobalIndex } from "./UtilsModels";
+import { CodesAndSystem, GlobalIndex } from "./CommonUtilsModels";
+export interface IndexEMA extends GlobalIndex {
+    groupedCodes: GroupedCodesEMA;
+}
+export interface GroupedCodesEMA {
+    covid19VaccineRegistered: CodesAndSystem;
+    covid19VaccineTemp: CodesAndSystem;
+}
 export interface IndexFHIR extends GlobalIndex {
     extension: typeof ExtensionsFHIR;
     groupedCodes: GroupedCodesFHIR;

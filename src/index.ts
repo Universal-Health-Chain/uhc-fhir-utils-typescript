@@ -4,7 +4,7 @@
 export * from "./models";
 // export * from "./models/DicomModels";
 export { ExtensionsFHIR } from "./models/FhirModels"
-export { CodingSystem } from "./models/UtilsModels"
+export { CodingSystem } from "./models/CommonUtilsModels"
 
 // export classes
 export * from "./FhirUtils";            // global class
@@ -13,6 +13,7 @@ export * from "./fhirUtils/index";   // independent classes
 // export consts and enums (and functions outside classes)
 export { MimeType } from "./fhirUtils/Attachment"
 export { GlobalIndexATC } from "./fhirUtils/Atc"
+export { GlobalIndexEMA } from "./fhirUtils/Ema"
 export { GlobalIndexFHIR } from "./fhirUtils/Hl7"
 export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./fhirUtils/Loinc";
 export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED,

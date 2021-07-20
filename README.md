@@ -1,5 +1,14 @@
 # uhc-fhir-utils-typescript
 
+Changelog:
+v1.2.0
+- added "Prophylaxis" in some vaccine functions to differentiate them from vaccine "Product" (manufactured) ones.
+- vaccineCodesCVX() is now vaccineProphylaxisCodesCVX()
+- vaccineCodeATC() is now vaccineProphylaxisCodeATC()
+- vaccineCodesCovid19() is now vaccineProphylaxisCodesGlobal()
+- isCovid19Vaccine() is now isCovid19VaccineProphylaxis()
+- added covid19VaccineProphylaxisCodesSNOMED()
+
 Each time a new FHIR message is created, it SHALL be assigned an identifier (MessageHeader.id)
 An incoming message contains two identifiers:
     - MessageHeader.id (the id of the message)

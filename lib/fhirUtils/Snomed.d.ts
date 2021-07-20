@@ -2,12 +2,16 @@ import { IndexSNOMED } from "../models/SnomedModels";
 export declare class Snomed {
     constructor();
     getDisplayOrTextByCodeSNOMED: (code: string, snomedLanguageFile?: any) => string;
-    getVaccinationProcedureCovid19CodesSNOMED(globalOrRegional?: string): string[];
+    getVaccinationProcedureCovid19CodesSNOMED: (globalOrRegional?: string | undefined) => string[];
+    getCovid19VaccineProphylaxisCodesSNOMED: () => string[];
+    getCovid19LaboratoryOriginSamples: () => string[];
     getPositiveOrDetectedCodesSNOMED: () => string[];
     getNegativeOrNotDetectedCodesSNOMED: () => string[];
     getSuspectedOrInconclusiveCodesSNOMED: () => string[];
     getProbablyNotPresentCodesSNOMED: () => string[];
 }
+export declare function covid19LaboratoryOriginSamples(): string[];
+export declare function covid19VaccineProphylaxisCodesSNOMED(): string[];
 export declare const SNOMED_TO_ICD10: any;
 export declare const SNOMED_TO_ICD11: any;
 export declare enum covid19DiseaseTerminologySNOMED {

@@ -1,6 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare const covid19Tag = "COVID-19";
-export declare const vaccineCodeATC = "J07BX03";
+export declare const vaccineProphylaxisCodeATC = "J07BX03";
 export declare class Covid19 {
     constructor();
     covid19Tag: () => string;
@@ -11,10 +11,12 @@ export declare class Covid19 {
     isCovid19DiseaseAlertCommunication: (communication: R4.ICommunication) => boolean;
     isCovid19SuspectedAlertCommunication: (communication: R4.ICommunication) => boolean;
     isCovid19ExposureAlertCommunication: (communication: R4.ICommunication) => boolean;
-    /** Get specific codes by HL7 */
-    vaccineCodesCVX: () => string[];
-    /** Get specific codes by system WHO's ATC */
-    vaccineCodeATC: () => string;
+    /** Get specific codes by CVX coding system */
+    vaccineProphylaxisCodesCVX: () => string[];
+    /** Get specific codes by WHO's ATC coding system*/
+    vaccineProphylaxisCodeATC: () => string;
+    /** Get specific vaccine prophylaxis codes (no vaccine product codes) by SNOMED coding system */
+    vaccineProphylaxisCodesSNOMED: () => string[];
     /** Get LOINC laboratory test group code: serology or naat group code */
     naatTestsGroupCodeLOINC: () => string;
     serologyTestsGroupCodeLOINC: () => string;
@@ -24,6 +26,7 @@ export declare class Covid19 {
     naatTestsCodesLOINC: () => string[];
     serologyTestsCodesLOINC: () => string[];
     /** Get specific codes by system SNOMED */
+    laboratoryOriginSampleCodesSNOMED: () => string[];
     naatResultsCodesSNOMED: () => string[];
     serologyResultsCodesSNOMED: () => string[];
     positiveOrDetectedCodesSNOMED: () => string[];
@@ -40,18 +43,22 @@ export declare class Covid19 {
     suspectedDiseaseICD10: () => string;
     confirmedDiseaseICD11: () => string;
     suspectedDiseaseICD11: () => string;
+    /** Manufacturers by system */
+    getCovid19OfficialManufacturerCodesEMA: () => string[];
+    getCovid19TempManufacturerCodesEMA: () => string[];
     /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-    vaccineCodesCovid19: () => string[];
-    isCovid19Vaccine: (code: string) => boolean;
-    vaccinationProcedureCodes: () => string[];
-    diseaseCodes: () => string[];
-    isCovid19Disease: (code: string) => boolean;
-    suspectedDiseaseCodes: () => string[];
-    isSuspectedDisease: (code: string) => boolean;
-    diseaseOrSuspectedDiseaseCodes: () => string[];
-    isCovid19OrSuspectedDisease: (code: string) => boolean;
+    vaccineProphylaxisCodesGlobal: () => string[];
+    vaccineProphylaxisCodesEMA: () => string[];
     laboratoryTestCodes: () => string[];
     laboratoryTestAndGroupsCodes: () => string[];
+    vaccinationProcedureCodes: () => string[];
+    diseaseCodes: () => string[];
+    diseaseOrSuspectedDiseaseCodes: () => string[];
+    suspectedDiseaseCodes: () => string[];
+    isCovid19VaccineProphylaxis: (code: string) => boolean;
+    isCovid19Disease: (code: string) => boolean;
+    isSuspectedDisease: (code: string) => boolean;
+    isCovid19OrSuspectedDisease: (code: string) => boolean;
     /** Get COVID-19 specific resoruces */
     getCovid19DiagnosticReportsInDocument: (bundleDocument: R4.IBundle) => R4.IDiagnosticReport[];
     getCovid19ImmunizationsInDocument: (bundleDocument: R4.IBundle) => R4.IImmunization[];
@@ -63,7 +70,8 @@ export declare function isCovid19DiseaseAlertCommunication(communication: R4.ICo
 export declare function isCovid19SuspectedAlertCommunication(communication: R4.ICommunication): boolean;
 export declare function isCovid19ExposureAlertCommunication(communication: R4.ICommunication): boolean;
 /** Merge codes from distinct systems (if several ones, e.g. for searching) */
-export declare const vaccineCodesCovid19: () => string[];
+export declare const covid19VaccineProphylaxisCodesGlobal: () => string[];
+export declare const covid19VaccineProphylaxisCodesEMA: () => string[];
 export declare const vaccinationProcedureCodes: () => string[];
 export declare const diseaseCodes: () => string[];
 export declare const suspectedDiseaseCodes: () => string[];

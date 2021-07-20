@@ -1,6 +1,16 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { CodesAndSystem, CodingSystem, GlobalIndex } from "./UtilsModels"
+import { CodesAndSystem, CodingSystem, GlobalIndex } from "./CommonUtilsModels"
+
+export interface IndexEMA extends GlobalIndex {
+    // extension:      typeof ExtensionsFHIR
+    groupedCodes:   GroupedCodesEMA
+}
+
+export interface GroupedCodesEMA {  // https://csvjson.com/json2csv
+    covid19VaccineRegistered:   CodesAndSystem
+    covid19VaccineTemp:         CodesAndSystem
+}
 
 export interface IndexFHIR extends GlobalIndex {
     extension:      typeof ExtensionsFHIR

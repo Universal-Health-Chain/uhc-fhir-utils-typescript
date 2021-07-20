@@ -39,6 +39,13 @@ export enum CodingSystem {
     cvx                         = "http://hl7.org/fhir/sid/cvx", // Vaccine Administered
     cvxCovid19                  = "http://hl7.org/fhir/sid/cvx",
     mvx                         = "https://terminology.hl7.org/ValueSet-v3-VaccineManufacturer.html",
+    emaOfficialMedicinalProduct = "https://ec.europa.eu/health/documents/community-register/html/",
+    emaCovid19OfficialVaccine   = "https://ec.europa.eu/health/documents/community-register/html/",
+    emaCovid19TempVaccine       = "http://ec.europa.eu/temp/vaccineproductname",
+    emaCovid19TestManufacturer  = "emaDeviceManufacturer",
+    emaCovid19LabTestDevice     = "https://covid-19-diagnostics.jrc.ec.europa.eu/devices",
+    emaOfficialOrganization     = "https://spor.ema.europa.eu/v1/organisations",
+    emaTempVaccineManufacturer  = "http://ec.europa.eu/temp/vaccinemanufacturer",
     
     vaccineManufacturer         = "https://terminology.hl7.org/ValueSet-v3-VaccineManufacturer.html",
     immunizationProviderRole    = "http://terminology.hl7.org/CodeSystem/v2-0443",

@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { vaccineCodeATC } from "./Covid19"
+import { vaccineProphylaxisCodeATC } from "./Covid19"
 
 export class Immunization {
     
@@ -23,7 +23,7 @@ export class Immunization {
 }
 
 export function createCovid19BundleDocumentWithImmunizationAndAttachmentsByGroupATC(attachments:R4.IAttachment[]):R4.IBundle {
-    return createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(vaccineCodeATC, attachments)
+    return createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(vaccineProphylaxisCodeATC, attachments)
 }
 
 export function createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(atcCode:string, attachments:R4.IAttachment[]) : R4.IBundle {

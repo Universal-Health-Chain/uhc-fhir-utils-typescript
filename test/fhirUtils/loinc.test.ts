@@ -6,7 +6,7 @@ import { FhirUtils } from "../../src"
 const fhirUtils = new FhirUtils()
 
 // TODO: define interface for SnomedLabels JSON objects
-// const LoincLabelsEN:any = require ("../../languages/international/loinc.json")
+// const LoincLabelsEN:any = require ("../../languages/international/loincUHC.json")
 
 describe("translate LOINC codes", () => {
     xit("should translate LOINC code", () => {
