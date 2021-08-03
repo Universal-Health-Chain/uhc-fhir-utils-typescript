@@ -3,7 +3,7 @@
     "lib": ["esnext"],
     "target": "esnext",
     "module": "commonjs",
-    "types": ["jest", "mocha", "node"],
+    "types": ["jest", "node"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
