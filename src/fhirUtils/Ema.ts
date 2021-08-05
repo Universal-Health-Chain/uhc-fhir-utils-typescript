@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { IndexEMA } from "../models/FhirModels"
-import { CodingSystem } from "../models/CommonUtilsModels"
+import { CodingSystem } from "../models/CommonModels"
 import { getLabelsOfGroupedCodes } from "./CommonFHIR"
 
 export class Ema {

@@ -11,6 +11,6 @@ export declare class CommonFHIR {
     getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
 }
 export declare function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]>;
-export declare function fhirNormalization(fhirResource: any): any;
+export declare function normalizedAndCanonicalFHIR(json: any): any;
 export declare function anonymizeResource(fhirResource: any): any;
 export declare function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile: any, targetGroupedSection?: string): string[];

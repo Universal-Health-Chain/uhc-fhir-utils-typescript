@@ -11,7 +11,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept, getExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
 import { getResourcesByTypes } from "./Bundle"
-import { CodingSystem } from "../models/CommonUtilsModels"
+import { CodingSystem } from "../models/CommonModels"
 import { Uuid } from "uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 

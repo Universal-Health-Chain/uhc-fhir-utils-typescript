@@ -1,4 +1,4 @@
-import { CodesAndSystem, GlobalIndex } from "./CommonUtilsModels";
+import { CodesAndSystem, GlobalIndex } from "./CommonModels";
 export interface IndexEMA extends GlobalIndex {
     groupedCodes: GroupedCodesEMA;
 }

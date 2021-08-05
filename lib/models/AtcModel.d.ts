@@ -1,4 +1,4 @@
-import { Codes } from "./CommonUtilsModels";
+import { Codes } from "./CommonModels";
 export interface IndexATC {
     categorization: CategorizationATC;
     groupedCodes: GroupedCodesATC;

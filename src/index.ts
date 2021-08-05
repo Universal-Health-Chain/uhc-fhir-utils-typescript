@@ -4,7 +4,7 @@
 export * from "./models";
 // export * from "./models/DicomModels";
 export { ExtensionsFHIR } from "./models/FhirModels"
-export { CodingSystem } from "./models/CommonUtilsModels"
+export { CodingSystem } from "./models/CommonModels"
 
 // export classes
 export * from "./FhirUtils";            // global class

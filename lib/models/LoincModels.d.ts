@@ -1,4 +1,4 @@
-import { Codes } from "./CommonUtilsModels";
+import { Codes } from "./CommonModels";
 export interface IndexLOINC {
     readonly healthSections: string[];
     readonly covid19SerologyTestCodes: string[];

@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { Codes } from "./CommonUtilsModels";
+import { Codes } from "./CommonModels";
 
 export interface IndexLOINC {   // extends GlobalIndex {
     readonly healthSections:            string[]

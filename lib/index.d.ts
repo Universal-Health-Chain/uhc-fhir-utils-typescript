@@ -1,6 +1,6 @@
 export * from "./models";
 export { ExtensionsFHIR } from "./models/FhirModels";
-export { CodingSystem } from "./models/CommonUtilsModels";
+export { CodingSystem } from "./models/CommonModels";
 export * from "./FhirUtils";
 export * from "./fhirUtils/index";
 export { MimeType } from "./fhirUtils/Attachment";

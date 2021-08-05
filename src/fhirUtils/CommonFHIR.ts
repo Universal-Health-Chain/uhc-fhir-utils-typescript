@@ -1,6 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
+import canonicalize from "canonicalize"
 import { CommonUtilsUHC } from "uhc-common-utils-typescript";
 
 export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing";
@@ -110,14 +111,34 @@ export function classifyBundleByResourceTypes(
   return classifiedData;
 }
 
-export function fhirNormalization(fhirResource: any): any {
-  const NORMALIZATION: string[] = ["meta", "contained", "id", "text"];
+// FHIR Digital Signatures: https://confluence.hl7.org/display/FHIR/Digital+Signatures
+// Removing properties for FHIR normalization (https://www.hl7.org/fhir/xml.html#digsig)
+// and creating crypto safe predictable canocalization of JSON as defined by RFC8785.
+// One consequence of signing the document is that URLs, identifiers and internal references are frozen and cannot be changed.
+// This might be a desired feature, but it may also cripple interoperability between closed ecosystems where re-identification frequently occurs.
+// Depending if a FHIR Bundle document or any other FHIR resource is being normalized:
+// 1. The signs everything in a Bundle, except for the Bundle.id and Bundle.metadata
+// 2. The narrative (Resource.text) is omitted prior to signing (note the deletion is at Resource.text, not Resource.text.div)
+//    In addition to narrative (Resource.text), the Resource.meta element is removed.
 
-  NORMALIZATION.forEach((key) => {
-    delete fhirResource[key];
-  });
+/// It returns a normalized and crypto safe predictable FHIR JSON resource or document (canonicalized as defined by RFC8785)
+export function normalizedAndCanonicalFHIR(json: any): any {
+  const resorceNormalization: string[] = ["meta", "text"]; // 'static' normatilzation as defined for XML: http://hl7.org/fhir/canonicalization/xml#static
+  const bundleDocNormalization: string[] = ["meta", "id"]; // 'document' normalization as defined for XML: http://hl7.org/fhir/canonicalization/xml#document
 
-  return commonUtils.sort.sortObject(fhirResource);
+  if (json && json.resourceType) {
+    if (json.resourceType == "Bundle") {
+      bundleDocNormalization.forEach((key) => {
+        delete json[key];
+      });
+    } else {
+      resorceNormalization.forEach((key) => {
+        delete json[key];
+      });
+    }
+  }
+  // it returns crypto safe predictable canocalization of JSON as defined by RFC8785
+  return canonicalize(json);
 }
 
 // composition.section.entry will be empty in an IPS document, also observation.hasMembers (fix it?)

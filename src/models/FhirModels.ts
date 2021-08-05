@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { CodesAndSystem, CodingSystem, GlobalIndex } from "./CommonUtilsModels"
+import { CodesAndSystem, CodingSystem, GlobalIndex } from "./CommonModels"
 
 export interface IndexEMA extends GlobalIndex {
     // extension:      typeof ExtensionsFHIR
