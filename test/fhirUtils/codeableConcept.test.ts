@@ -3,7 +3,7 @@
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
-import { CodingSystem } from '../../src/models/CommonUtilsModels';
+import { CodingSystem } from '../../src/models/CommonModels';
 
 const fhirUtils = new FhirUtils()
 
@@ -58,7 +58,7 @@ describe("test CodeableConcept", () => {
         
         const coding:R4.ICoding = fhirUtils.codeableConcept.getCodingInArrayOfCodeableConcepts(codeableConcepts, CodingSystem.snomed)
         expect(coding).toBeDefined()
-        console.log("single coding by array of codeable concepts = ", JSON.stringify(coding))
+        // console.log("single coding by array of codeable concepts = ", JSON.stringify(coding))
     })
 
     it("should get a single codeable concept from an array of codeable concepts", () => {

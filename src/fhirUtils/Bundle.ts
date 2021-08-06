@@ -8,10 +8,14 @@ import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCo
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
 import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
+import { getCleanId } from "./CommonFHIR"
 
 export class Bundle {
     constructor() {
     }
+
+    /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
+    getCleanIdOfDocumentComposition = (fhirBundle:R4.IBundle): string => getCleanIdOfDocumentComposition(fhirBundle)
 
     getTimestamp(fhirBundle:R4.IBundle): string {
         return getTimestamp(fhirBundle)
@@ -21,19 +25,19 @@ export class Bundle {
         return getTagsOfBundleDocument(bundleDocument)
     }
 
-    // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
+    /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument:R4.IBundle): boolean {
         return isIPS(bundleDocument)
     }
 
     // TODO: ADD RESOURCES TO COMPOSITION SECTIONS AND FULLURL
-    // It adds a bundle resource including Composition or HeaderMessage and skips if already present
+    /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
     addResourceToBundle(bundle:R4.IBundle, resource:any, sectionCode?:string, sectionSystem?:string): R4.IBundle{
         return addResourceToBundle(bundle, resource, sectionCode, sectionSystem)
     }
 
     // TODO: ADD RESOURCES TO COMPOSITION SECTIONS
-    // It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message
+    /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
     addAdditionalResourcesToBundle(bundle:R4.IBundle, resources?:any[], sectionCode?:string, sectionSystem?:string): R4.IBundle {
         return addAdditionalResourcesToBundle(bundle, resources, sectionCode, sectionSystem)
     }
@@ -77,7 +81,7 @@ export class Bundle {
         return getAllResourcesWithoutCompositionOrMessageHeader(bundle)
     }
 
-    // It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash
+    /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[] {
         return getResourceIdsInBundle(bundle)
     }
@@ -90,7 +94,7 @@ export class Bundle {
         return getResourceByIdInBundle(resourceId, bundle)
     }
 
-    // It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl
+    /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
     replaceResourceById(resource:any, bundle:R4.IBundle): R4.IBundle{
         return replaceResourceById(resource, bundle)
     }
@@ -99,6 +103,19 @@ export class Bundle {
         return getMediaInBundle(bundle)
     }
 
+}
+
+export function getCleanIdOfDocumentComposition(fhirBundle:R4.IBundle): string {
+    // Composition is always fhirBundle.entry[0].resource in a FHIR Document or it is not a Bundle Document
+    if (!fhirBundle || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1 || 
+        !fhirBundle.entry[0].resource || !fhirBundle.entry[0].resource.resourceType || 
+        fhirBundle.entry[0].resource.resourceType !== "Composition" || !!fhirBundle.entry[0].resource.id){
+        return "" // instead of error
+    }
+    else {
+        // fullUrn should contain the URN and the Compositon.id should 
+        return getCleanId(fhirBundle.entry[0].resource.id)
+    }
 }
 
 export function getTimestamp(fhirBundle:R4.IBundle): string {

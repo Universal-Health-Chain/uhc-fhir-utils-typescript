@@ -4,6 +4,7 @@ export { CodingSystem } from "./models/CommonModels";
 export * from "./FhirUtils";
 export * from "./fhirUtils/index";
 export { MimeType } from "./fhirUtils/Attachment";
+export { getCleanId, getBundleEntriesMap, normalizedAndCanonicalizedFHIR, anonymizeResource } from "./fhirUtils/CommonFHIR";
 export { GlobalIndexATC } from "./fhirUtils/Atc";
 export { GlobalIndexEMA } from "./fhirUtils/Ema";
 export { GlobalIndexFHIR } from "./fhirUtils/Hl7";

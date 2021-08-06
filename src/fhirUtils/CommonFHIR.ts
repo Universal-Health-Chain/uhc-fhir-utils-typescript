@@ -37,6 +37,7 @@ export const ANONYMIZATION: string[] = [
   "family",
   "_family",
   "given",
+  "_given",
   "birthDate",
   "age",
   "address",
@@ -63,7 +64,7 @@ export class CommonFHIR {
   classifyBundleByResourceTypes = (
     fhirDocument: R4.IBundle
   ): Map<string, R4.IBundle_Entry[]> =>
-    classifyBundleByResourceTypes(fhirDocument);
+    getBundleEntriesMap(fhirDocument);
 
   /*
     // TODO:
@@ -80,9 +81,32 @@ export class CommonFHIR {
   ): string[] {
     return getLabelsOfGroupedCodes(codes, codeLabels, groupedSectionName);
   }
+
+  getCleanId = (data:any | undefined): string => getCleanId(data)
+  normalizedAndCanonicalizedFHIR = (json: any): any => normalizedAndCanonicalizedFHIR(json) 
 }
 
-export function classifyBundleByResourceTypes(
+/** it gets a single ID from a FHIR reference URI or URN, among others */
+function cleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
+  const splittedReferenceURI:string[] = referenceOrURN.split("/")
+  const splittedURN = splittedReferenceURI[splittedReferenceURI.length-1].split(":") // splits the last of them wich will contain an URN string if any
+  return splittedURN[splittedURN.length-1] // it returns the last of them wich is the sole identifier
+}
+
+/** 
+ * It gets a single ID from a FHIR reference URI or URN, among others.
+ * NOTE: if empty result it should be fixed or deleted by the fronted
+*/
+export function getCleanId(data:any | undefined): string {
+  try {
+    if (data && data.id) return cleanIdWithoutReferenceFHIROrURN(data.id) || "" // it can be an URN with the ID at the end of the string
+    else return ""
+  } catch (e) {
+    return ""
+  }
+}
+
+export function getBundleEntriesMap(
   fhirDocument: R4.IBundle
 ): Map<string, R4.IBundle_Entry[]> {
   const classifiedData = new Map<string, R4.IBundle[]>();
@@ -117,12 +141,12 @@ export function classifyBundleByResourceTypes(
 // One consequence of signing the document is that URLs, identifiers and internal references are frozen and cannot be changed.
 // This might be a desired feature, but it may also cripple interoperability between closed ecosystems where re-identification frequently occurs.
 // Depending if a FHIR Bundle document or any other FHIR resource is being normalized:
-// 1. The signs everything in a Bundle, except for the Bundle.id and Bundle.metadata
+// 1. In a Bundle everything is signed, except for the Bundle.id and Bundle.meta data. SMART Health Credentials also removes in every Resource: id, meta and text.
 // 2. The narrative (Resource.text) is omitted prior to signing (note the deletion is at Resource.text, not Resource.text.div)
-//    In addition to narrative (Resource.text), the Resource.meta element is removed.
+//    In addition to narrative (Resource.text), the Resource.meta element is removed. SMART Health Credential also removes the resource id, so it must be added to identifiers (as URN)
 
 /// It returns a normalized and crypto safe predictable FHIR JSON resource or document (canonicalized as defined by RFC8785)
-export function normalizedAndCanonicalFHIR(json: any): any {
+export function normalizedAndCanonicalizedFHIR(json: any): any {
   const resorceNormalization: string[] = ["meta", "text"]; // 'static' normatilzation as defined for XML: http://hl7.org/fhir/canonicalization/xml#static
   const bundleDocNormalization: string[] = ["meta", "id"]; // 'document' normalization as defined for XML: http://hl7.org/fhir/canonicalization/xml#document
 

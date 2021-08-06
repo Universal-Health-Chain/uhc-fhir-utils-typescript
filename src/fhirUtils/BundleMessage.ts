@@ -2,8 +2,10 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-// import { validateUUIDv4 } from "./commonUtils"
-import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle } from "./Bundle"
+import { getCleanId } from "./CommonFHIR"
+import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
+    getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById
+} from "./Bundle"
 import { Uuid } from "uhc-common-utils-typescript"
 
 const uuidUtils = new Uuid() 
@@ -49,6 +51,51 @@ export class BundleMessage {
         return addAuditEventToBundleMessage(fhirMessage, auditEvent)
     }
     
+    /** The permanent ID of a FHIR Message across any system is the ID of the MessageHeader of the content resources */
+    getCleanIdOfDocumentComposition = (fhirBundle:R4.IBundle): string => getCleanIdOfMessageHeader(fhirBundle)
+
+    getTimestamp(fhirBundle:R4.IBundle): string {
+        return getTimestamp(fhirBundle)
+    }
+
+    getAllResources(bundle: R4.IBundle): any[] {
+        return getAllResourcesInBundleEntries(bundle)
+    }
+
+    getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
+        return getAllResourcesWithoutCompositionOrMessageHeader(bundle)
+    }
+
+    /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
+    getResourceIdsInBundle(bundle: R4.IBundle): string[] {
+        return getResourceIdsInBundle(bundle)
+    }
+
+    getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
+        return getResourcesByTypes(bundle, resourceTypes)
+    }
+
+    getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
+        return getResourceByIdInBundle(resourceId, bundle)
+    }
+
+    /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
+    replaceResourceById(resource:any, bundle:R4.IBundle): R4.IBundle{
+        return replaceResourceById(resource, bundle)
+    }
+
+}
+
+/** MessageHeader is always fhirBundle.entry[0].resource in a FHIR Message or it is not a Bundle Message */
+export function getCleanIdOfMessageHeader(fhirBundle:R4.IBundle): string {
+    if (!fhirBundle || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1 || 
+        !fhirBundle.entry[0].resource || !fhirBundle.entry[0].resource.resourceType || 
+        fhirBundle.entry[0].resource.resourceType !== "MessageHeader" || !!fhirBundle.entry[0].resource.id){
+        return "" // instead of error
+    }
+    else {
+        return getCleanId(fhirBundle.entry[0].resource.id)
+    }
 }
 
 // export function createBundleMessage(resources?:any[]): R4.IBundle { return createEmptyBundleOfType(R4.BundleTypeKind._message, resources)}

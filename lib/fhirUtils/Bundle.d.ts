@@ -1,10 +1,15 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Bundle {
     constructor();
+    /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
+    getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle) => string;
     getTimestamp(fhirBundle: R4.IBundle): string;
     getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
+    /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument: R4.IBundle): boolean;
+    /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
     addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
+    /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
     addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
     createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
@@ -15,12 +20,15 @@ export declare class Bundle {
     getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem?: string): any[];
     getAllResources(bundle: R4.IBundle): any[];
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
+    /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
     getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
+    /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
+export declare function getCleanIdOfDocumentComposition(fhirBundle: R4.IBundle): string;
 export declare function getTimestamp(fhirBundle: R4.IBundle): string;
 export declare function getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
 export declare function addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;

@@ -9,8 +9,15 @@ export declare class CommonFHIR {
     anonymizeResource(fhirResource: any): any;
     classifyBundleByResourceTypes: (fhirDocument: R4.IBundle) => Map<string, R4.IBundle_Entry[]>;
     getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
+    getCleanId: (data: any | undefined) => string;
+    normalizedAndCanonicalizedFHIR: (json: any) => any;
 }
-export declare function classifyBundleByResourceTypes(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]>;
-export declare function normalizedAndCanonicalFHIR(json: any): any;
+/**
+ * It gets a single ID from a FHIR reference URI or URN, among others.
+ * NOTE: if empty result it should be fixed or deleted by the fronted
+*/
+export declare function getCleanId(data: any | undefined): string;
+export declare function getBundleEntriesMap(fhirDocument: R4.IBundle): Map<string, R4.IBundle_Entry[]>;
+export declare function normalizedAndCanonicalizedFHIR(json: any): any;
 export declare function anonymizeResource(fhirResource: any): any;
 export declare function getLabelsOfGroupedCodes(codes: string[], hl7LanguageFile: any, targetGroupedSection?: string): string[];
