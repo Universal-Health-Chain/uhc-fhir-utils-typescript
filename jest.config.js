@@ -12,7 +12,7 @@ module.exports = {
     },
     transformIgnorePatterns: [
         `[/\\\\]node_modules[/\\\\](?!${[
-            'uhc-common-utils-typescript'
+            '@universal-health-chain/uhc-common-utils-typescript'
         ].join('|')})`,
     ],
     testMatch: [

@@ -1,6 +1,6 @@
 {
-  "name": "uhc-fhir-utils-typescript",
-  "version": "1.2.9",
+  "name": "@universal-health-chain/uhc-fhir-utils-typescript",
+  "version": "1.2.10",
   "description": "UHC's FHIR utils (Typescript)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,8 +32,20 @@
     "@types/js-base64": "^2.3.2",
     "@types/node": "^14.6.0",
     "@types/uuid": "^8.3.0",
+    "@universal-health-chain/uhc-common-utils-typescript": "^0.3.5",
     "canonicalize": "^1.0.5",
-    "dicom-parser": "^1.8.7",
-    "uhc-common-utils-typescript": "^0.3.4"
-  }
+    "dicom-parser": "^1.8.7"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Universal-Health-Chain/uhc-fhir-utils-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Universal-Health-Chain/uhc-fhir-utils-typescript/issues"
+  },
+  "homepage": "https://github.com/Universal-Health-Chain/uhc-fhir-utils-typescript#readme"
 }

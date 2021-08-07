@@ -4,7 +4,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidRandom} from "uuid"
 import { encode as encodeBase64, decode as decodeBase64 } from "@stablelib/base64"
 // import { validateFhirDateTime } from "./CommonFHIR"
-import { CommonUtilsUHC } from "uhc-common-utils-typescript"
+import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript"
 
 const commonUtils = new CommonUtilsUHC()
 

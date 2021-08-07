@@ -6,7 +6,7 @@ import { getCleanId } from "./CommonFHIR"
 import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
     getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getTagsInBundleResource
 } from "./Bundle"
-import { Uuid } from "uhc-common-utils-typescript"
+import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
 const uuidUtils = new Uuid() 
 

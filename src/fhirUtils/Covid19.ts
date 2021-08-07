@@ -12,7 +12,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept, getExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
 import { getResourcesByTypes, getTagsInBundleResource, isCovid19SoleResource } from "./Bundle"
 import { CodingSystem } from "../models/CommonModels"
-import { Uuid } from "uhc-common-utils-typescript"
+import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 
 const uuidUtils = new Uuid() 

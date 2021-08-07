@@ -1,6 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
-import { Uuid } from "uhc-common-utils-typescript"
+import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
 const uuidUtils = new Uuid() 
 

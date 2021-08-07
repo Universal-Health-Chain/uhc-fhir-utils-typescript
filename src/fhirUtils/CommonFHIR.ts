@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import canonicalize from "canonicalize"
-import { CommonUtilsUHC } from "uhc-common-utils-typescript";
+import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript";
 
 export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing";
 export const FHIR_DATE_REGEX =

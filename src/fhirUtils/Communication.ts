@@ -7,7 +7,7 @@ import { CodingSystem } from "../models"
 import { getDisplayOrTextByCodeHL7 } from "./Hl7"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 
-import { Uuid } from "uhc-common-utils-typescript"
+import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
 const uuidUtils = new Uuid() 
 
