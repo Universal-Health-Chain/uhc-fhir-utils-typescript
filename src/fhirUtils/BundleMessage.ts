@@ -4,7 +4,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { getCleanId } from "./CommonFHIR"
 import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
-    getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById
+    getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getTagsInBundleResource
 } from "./Bundle"
 import { Uuid } from "uhc-common-utils-typescript"
 
@@ -77,6 +77,11 @@ export class BundleMessage {
 
     getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
         return getResourceByIdInBundle(resourceId, bundle)
+    }
+
+    /** Bundle type can be "Message" but also "Document", "Collection", "Batch"... */
+    getTagsInBundle(fhirBundle:R4.IBundle): string[] {
+        return getTagsInBundleResource(fhirBundle)
     }
 
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */

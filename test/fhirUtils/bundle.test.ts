@@ -193,7 +193,7 @@ describe("create bundle Documents and operates with it", () => {
         // TODO: check if the composition contains the reference to the added resource
 
         // the tags are get by the frontend and shown to the practitioner
-        let uhcCodeTags = fhirUtils.bundle.getTagsOfBundleDocument(documentIPS)
+        let uhcCodeTags = fhirUtils.bundle.getTagsInBundle(documentIPS)
         // console.log("uhcCodeTags = ", uhcCodeTags)
         expect(uhcCodeTags.length).toBeGreaterThan(0)
         expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()

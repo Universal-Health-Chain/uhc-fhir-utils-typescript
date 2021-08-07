@@ -4,7 +4,8 @@ export declare class Bundle {
     /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
     getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle) => string;
     getTimestamp(fhirBundle: R4.IBundle): string;
-    getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
+    /** Bundle type can be "document" but also "collection", "message", "history"... */
+    getTagsInBundle(fhirBundle: R4.IBundle): string[];
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument: R4.IBundle): boolean;
     /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
@@ -30,7 +31,10 @@ export declare class Bundle {
 }
 export declare function getCleanIdOfDocumentComposition(fhirBundle: R4.IBundle): string;
 export declare function getTimestamp(fhirBundle: R4.IBundle): string;
-export declare function getTagsOfBundleDocument(bundleDocument: R4.IBundle): string[];
+/** If resource is a Bundle then the different resources MUST be managed by the parent function for calling several times to this child function */
+export declare function isCovid19SoleResource(resource: any): boolean;
+/** Bundle type can be document, collection, message, history... */
+export declare function getTagsInBundleResource(bundleDocument: R4.IBundle): string[];
 export declare function addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
 export declare function addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
 export declare function createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;

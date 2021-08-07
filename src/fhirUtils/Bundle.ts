@@ -21,8 +21,9 @@ export class Bundle {
         return getTimestamp(fhirBundle)
     }
 
-    getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
-        return getTagsOfBundleDocument(bundleDocument)
+    /** Bundle type can be "document" but also "collection", "message", "history"... */
+    getTagsInBundle(fhirBundle:R4.IBundle): string[] {
+        return getTagsInBundleResource(fhirBundle)
     }
 
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
@@ -126,35 +127,45 @@ export function getTimestamp(fhirBundle:R4.IBundle): string {
     return ""   // else returns empty
 }
 
-export function getTagsOfBundleDocument(bundleDocument:R4.IBundle): string[] {
+/** If resource is a Bundle then the different resources MUST be managed by the parent function for calling several times to this child function */
+export function isCovid19SoleResource(resource:any): boolean {
+    if (resource && resource.resourceType) {
+        let codesCovid19:string[] = []
+
+        switch(resource.resourceType) {
+            case ("Immunization"): {
+                // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
+                codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19VaccineProphylaxisCodesGlobal(), codesCovid19)
+                // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                break
+            }
+            case ("DiagnosticReport"): {
+                // It checks for all COVID-19 laboratory test codes (LOINC)
+                codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], covid19LaboratoryTestsAndGroupsCodes(), codesCovid19)
+                // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
+                break
+            }
+        }
+        // Adding the COVID-19 tag to the list if some COVID-19 code was detected and if the tag does not exists in the list
+        if (codesCovid19 && codesCovid19.length && codesCovid19.length>0) return true
+    }
+    return false
+}
+
+/** Bundle type can be document, collection, message, history... */
+export function getTagsInBundleResource(bundleDocument:R4.IBundle): string[] {
     const tagCovid19:string = covid19Tag
-    let uhcCodeTags:string[] = []
+    let uhcCodeTags:string[] = ["Bundle"]
     let resources:any = getAllResourcesInBundleEntries(bundleDocument)
     if (resources && resources.length && resources.length > 1) {
+        let flagIsCovid19 = false
         resources.forEach( function(resource:any) {
-            if (resource.resourceType != "Composition") {
-                // It adds the resource found to the tags list if it does not exists in that list
-                if (!uhcCodeTags.includes(resource.resourceType)) uhcCodeTags.push(resource.resourceType)
-                let codesCovid19:string[] = []
-  
-                switch(resource.resourceType) {
-                    case ("Immunization"): {
-                        // It checks for all COVID-19 vaccine codes (CVX and ATC) and put uhcTagForCovid19 value if some was found
-                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.vaccineCode], covid19VaccineProphylaxisCodesGlobal(), codesCovid19)
-                        // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
-                        break
-                    }
-                    case ("DiagnosticReport"): {
-                        // It checks for all COVID-19 laboratory test codes (LOINC)
-                        codesCovid19 = addExistingTargetCodesInCodeableConcepts([resource.code], covid19LaboratoryTestsAndGroupsCodes(), codesCovid19)
-                        // console.log("codesCovid19 at " + resource.resourceType + " =", codesCovid19)
-                        break
-                    }
-                }
-                // Adding the COVID-19 tag to the list if some COVID-19 code was detected and if the tag does not exists in the list
-                if (codesCovid19 && codesCovid19.length && codesCovid19.length>0 && !uhcCodeTags.includes(tagCovid19)) uhcCodeTags.push(tagCovid19)
-            }
+            if (!uhcCodeTags.includes(resource.resourceType)) uhcCodeTags.push(resource.resourceType)
+            // setting COVID-19 flag to true if isCovid19SoleResource is true
+            flagIsCovid19 = flagIsCovid19 || isCovid19SoleResource(resource)
         })
+        // Adding "COVID-19" tag if some COVID-19 code was detected in the resources
+        if (flagIsCovid19) uhcCodeTags.push(tagCovid19)
     }
     return uhcCodeTags
 }

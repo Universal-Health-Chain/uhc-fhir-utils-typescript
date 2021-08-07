@@ -20,6 +20,8 @@ export declare class BundleMessage {
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
     getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
+    /** Bundle type can be "Message" but also "Document", "Collection", "Batch"... */
+    getTagsInBundle(fhirBundle: R4.IBundle): string[];
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
 }
