@@ -8,14 +8,14 @@ import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCo
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
 import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
-import { getCleanId } from "./CommonFHIR"
+import { getCleanIdOfResource } from "./CommonFHIR"
 
 export class Bundle {
     constructor() {
     }
 
     /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
-    getCleanIdOfDocumentComposition = (fhirBundle:R4.IBundle): string => getCleanIdOfDocumentComposition(fhirBundle)
+    getCleanIdOfDocumentComposition = (fhirBundle:R4.IBundle | undefined): string => getCleanIdOfDocumentComposition(fhirBundle)
 
     getTimestamp(fhirBundle:R4.IBundle): string {
         return getTimestamp(fhirBundle)
@@ -106,16 +106,16 @@ export class Bundle {
 
 }
 
-export function getCleanIdOfDocumentComposition(fhirBundle:R4.IBundle): string {
+export function getCleanIdOfDocumentComposition(fhirBundle:R4.IBundle | undefined): string {
     // Composition is always fhirBundle.entry[0].resource in a FHIR Document or it is not a Bundle Document
     if (!fhirBundle || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1 || 
         !fhirBundle.entry[0].resource || !fhirBundle.entry[0].resource.resourceType || 
-        fhirBundle.entry[0].resource.resourceType !== "Composition" || !!fhirBundle.entry[0].resource.id){
+        fhirBundle.entry[0].resource.resourceType !== "Composition" || !fhirBundle.entry[0].resource.id){
         return "" // instead of error
     }
     else {
         // fullUrn should contain the URN and the Compositon.id should 
-        return getCleanId(fhirBundle.entry[0].resource.id)
+        return getCleanIdOfResource(fhirBundle.entry[0].resource)
     }
 }
 

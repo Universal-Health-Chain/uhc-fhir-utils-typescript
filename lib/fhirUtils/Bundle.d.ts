@@ -2,7 +2,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Bundle {
     constructor();
     /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
-    getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle) => string;
+    getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle | undefined) => string;
     getTimestamp(fhirBundle: R4.IBundle): string;
     /** Bundle type can be "document" but also "collection", "message", "history"... */
     getTagsInBundle(fhirBundle: R4.IBundle): string[];
@@ -29,7 +29,7 @@ export declare class Bundle {
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
-export declare function getCleanIdOfDocumentComposition(fhirBundle: R4.IBundle): string;
+export declare function getCleanIdOfDocumentComposition(fhirBundle: R4.IBundle | undefined): string;
 export declare function getTimestamp(fhirBundle: R4.IBundle): string;
 /** If resource is a Bundle then the different resources MUST be managed by the parent function for calling several times to this child function */
 export declare function isCovid19SoleResource(resource: any): boolean;

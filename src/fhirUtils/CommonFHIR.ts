@@ -82,7 +82,7 @@ export class CommonFHIR {
     return getLabelsOfGroupedCodes(codes, codeLabels, groupedSectionName);
   }
 
-  getCleanId = (data:any | undefined): string => getCleanId(data)
+  getCleanIdOfResource = (resource:any | undefined): string => getCleanIdOfResource(resource)
   normalizedAndCanonicalizedFHIR = (json: any): any => normalizedAndCanonicalizedFHIR(json) 
 }
 
@@ -97,9 +97,12 @@ function cleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
  * It gets a single ID from a FHIR reference URI or URN, among others.
  * NOTE: if empty result it should be fixed or deleted by the fronted
 */
-export function getCleanId(data:any | undefined): string {
+export function getCleanIdOfResource(resource:any | undefined): string {
   try {
-    if (data && data.id) return cleanIdWithoutReferenceFHIROrURN(data.id) || "" // it can be an URN with the ID at the end of the string
+    if (resource && resource.id){
+      const cleanId = cleanIdWithoutReferenceFHIROrURN(resource.id)
+      return cleanId || "" // it can be an URN with the ID at the end of the string
+    }
     else return ""
   } catch (e) {
     return ""

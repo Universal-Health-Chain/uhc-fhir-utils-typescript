@@ -6,8 +6,8 @@ import { FhirUtils } from "../../src";
 
 const fhirUtils = new FhirUtils();
 
-const ipsDocument: R4.IBundle = require("../examples/Bundle-IPS-examples-Bundle-01.json");
-const immunizationResource: R4.IBundle = require("../examples/Immunization-75680.json");
+const ipsDocument: R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json");
+const immunizationResource: R4.IBundle = require("../examples/fhirR4/Immunization-75680.json");
 
 describe("fhir organization of bundles", () => {
   it("should organize bundle by resource type", (done) => {

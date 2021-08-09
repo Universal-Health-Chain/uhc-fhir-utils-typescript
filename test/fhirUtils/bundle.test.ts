@@ -19,7 +19,7 @@ const targetDisease:string = "840539006"
 
 // -- Observation --
 const healthHistorySectionCodeForTesting = "11369-6" // DiagnosticResults
-
+const fhirIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
 const observationForTesting:R4.IObservation = {
     resourceType: "Observation",
     id: "observation-for-testing-uuid",
@@ -63,6 +63,15 @@ const DiagnosticReportCovid19:R4.IDiagnosticReport={
     ]
 }
 
+describe("tests", () => { 
+  it("should get the Composition ID from a FHIR Bundle", (done) => {
+    const documentCompositionID = fhirUtils.bundle.getCleanIdOfDocumentComposition(fhirIPS)
+    // console.log("documentCompositionID = ", documentCompositionID)
+    expect(documentCompositionID).toBeDefined()
+    expect(documentCompositionID==="").toBeFalsy()
+    done()
+  })
+})
 
 describe("create FHIR Document Bundle and operates with it", () => { 
   it("should build an empty FHIR Bundle", (done) => {
@@ -174,7 +183,7 @@ describe("create bundle Documents and operates with it", () => {
 
     
     it("should add COVID-19 data to an IPS Document ", (done) => {
-        let documentIPS:R4.IBundle = require("../examples/Bundle-IPS-examples-Bundle-01.json")
+        let documentIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
         // It checks isIPS()
         let checkIPS = fhirUtils.bundle.isIPS(documentIPS)
         expect(checkIPS==true).toBe(true)
