@@ -4,6 +4,20 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 import canonicalize from "canonicalize"
 import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript";
 
+/** URNs are case insensitive
+ * "UUID", "UVCI". "DVCI" or "VCID" MUST BE added when an UUID, Health Certificate, SMART Health Card or a Verifiable Credential ID (txId or version ID) exists
+*/
+export enum UrnPrefixFHIR {
+  BundleDocument = "URN:FHIR:DOCUMENT:", // using the same ID as Composition.id because Bundle.id is ignored / removed
+  DocumentComposition = "URN:FHIR:COMPOSITION:", // the real ID of bundle document, the Bundle.id is ignored / removed
+  Attachment = "URN:FHIR:ATTACHMENT:",
+  DocumentReference = "URN:FHIR:DOCUMENTREFERENCE:", // it contains one or more attachments
+  Immunization = "URN:FHIR:IMMUNIZATION:",
+  DiagnosticReport = "URN:FHIR:DIAGNOSTICREPORT:",
+  Observation = "URN:FHIR:OBSERVATION:", // it can be Laboratory or Pathology test, among others types of observation
+  VitalSign = "URN:FHIR:VITALSIGN:", // special observation
+}
+
 export const BLOOD_TYPING_MAIN_CODE_TEXT = "Blood typing";
 export const FHIR_DATE_REGEX =
   "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?";
@@ -82,8 +96,18 @@ export class CommonFHIR {
     return getLabelsOfGroupedCodes(codes, codeLabels, groupedSectionName);
   }
 
+  /** It returns empty or an ID with no URN prefix and no FHIR Reference prefix */
+  cleanId = (id:string): string => cleanId(id)
   getCleanIdOfResource = (resource:any | undefined): string => getCleanIdOfResource(resource)
+  
+  /** It returns a normalized and crypto safe predictable FHIR JSON resource or document as string (canonicalized as defined by RFC8785) */
   normalizedAndCanonicalizedFHIR = (json: any): any => normalizedAndCanonicalizedFHIR(json) 
+}
+
+/** It returns empty or an ID without URN prefix or FHIR Reference prefix */
+export function cleanId(id:string): string {
+  const cleanId = getCleanIdOfResource({id: id})
+  return cleanId
 }
 
 /** it gets a single ID from a FHIR reference URI or URN, among others */
@@ -148,7 +172,7 @@ export function getBundleEntriesMap(
 // 2. The narrative (Resource.text) is omitted prior to signing (note the deletion is at Resource.text, not Resource.text.div)
 //    In addition to narrative (Resource.text), the Resource.meta element is removed. SMART Health Credential also removes the resource id, so it must be added to identifiers (as URN)
 
-/// It returns a normalized and crypto safe predictable FHIR JSON resource or document (canonicalized as defined by RFC8785)
+/** It returns a normalized and crypto safe predictable FHIR JSON resource or document (canonicalized as defined by RFC8785) */
 export function normalizedAndCanonicalizedFHIR(json: any): any {
   const resorceNormalization: string[] = ["meta", "text"]; // 'static' normatilzation as defined for XML: http://hl7.org/fhir/canonicalization/xml#static
   const bundleDocNormalization: string[] = ["meta", "id"]; // 'document' normalization as defined for XML: http://hl7.org/fhir/canonicalization/xml#document
