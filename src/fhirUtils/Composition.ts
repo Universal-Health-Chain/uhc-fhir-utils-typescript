@@ -65,7 +65,7 @@ export class Composition {
 export function getCodesOfSections(sections:R4.IComposition_Section[], system:string): string[] {
     let results:string[] = []
     sections.forEach( function(section:R4.IComposition_Section) {
-        if (section.code && section.code.coding && section.code.coding.length > 1) {
+        if (section.code && section.code.coding && section.code.coding.length > 0) {
             section.code.coding.forEach( function(item:R4.ICoding){
                 if (item.code && item.system==system) results.push(item.code)
             })

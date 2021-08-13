@@ -6,9 +6,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
-import { addExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
+import { addExistingTargetCodesInCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
 import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
 import { getCleanIdOfResource } from "./CommonFHIR"
+import { CodingSystem } from "../models"
 
 export class Bundle {
     constructor() {
@@ -87,6 +88,10 @@ export class Bundle {
         return getResourceIdsInBundle(bundle)
     }
 
+    getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[] {
+        return getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS, sectionCode)
+    }
+
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
         return getResourcesByTypes(bundle, resourceTypes)
     }
@@ -157,7 +162,7 @@ export function getTagsInBundleResource(bundleDocument:R4.IBundle): string[] {
     const tagCovid19:string = covid19Tag
     let uhcCodeTags:string[] = ["Bundle"]
     let resources:any = getAllResourcesInBundleEntries(bundleDocument)
-    if (resources && resources.length && resources.length > 1) {
+    if (resources && resources.length && resources.length > 0) { // the first entry shall be the composition resource
         let flagIsCovid19 = false
         resources.forEach( function(resource:any) {
             if (!uhcCodeTags.includes(resource.resourceType)) uhcCodeTags.push(resource.resourceType)
@@ -436,6 +441,36 @@ export function getResourceIdsInBundle(bundle: R4.IBundle): string[] {
       }
     })
     return results
+}
+
+// It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash
+export function getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[] {
+    
+    // the FHIR resources are within document.entry[] and the Composition resource (document index) is always in the first entry
+    if (!bundleDocumentIPS || !bundleDocumentIPS.entry || !bundleDocumentIPS.entry.length || bundleDocumentIPS.entry.length<1) {
+        return []
+    }
+
+    // the health sections are in the Composition resource (first entry in the bundle document): document.entry[0].resource.section[]
+    const documentComposition:R4.IComposition = bundleDocumentIPS.entry[0].resource as R4.IComposition
+    // const documentComposition = getResourcesByTypes(bundleDocumentIPS, ["Composition"])[0]
+    if (!documentComposition || !documentComposition.section || !documentComposition.section.length || documentComposition.section.length<1){
+        return []
+    }
+
+    let references:string[] = []
+    documentComposition.section.forEach( function(section:R4.IComposition_Section) {
+        const code = getCodeListInCodeableConcept(section.code, CodingSystem.loinc)
+        if (code && code.length && code.length>0 && code[0]===sectionCode){
+            if (section.entry && section.entry.length && section.entry.length>0){
+                section.entry.forEach( function(dataReference:R4.IReference){
+                    // adding all the references within the health section
+                    if (dataReference.reference) references.push(dataReference.reference)
+                })
+            }
+        }
+    })
+    return references
 }
 
 export function getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {

@@ -8,7 +8,7 @@ import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcep
 // const bundleUtils = new Bundle()
 
 import { FhirUtils } from '../../src/FhirUtils';
-import { CodingSystem } from "../../src";
+import { CodingSystem, medicalHistoryClassification } from "../../src";
 const fhirUtils = new FhirUtils()
 
 const authorReferenceIdForTesting = "author-reference-uuid"
@@ -19,7 +19,7 @@ const targetDisease:string = "840539006"
 
 // -- Observation --
 const healthHistorySectionCodeForTesting = "11369-6" // DiagnosticResults
-const fhirIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
+const bundleIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
 const observationForTesting:R4.IObservation = {
     resourceType: "Observation",
     id: "observation-for-testing-uuid",
@@ -63,14 +63,27 @@ const DiagnosticReportCovid19:R4.IDiagnosticReport={
     ]
 }
 
-describe("tests", () => { 
+describe("testing bundle composition functions", () => { 
   it("should get the Composition ID from a FHIR Bundle", (done) => {
-    const documentCompositionID = fhirUtils.bundle.getCleanIdOfDocumentComposition(fhirIPS)
+    const documentCompositionID = fhirUtils.bundle.getCleanIdOfDocumentComposition(bundleIPS)
     // console.log("documentCompositionID = ", documentCompositionID)
     expect(documentCompositionID).toBeDefined()
     expect(documentCompositionID==="").toBeFalsy()
     done()
   })
+
+  it("should get the Composition ID from a FHIR Bundle", (done) => {
+    const sectionCodeLOINC = medicalHistoryClassification.allergies
+    const bundleDocumentIPS = bundleIPS as R4.IBundle
+    
+    const references = fhirUtils.bundle.getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS, sectionCodeLOINC)
+    console.log("references = ", references)
+    
+    expect(references).toBeDefined()
+    expect(references.length).toBeGreaterThan(0)
+    done()
+  })
+
 })
 
 describe("create FHIR Document Bundle and operates with it", () => { 

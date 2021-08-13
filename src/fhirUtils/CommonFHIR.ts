@@ -141,7 +141,7 @@ export function getBundleEntriesMap(
   if (
     fhirDocument.entry &&
     fhirDocument.entry.length &&
-    fhirDocument.entry.length > 1
+    fhirDocument.entry.length > 0 // the first entry shall be the Composition resource if a Document or the MessageHeader resource if a Message
   ) {
     fhirDocument.entry.forEach(function (entry: R4.IBundle_Entry) {
       if (entry.resource && entry.resource.resourceType) {

@@ -23,6 +23,7 @@ export declare class Bundle {
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
+    getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[];
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
     getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
@@ -48,6 +49,7 @@ export declare function getResourcesInSection(bundleDocument: R4.IBundle, sectio
 export declare function getAllResourcesInBundleEntries(bundle: R4.IBundle): any[];
 export declare function getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
 export declare function getResourceIdsInBundle(bundle: R4.IBundle): string[];
+export declare function getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[];
 export declare function getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
 export declare function getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
 export declare function getObservationsByCode(bundle: R4.IBundle, code: string): any[];
