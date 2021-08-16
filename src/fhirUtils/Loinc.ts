@@ -56,6 +56,11 @@ export enum covid19LaboratoryTestGroups {
     naatTestsGroup      = "LG51017-8" 
 }
 
+export enum covid19HealthCertificateLaboratoryTest {
+    RAT = "LP217198-3",
+    NAT = "LP6464-4" 
+}
+
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export enum GroupedLOINC {
     // TODO: add from IndexHL7.groupedCodes
@@ -69,6 +74,10 @@ export enum GroupedLOINC {
 export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:object): string {
     if (!loincLanguageFile) loincLanguageFile = require("../../languages/international/loincUHC.json")
     return (loincLanguageFile as any)[code]
+}
+
+export function getCovid19HealthCertificateLaboratoryTests():string[]{
+    return [covid19HealthCertificateLaboratoryTest.NAT, covid19HealthCertificateLaboratoryTest.RAT]
 }
 
 export function getActiveLaboratoryTestsCovid19():string[]{

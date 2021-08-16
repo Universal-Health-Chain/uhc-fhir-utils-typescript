@@ -40,6 +40,10 @@ export declare enum covid19LaboratoryTestGroups {
     serologyTestsGroup = "LG51018-6",
     naatTestsGroup = "LG51017-8"
 }
+export declare enum covid19HealthCertificateLaboratoryTest {
+    RAT = "LP217198-3",
+    NAT = "LP6464-4"
+}
 /** Define the sections for the indexed codes and for the JSON files with the labels of the codes in different languages*/
 export declare enum GroupedLOINC {
     healthSection = "healthSection",
@@ -48,6 +52,7 @@ export declare enum GroupedLOINC {
     laboratoryTestTopCommonSI = "laboratoryTestTopCommonSI"
 }
 export declare function getDisplayOrTextByCodeLOINC(code: string, loincLanguageFile?: object): string;
+export declare function getCovid19HealthCertificateLaboratoryTests(): string[];
 export declare function getActiveLaboratoryTestsCovid19(): string[];
 export declare function getFullSerologyTestCovid19LOINC(): string[];
 export declare function getFullNaatTestCovid19LOINC(): string[];

@@ -1,17 +1,18 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covid19LaboratoryTestGroups, getActiveLaboratoryTestsCovid19 } from "./Loinc"
+import { GlobalIndexLOINC, getFullSerologyTestCovid19LOINC, getFullNaatTestCovid19LOINC, covid19LaboratoryTestGroups, 
+    getActiveLaboratoryTestsCovid19, getCovid19HealthCertificateLaboratoryTests } from "./Loinc"
 import { covid19DiseaseTerminologySNOMED, getVaccinationProcedureCovid19CodesSNOMED, positiveOrDetectedCodesSNOMED,
     negativeOrNotDetectedCodesSNOMED, suspectedOrInconclusiveCodesSNOMED, probablyNotPresentCodesSNOMED,
-    resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED, covid19VaccineProphylaxisCodesSNOMED, covid19LaboratoryOriginSamples } from "./Snomed"
-import { GlobalIndexFHIR, getVaccinesCovid19CVX } from "./Hl7"
+    resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED, covid19VaccineProphylaxisCodesSNOMED,
+    covid19LaboratoryOriginSamples } from "./Snomed"
+import { GlobalIndexFHIR } from "./Hl7"
 import { covid19DiseaseTermsICD10, covid19DiseaseTermsICD11 } from "./Icd"
 import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
-import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept, getExistingTargetCodesInCodeableConcepts } from "./CodeableConcept"
+import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getResourcesByTypes, getTagsInBundleResource, isCovid19SoleResource } from "./Bundle"
-import { CodingSystem } from "../models/CommonModels"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 
@@ -76,6 +77,7 @@ export class Covid19 {
     /** Get LOINC laboratory test group code: serology or naat group code */
     naatTestsGroupCodeLOINC = ():string => naatTestsGroupCodeLOINC()
     serologyTestsGroupCodeLOINC = ():string => serologyTestsGroupCodeLOINC()
+    healthCertificateLaboratoryTests = ():string [] => getCovid19HealthCertificateLaboratoryTests()
 
     /** Get all or specific LOINC laboratory tests */
     laboratoryTestsCodesLOINC = ():string[] => laboratoryTestsCodesLOINC()

@@ -72,7 +72,7 @@ describe("testing bundle composition functions", () => {
     done()
   })
 
-  it("should get the Composition ID from a FHIR Bundle", (done) => {
+  it("should get the resources references in a section of the bundle document", (done) => {
     const sectionCodeLOINC = medicalHistoryClassification.allergies
     const bundleDocumentIPS = bundleIPS as R4.IBundle
     
