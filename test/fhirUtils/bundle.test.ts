@@ -216,7 +216,7 @@ describe("create bundle Documents and operates with it", () => {
 
         // the tags are get by the frontend and shown to the practitioner
         let uhcCodeTags = fhirUtils.bundle.getTagsInBundle(documentIPS)
-        // console.log("uhcCodeTags = ", uhcCodeTags)
+        console.log("uhcCodeTags = ", uhcCodeTags)
         expect(uhcCodeTags.length).toBeGreaterThan(0)
         expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
         expect(uhcCodeTags.includes("DiagnosticReport")).toBeTruthy()
