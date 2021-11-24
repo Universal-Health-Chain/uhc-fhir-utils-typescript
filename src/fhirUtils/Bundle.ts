@@ -46,16 +46,20 @@ export class Bundle {
         return hasSections(bundleDocument)
     }
 
-    // TODO: ADD RESOURCES TO COMPOSITION SECTIONS AND FULLURL
+    // TODO: create another function to add the resource to the composition index
+    // export function addResourceToBundleAndIndex(bundle:R4.IBundle, resource:any, sectionCode:string): R4.IBundle{}
+
     /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
-    addResourceToBundle(bundle:R4.IBundle, resource:any, sectionCode?:string, sectionSystem?:string): R4.IBundle{
-        return addResourceToBundle(bundle, resource, sectionCode, sectionSystem)
+    addResourceToBundle(bundle:R4.IBundle, resource:any): R4.IBundle{
+        return addResourceToBundle(bundle, resource)
     }
 
-    // TODO: ADD RESOURCES TO COMPOSITION SECTIONS
+    // TODO: create another function for adding resources to the Composition index by section
+    // export function addAdditionalResourcesToBundleAndIndex(bundle:R4.IBundle, resources:any[], sectionCode:string): R4.IBundle {
+
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
-    addAdditionalResourcesToBundle(bundle:R4.IBundle, resources?:any[], sectionCode?:string, sectionSystem?:string): R4.IBundle {
-        return addAdditionalResourcesToBundle(bundle, resources, sectionCode, sectionSystem)
+    addAdditionalResourcesToBundle(bundle:R4.IBundle, resources?:any[]): R4.IBundle {
+        return addResourcesToBundle(bundle, resources)
     }
 
     createBundleDocumentWithTypeLOINC(resources?:any[], authorReferenceId?:string, typeDocumentCodeLOINC?:string): R4.IBundle {
@@ -201,9 +205,14 @@ function createEmptyBundle(bundleType:R4.BundleTypeKind, language?:string): R4.I
     return bundle
 }
 
-// TODO: ADD RESOURCES TO COMPOSITION SECTIONS AND FULLURL
+// TODO: create another function to add the resource to the composition index
+// export function addResourceToBundleAndIndex(bundle:R4.IBundle, resource:any, sectionCode:string): R4.IBundle{}
+
+// TODO: create another function for adding resources to the Composition index by section
+// export function addAdditionalResourcesToBundleAndIndex(bundle:R4.IBundle, resources:any[], sectionCode:string): R4.IBundle {
+
 // It adds a bundle resource including Composition or HeaderMessage and skips if already present
-export function addResourceToBundle(bundle:R4.IBundle, resource:any, sectionCode?:string, sectionSystem?:string): R4.IBundle{
+export function addResourceToBundle(bundle:R4.IBundle, resource:any): R4.IBundle{
     if (!resource.resourceType) return bundle
     // Only for debugging, resourceType "Bundle" MUST BE ADDED ONLY when creating a FHIR MESSAGE but NOT WHEN CREATING A BUNDLE DOCUMENT (just resource entries)
     // if (resource.resourceType!="Bundle"&&resource.resourceType!="Composition"&&resource.resourceType!="Communication"&&resource.resourceType!="AuditEvent"&&  resource.resourceType!="MessageHeader")  console.log("Health resource type received in addResourceToBundleFHIR = ", resource.resourceType)
@@ -229,16 +238,15 @@ export function addResourceToBundle(bundle:R4.IBundle, resource:any, sectionCode
     return bundle
 }
 
-// TODO: ADD RESOURCES TO COMPOSITION SECTIONS
-// It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message
-export function addAdditionalResourcesToBundle(bundle:R4.IBundle, resources?:any[], sectionCode?:string, sectionSystem?:string): R4.IBundle {
+// DONE: renaming 'addAdditionalResourcesToBundle' as 'addResourcesToBundle'
+/** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
+export function addResourcesToBundle(bundle:R4.IBundle, resources?:any[]): R4.IBundle {
     // console.log("addAdditionalResourcesToBundle with resources = ", JSON.stringify(resources))
     if (!bundle || bundle.resourceType != "Bundle") throw new Error ("Not a FHIR Bundle") // return {} as R4.IBundle
     if (!resources || !resources.length || resources.length<1) throw new Error ("No 'AdditionalResources' to add")  // for debugging, instead of return the original bundle without error
 
     // TODO: it validates the FHIR object and gets the validated value or returns empty
-    let newBundle: R4.IBundle
-    newBundle = bundle
+    let newBundle: R4.IBundle = {...bundle}
 
     // let existingResourcesIds:string[] = getResourceIdsInBundle(bundle)
     
@@ -319,7 +327,7 @@ export function createBundleDocumentWithComposition(resources?:any[], authorRefe
     bundle = addResourceToBundle(bundle, emptyComposition)
 
     // TODO: addAdditionalResourcesToBundle SHOULD ADD RESOURCES TO COMPOSITION
-    if (resources && resources.length && resources.length >0) bundle = addAdditionalResourcesToBundle(bundle, resources)
+    if (resources && resources.length && resources.length >0) bundle = addResourcesToBundle(bundle, resources)
     
     // console.log("createBundleDocumentWithComposition resulting bundle= ", JSON.stringify(bundle))
     return bundle
@@ -388,7 +396,7 @@ export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:str
     let newComposition:R4.IComposition = addResourcesToComposition(compositions[0], resources, sectionCode)
     
     // Then it adds the new resources to the bundle
-    let newBundle:R4.IBundle = addAdditionalResourcesToBundle(bundleDocument, resources)
+    let newBundle:R4.IBundle = addResourcesToBundle(bundleDocument, resources)
 
     // Finally it replaces the composition with the new references to the added resources
     newBundle = replaceResourceById(newComposition, newBundle)

@@ -3,7 +3,7 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { getCleanIdOfResource } from "./CommonFHIR"
-import { addAdditionalResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
+import { addResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
     getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getTagsInBundleResource
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
@@ -131,7 +131,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
  
     // It creates the mandatory MessageHeader with id equal to the messageId (which is a document in pouchDB)
     let messageHeader:R4.IMessageHeader = createMessageHeader(messageId)
-    messageBundle = addAdditionalResourcesToBundle(messageBundle, [messageHeader])
+    messageBundle = addResourcesToBundle(messageBundle, [messageHeader])
  
     // it adds a text sended by the user (if any)
     if (textMessage) addCommunicationTextToBundleMessage(messageBundle, textMessage)
@@ -151,7 +151,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
     if (bundleDoc) {
         // TODO: create or add to a "Communication" resource with 'contentReference' for a Patient Record Audit Event
         let patientRecordAudit:R4.IAuditEvent = createPatientRecordAuditEvent(senderId, entityTitle, entityDescription)
-        BundleMessage = addAdditionalResourcesToBundle(BundleMessage, [patientRecordAudit, bundleDoc])
+        BundleMessage = addResourcesToBundle(BundleMessage, [patientRecordAudit, bundleDoc])
     }
     return BundleMessage
  }

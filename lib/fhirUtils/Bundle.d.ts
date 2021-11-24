@@ -11,9 +11,9 @@ export declare class Bundle {
     getCodesOfSections(bundleDocument: R4.IBundle): string[];
     hasSections(bundleDocument: R4.IBundle): boolean;
     /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
-    addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
+    addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
-    addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
+    addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
     createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
@@ -38,8 +38,9 @@ export declare function getTimestamp(fhirBundle: R4.IBundle): string;
 export declare function isCovid19SoleResource(resource: any): boolean;
 /** Bundle type can be document, collection, message, history... */
 export declare function getTagsInBundleResource(bundleDocument: R4.IBundle): string[];
-export declare function addResourceToBundle(bundle: R4.IBundle, resource: any, sectionCode?: string, sectionSystem?: string): R4.IBundle;
-export declare function addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[], sectionCode?: string, sectionSystem?: string): R4.IBundle;
+export declare function addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
+/** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
+export declare function addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
 export declare function createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
 export declare function isIPS(bundleDocument: R4.IBundle): boolean;
 export declare function hasSections(bundleDocument: R4.IBundle): boolean;

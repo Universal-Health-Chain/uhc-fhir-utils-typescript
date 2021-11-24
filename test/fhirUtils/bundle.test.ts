@@ -84,6 +84,17 @@ describe("testing bundle composition functions", () => {
     done()
   })
 
+  it("should get the list of section codes in the bundle document", (done) => {
+    const bundleDocumentIPS = bundleIPS as R4.IBundle
+    
+    const loincSectionCodes = fhirUtils.bundle.getCodesOfSections(bundleDocumentIPS)
+    console.log("loincSectionCodes = ", loincSectionCodes)
+    
+    expect(loincSectionCodes).toBeDefined()
+    expect(loincSectionCodes.length).toBeGreaterThan(0)
+    done()
+  })
+
 })
 
 describe("create FHIR Document Bundle and operates with it", () => { 
