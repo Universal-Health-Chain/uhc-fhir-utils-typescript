@@ -109,7 +109,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
   });
   it("should add a FHIR resource to a FHIR Bundle", (done) => {
       let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
-      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [DiagnosticReportCovid19])
+      bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [DiagnosticReportCovid19])
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       // expect(bundle.entry).toBeDefined()
@@ -132,7 +132,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
   });    
   it("should get FHIR resources from a FHIR Bundle", (done) => {
       let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
-      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resources = fhirUtils.bundle.getAllResources(bundle)
       expect(resources).toHaveLength(2)   // updated with the composition resource included
       expect(resources[1].resourceType).toEqual(observationForTesting.resourceType)
@@ -140,7 +140,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
   });    
   it("should get FHIR resources by type from a FHIR Bundle", (done) => {
       let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
-      bundle = fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resources = fhirUtils.bundle.getResourcesByTypes(bundle, ["Observation"])
       // //console.log("Resources = ", resources)
       expect(resources).toHaveLength(1)
@@ -150,7 +150,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
 
   it("should get a FHIR resource by ID from a FHIR Bundle", (done) => {
       let bundle =fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
-      bundle =fhirUtils.bundle.addAdditionalResourcesToBundle(bundle, [observationForTesting])
+      bundle =fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resource =fhirUtils.bundle.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
       expect(resource).toEqual(observationForTesting)
       done()
