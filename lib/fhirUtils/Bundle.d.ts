@@ -13,7 +13,7 @@ export declare class Bundle {
     /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
     addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
-    addAdditionalResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
+    addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
     createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;

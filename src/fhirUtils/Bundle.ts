@@ -58,7 +58,7 @@ export class Bundle {
     // export function addAdditionalResourcesToBundleAndIndex(bundle:R4.IBundle, resources:any[], sectionCode:string): R4.IBundle {
 
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
-    addAdditionalResourcesToBundle(bundle:R4.IBundle, resources?:any[]): R4.IBundle {
+    addResourcesToBundle(bundle:R4.IBundle, resources?:any[]): R4.IBundle {
         return addResourcesToBundle(bundle, resources)
     }
 
