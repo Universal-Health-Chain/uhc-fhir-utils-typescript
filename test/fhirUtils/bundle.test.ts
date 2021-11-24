@@ -174,13 +174,13 @@ describe("create bundle Documents and operates with it", () => {
         expect(compositionCodes.includes("60591-5")).toBeTruthy // or expect(compositionCodes).toContain("60591-5")
 
         // It adds an observation in the section
-        let modifiedIPS =fhirUtils.bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, CodingSystem.loinc, [observationForTesting]) as any
+        let modifiedIPS =fhirUtils.bundle.addResourcesBySection(ipsDocument, healthHistorySectionCodeForTesting, [observationForTesting]) as any
         //console.log("IPS Document with added observation = ", JSON.stringify(modifiedIPS))
         expect(modifiedIPS.entry[1].resource).toEqual(observationForTesting)
         // TODO: check if the composition contains the reference to the added resource
 
         // It gets the observation from the IPS document
-        let resources =fhirUtils.bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting, CodingSystem.loinc) as any
+        let resources =fhirUtils.bundle.getResourcesInSection(modifiedIPS, healthHistorySectionCodeForTesting) as any
         //expect(resources[0]).toEqual(observationForTesting)
 
         // It replaces the observation by its id into the IPS document
@@ -203,13 +203,13 @@ describe("create bundle Documents and operates with it", () => {
 
         // It adds an immunization to the section
         let immunizationSection = fhirUtils.sections.getSectionImmunizationLOINC()
-        let modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, immunizationSection, CodingSystem.loinc, [ImmunizationCovid19]) as any
+        let modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, immunizationSection, [ImmunizationCovid19]) as any
         //console.log("IPS Document with added immunization = ", JSON.stringify(modifiedIPS))
         // TODO: check if the composition contains the reference to the added resource
 
         // It adds a lab test to the section
         let diagnosticResultsSection = fhirUtils.sections.getSectionDiagnosticResultsLOINC()
-        modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, diagnosticResultsSection, CodingSystem.loinc, [DiagnosticReportCovid19]) as any
+        modifiedIPS = fhirUtils.bundle.addResourcesBySection(documentIPS, diagnosticResultsSection, [DiagnosticReportCovid19]) as any
         
         // console.log("IPS Document = ", JSON.stringify(modifiedIPS))
         // TODO: check if the composition contains the reference to the added resource

@@ -59,8 +59,8 @@ export class Bundle {
     }
 
     // TODO: generate the entry.fullUrl and reference as "resourceType/id"
-    addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, sectionSystem:string, resources:any[]): R4.IBundle {
-        return addResourcesBySection(bundleDocument, sectionCode, sectionSystem, resources)
+    addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, resources:any[]): R4.IBundle {
+        return addResourcesBySection(bundleDocument, sectionCode, resources)
     }
 
     addEntriesBySection(bundleDocument:R4.IBundle, bundleEntries:R4.IBundle_Entry[], sectionCode:string, sectionSystem:string): R4.IBundle {
@@ -71,8 +71,8 @@ export class Bundle {
         return  getReferencesInSection(section)
     }
 
-    getResourcesInSection(bundleDocument:R4.IBundle, sectionCode:string, sectionSystem?:string): any[] {
-        return getResourcesInSection(bundleDocument, sectionCode, sectionSystem)
+    getResourcesInSection(bundleDocument:R4.IBundle, sectionCode:string): any[] {
+        return getResourcesInSection(bundleDocument, sectionCode)
     }
 
     getAllResources(bundle: R4.IBundle): any[] {
@@ -274,16 +274,17 @@ function getReferencesInBundleEntries(entries:R4.IBundle_Entry[]): R4.IReference
 }
 
 // TODO: put display and text of the section (translation)
-function addReferencesInBundleEntriesToComposition(composition:R4.IComposition, entries:R4.IBundle_Entry[], sectionCode:string, sectionSystem:string): R4.IComposition {
+function addReferencesInBundleEntriesToComposition(composition:R4.IComposition, entries:R4.IBundle_Entry[], loincSectionCode:string): R4.IComposition {
     // TODO: check bundle
 
     // It gets the validated composition to be updated
-    let newComposition:R4.IComposition = composition
+    let newComposition:R4.IComposition = { ... composition}
 
     // It gets or creates the section
-    let section:R4.IComposition_Section
-    if (!newComposition.section) section = createEmptyCompositionSection(sectionCode, sectionSystem)
-    else section = getSectionByCodeInComposition(newComposition, sectionCode, sectionSystem)    // error if section has no code
+    let section = getSectionByCodeInComposition(newComposition, loincSectionCode)    // error if section has no code
+    if (!section){
+        section = createEmptyCompositionSection(loincSectionCode)
+    }
     
     // It gets the references to the resources and puts them into the section
     let references:R4.IReference[] = getReferencesInBundleEntries(entries)
@@ -346,14 +347,14 @@ export function addEntriesToBundle(bundle:R4.IBundle, entries:R4.IBundle_Entry[]
 }
 
 // TODO: generate the entry.fullUrl and reference as "resourceType/id"
-export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, sectionSystem:string, resources:any[]): R4.IBundle {
+export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, resources:any[]): R4.IBundle {
     let compositions:R4.IComposition[] = getResourcesByTypes(bundleDocument, ["Composition"])
     if (compositions.length < 1 ) return {} as R4.IBundle   //returns empty TODO: error or create new Composition?
 
     // if it was created as an empty IPS document then it does not have any section yet
 
     // It updates the resources references of the section into the composition entry of the bundle
-    let newComposition:R4.IComposition = addResourcesToComposition(compositions[0], resources, sectionCode, sectionSystem)
+    let newComposition:R4.IComposition = addResourcesToComposition(compositions[0], resources, sectionCode)
     
     // Then it adds the new resources to the bundle
     let newBundle:R4.IBundle = addAdditionalResourcesToBundle(bundleDocument, resources)
@@ -370,7 +371,7 @@ export function addEntriesBySection(bundleDocument:R4.IBundle, bundleEntries:R4.
     // if it was created as an empty IPS document then it does not have any section yet
     let resources
     // It updates the resources references of the section into the composition entry of the bundle
-    let newComposition:R4.IComposition = addReferencesInBundleEntriesToComposition(compositions[0], bundleEntries, sectionCode, sectionSystem)
+    let newComposition:R4.IComposition = addReferencesInBundleEntriesToComposition(compositions[0], bundleEntries, sectionCode)
     // Then it adds the new resources to the bundle
     let newBundle:R4.IBundle = addEntriesToBundle(bundleDocument, bundleEntries)
     // Finally it replaces the composition with the new references to the added resources
@@ -389,14 +390,14 @@ export function getReferencesInSection(section:R4.IComposition_Section): R4.IRef
     return entryCompositionReferencesInSection
 }
 
-export function getResourcesInSection(bundleDocument:R4.IBundle, sectionCode:string, sectionSystem?:string): any[] {
+export function getResourcesInSection(bundleDocument:R4.IBundle, loincSectionCode:string): any[] {
     let compositions:R4.IComposition[] = getResourcesByTypes(bundleDocument, ["Composition"])
     if (compositions.length < 1 ) return {} as any[]    //returns empty
     if (!compositions[0].section || compositions[0].section.length < 1) return {} as any[]    //returns empty
     
-    let sectionInComposition:R4.IComposition_Section = getSectionByCodeInComposition(compositions[0], sectionCode, sectionSystem)
+    let sectionInComposition = getSectionByCodeInComposition(compositions[0], loincSectionCode)
     // It checks if the section has references to resources
-    if (!sectionInComposition.entry || sectionInComposition.entry.length < 1) return {} as any[]    //returns empty
+    if (!sectionInComposition || !sectionInComposition.entry || sectionInComposition.entry.length < 1) return {} as any[]    //returns empty
     
     let sectionReferences:R4.IReference[] = sectionInComposition.entry
     let resources:any[] = getResourcesByReferences(bundleDocument, sectionReferences) // search resources by id in a Bundle from the array of references

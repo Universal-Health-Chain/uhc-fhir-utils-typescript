@@ -28,11 +28,11 @@ export class Composition {
     
     // TODO: put display and text of the section (translation)
     addResourcesToComposition(composition:R4.IComposition, resources:any[], sectionCode:string, sectionSystem:string): R4.IComposition {
-        return addResourcesToComposition(composition, resources, sectionCode, sectionSystem)
+        return addResourcesToComposition(composition, resources, sectionCode)
     }
     
-    createEmptyCompositionSection(sectionCode:string, sectionSystem:string): R4.IComposition_Section {
-        return createEmptyCompositionSection(sectionCode, sectionSystem)
+    createEmptyCompositionSection(loincSectionCode:string): R4.IComposition_Section {
+        return createEmptyCompositionSection(loincSectionCode)
     }
     
     // It is mandatory to have one and only one code in the section
@@ -46,8 +46,8 @@ export class Composition {
     }
     
     // getSectionByCodeInComposition returns empty if no section found
-    getSectionByCodeInComposition(composition:R4.IComposition, sectionCode:string, sectionSystem?:string): R4.IComposition_Section {
-        return getSectionByCodeInComposition(composition, sectionCode, sectionSystem)
+    getSectionByCodeInComposition(composition:R4.IComposition, loincSectionCode:string): R4.IComposition_Section | undefined {
+        return getSectionByCodeInComposition(composition, loincSectionCode)
     }
     
     // It updates the composition with the new section
@@ -114,14 +114,14 @@ function createEmptyCompositionIPS(authorReferenceId:string): R4.IComposition {
 
 
 // TODO: put display and text of the section (translation)
-export function addResourcesToComposition(composition:R4.IComposition, resources:any[], sectionCode:string, sectionSystem:string): R4.IComposition {
+export function addResourcesToComposition(composition:R4.IComposition, resources:any[], sectionCode:string): R4.IComposition {
     // It gets the validated composition to be updated
     let newComposition:R4.IComposition = composition
 
     // It gets or creates the section
-    let section:R4.IComposition_Section = getSectionByCodeInComposition(newComposition, sectionCode, sectionSystem)
+    let section = getSectionByCodeInComposition(newComposition, sectionCode)
     if (!section || !section.code || !section.code.coding || section.code.coding.length <1) {
-        section = createEmptyCompositionSection(sectionCode, sectionSystem)
+        section = createEmptyCompositionSection(sectionCode)
     }
     // else section = getSectionByCodeInComposition(newComposition, sectionCode, sectionSystem)    // error if section has no code
     
@@ -135,12 +135,12 @@ export function addResourcesToComposition(composition:R4.IComposition, resources
 }
 
 
-export function createEmptyCompositionSection(sectionCode:string, sectionSystem:string): R4.IComposition_Section {
+export function createEmptyCompositionSection(sectionCode:string): R4.IComposition_Section {
     // console.log("creating new empty section in composition with code "+ sectionCode + " of system " + sectionSystem)
     // TODO: get display and text for the section
     let newSectionCoding:R4.ICoding = {
         code: sectionCode,
-        system: sectionSystem
+        system: CodingSystem.loinc
     }
     let newSection:R4.IComposition_Section = {  // It is a CodeableConcept with a Coding object inside
         // TODO: add title in the user language
@@ -184,16 +184,16 @@ function getReferencesOfResources(resources:any[]): R4.IReference[] {
 }
 
 
-// getSectionByCodeInComposition returns empty if no section found
-export function getSectionByCodeInComposition(composition:R4.IComposition, sectionCode:string, sectionSystem?:string): R4.IComposition_Section {
-    if (!composition.section || composition.section.length < 1) return {} as R4.IComposition_Section // returns empty
+/** getSectionByCodeInComposition returns undefined if no section found */
+export function getSectionByCodeInComposition(composition:R4.IComposition, loincSectionCode:string): R4.IComposition_Section | undefined {
+    if (!composition.section || composition.section.length < 1) return undefined
 
-    let result:R4.IComposition_Section = {}
+    let result
     composition.section.forEach( function(section:R4.IComposition_Section){
         if (section.code && section.code.coding && section.code.coding.length > 0) {
             section.code.coding.forEach( function(sectionCoding:R4.ICoding) {
                 // It looks for the first section that matchs with the code (no duplicated sections)
-                if (sectionCoding.code == sectionCode) result = section
+                if (sectionCoding.code == loincSectionCode) result = section
             })
         }
     })

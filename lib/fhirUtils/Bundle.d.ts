@@ -15,10 +15,10 @@ export declare class Bundle {
     createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
-    addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem: string, resources: any[]): R4.IBundle;
+    addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
     addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
     getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
-    getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem?: string): any[];
+    getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string): any[];
     getAllResources(bundle: R4.IBundle): any[];
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
@@ -42,10 +42,10 @@ export declare function createBundleDocumentWithComposition(resources?: any[], a
 export declare function isIPS(bundleDocument: R4.IBundle): boolean;
 export declare function createEmptyIPS(authorReferenceId: string): R4.IBundle;
 export declare function addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
-export declare function addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem: string, resources: any[]): R4.IBundle;
+export declare function addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
 export declare function addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
 export declare function getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
-export declare function getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string, sectionSystem?: string): any[];
+export declare function getResourcesInSection(bundleDocument: R4.IBundle, loincSectionCode: string): any[];
 export declare function getAllResourcesInBundleEntries(bundle: R4.IBundle): any[];
 export declare function getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
 export declare function getResourceIdsInBundle(bundle: R4.IBundle): string[];
