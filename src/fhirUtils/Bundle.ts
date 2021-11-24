@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import { convertUuidToUuid58 } from 'uuid58'
 import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
-    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition } from "./Composition"
+    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
 import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
 import { getCleanIdOfResource } from "./CommonFHIR"
@@ -30,6 +30,20 @@ export class Bundle {
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument:R4.IBundle): boolean {
         return isIPS(bundleDocument)
+    }
+
+    //** returns the list of sections or empty array (but not undefined) */
+    getCodesOfSections(bundleDocument:R4.IBundle): string[] {
+        const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
+        if (compositions && compositions.length && compositions.length>0) {
+            return getCodesOfSections(compositions[0].section, CodingSystem.loinc)
+        } else {
+            return [] // empty
+        }
+    }
+
+    hasSections(bundleDocument:R4.IBundle): boolean {
+        return hasSections(bundleDocument)
     }
 
     // TODO: ADD RESOURCES TO COMPOSITION SECTIONS AND FULLURL
@@ -318,6 +332,23 @@ export function isIPS(bundleDocument:R4.IBundle): boolean {
         || !bundleDocument.entry[0].resource.type.coding || !bundleDocument.entry[0].resource.type.coding[0] || !bundleDocument.entry[0].resource.type.coding[0].code
         || bundleDocument.entry[0].resource.type.coding[0].code != "60591-5" ) return false
     else return true
+}
+
+export function hasSections(bundleDocument:R4.IBundle): boolean {
+    if (!bundleDocument || !bundleDocument.type || bundleDocument.type !== R4.BundleTypeKind._document){
+        return false
+    }
+  
+    const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
+    if (!compositions || !compositions.length || compositions.length<1) {
+        return false
+    }
+
+    if (!compositions[0].section || !compositions[0].section.length || compositions[0].section.length<1){
+        return false
+    }
+
+    return true
 }
 
 // TODO: set the UHC identifier, not only the id
