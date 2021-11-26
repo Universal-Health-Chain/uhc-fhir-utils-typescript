@@ -1,15 +1,25 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Bundle {
     constructor();
-    /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
-    getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle | undefined) => string;
+    getCodesOfSections(bundleDocument: R4.IBundle): string[];
+    hasSections(bundleDocument: R4.IBundle): boolean;
+    /**
+     * It returns the code of the section or empty string ("") if not found.
+     * Optionally, composition can be passed as parameter, but it is not required.
+     */
+    getSectionCodeForResourceId(bundleDocument: R4.IBundle, resourceId: string | undefined, composition?: R4.IComposition): string;
+    /**
+     * The permanent ID of a FHIR Document across any system
+     * is the ID of the Composition resource as index of the document,
+     * but not the bundle ID which can change across systems
+     * and also is removed in canonicalizaton before signature (FHIR specifications).
+     */
+    getCompositionCleanID: (fhirBundle: R4.IBundle | undefined) => string;
     getTimestamp(fhirBundle: R4.IBundle): string;
     /** Bundle type can be "document" but also "collection", "message", "history"... */
     getTagsInBundle(fhirBundle: R4.IBundle): string[];
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument: R4.IBundle): boolean;
-    getCodesOfSections(bundleDocument: R4.IBundle): string[];
-    hasSections(bundleDocument: R4.IBundle): boolean;
     /** It adds a bundle resource including Composition or HeaderMessage and skips if already present */
     addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
@@ -32,6 +42,11 @@ export declare class Bundle {
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
+/**
+ * It returns the code of the section or empty string ("") if not found.
+ * Optionally, the main function can pass the composition as parameter, but it is not required.
+ */
+export declare function getSectionCodeForResourceIdInBundle(bundleDocument: R4.IBundle, resourceId: string | undefined, composition?: R4.IComposition): string;
 export declare function getCleanIdOfDocumentComposition(fhirBundle: R4.IBundle | undefined): string;
 export declare function getTimestamp(fhirBundle: R4.IBundle): string;
 /** If resource is a Bundle then the different resources MUST be managed by the parent function for calling several times to this child function */

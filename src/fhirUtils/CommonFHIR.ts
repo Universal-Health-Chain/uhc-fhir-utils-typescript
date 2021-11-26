@@ -119,7 +119,7 @@ function cleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
 
 /** 
  * It gets a single ID from a FHIR reference URI or URN, among others.
- * NOTE: if empty result it should be fixed or deleted by the fronted
+ * If EMPTY result then it should be fixed or deleted by the fronted.
 */
 export function getCleanIdOfResource(resource:any | undefined): string {
   try {

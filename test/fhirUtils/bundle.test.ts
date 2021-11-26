@@ -63,9 +63,20 @@ const DiagnosticReportCovid19:R4.IDiagnosticReport={
     ]
 }
 
-describe("testing bundle composition functions", () => { 
+describe("testing bundle composition functions", () => {
+
+  it("should getSectionCodeForResourceId", (done) => {
+    const bundleDocument = bundleIPS as R4.IBundle
+    const resourceId = "c64139e7-f02d-409c-bf34-75e8bf23bc80"
+    // const resourceReference = "Condition/c64139e7-f02d-409c-bf34-75e8bf23bc80"
+    // createBundleDocumentAndCompositionIndexByResourceId
+    const result = fhirUtils.bundle.getSectionCodeForResourceId(bundleDocument, resourceId)
+    expect(result).toBe('11450-4') // "Problem list Reported"
+    done()
+  })
+
   it("should get the Composition ID from a FHIR Bundle", (done) => {
-    const documentCompositionID = fhirUtils.bundle.getCleanIdOfDocumentComposition(bundleIPS)
+    const documentCompositionID = fhirUtils.bundle.getCompositionCleanID(bundleIPS)
     // console.log("documentCompositionID = ", documentCompositionID)
     expect(documentCompositionID).toBeDefined()
     expect(documentCompositionID==="").toBeFalsy()

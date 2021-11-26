@@ -15,8 +15,35 @@ export class Bundle {
     constructor() {
     }
 
-    /** The permanent ID of a FHIR Document across any system is the ID of the Composition of resources */
-    getCleanIdOfDocumentComposition = (fhirBundle:R4.IBundle | undefined): string => getCleanIdOfDocumentComposition(fhirBundle)
+    //** returns the list of sections or empty array (but not undefined) */
+    getCodesOfSections(bundleDocument:R4.IBundle): string[] {
+        const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
+        if (compositions && compositions.length && compositions.length>0) {
+            return getCodesOfSections(compositions[0].section, CodingSystem.loinc)
+        } else {
+            return [] // empty
+        }
+    }
+
+    hasSections(bundleDocument:R4.IBundle): boolean {
+        return hasSections(bundleDocument)
+    }
+
+    /**
+     * It returns the code of the section or empty string ("") if not found.
+     * Optionally, composition can be passed as parameter, but it is not required.
+     */
+    getSectionCodeForResourceId(bundleDocument:R4.IBundle, resourceId: string | undefined, composition?:R4.IComposition): string {
+        return getSectionCodeForResourceIdInBundle(bundleDocument, resourceId, composition)
+    }
+
+    /**
+     * The permanent ID of a FHIR Document across any system
+     * is the ID of the Composition resource as index of the document,
+     * but not the bundle ID which can change across systems
+     * and also is removed in canonicalizaton before signature (FHIR specifications).
+     */
+    getCompositionCleanID = (fhirBundle:R4.IBundle | undefined): string => getCleanIdOfDocumentComposition(fhirBundle)
 
     getTimestamp(fhirBundle:R4.IBundle): string {
         return getTimestamp(fhirBundle)
@@ -30,20 +57,6 @@ export class Bundle {
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument:R4.IBundle): boolean {
         return isIPS(bundleDocument)
-    }
-
-    //** returns the list of sections or empty array (but not undefined) */
-    getCodesOfSections(bundleDocument:R4.IBundle): string[] {
-        const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
-        if (compositions && compositions.length && compositions.length>0) {
-            return getCodesOfSections(compositions[0].section, CodingSystem.loinc)
-        } else {
-            return [] // empty
-        }
-    }
-
-    hasSections(bundleDocument:R4.IBundle): boolean {
-        return hasSections(bundleDocument)
     }
 
     // TODO: create another function to add the resource to the composition index
@@ -126,7 +139,51 @@ export class Bundle {
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[]{
         return getMediaInBundle(bundle)
     }
+} // end class Bundle
 
+// ---- FUNCTIONS ----
+// -------------------
+
+/**
+ * It returns the code of the section or empty string ("") if not found.
+ * Optionally, the main function can pass the composition as parameter, but it is not required.
+ */
+export function getSectionCodeForResourceIdInBundle(bundleDocument:R4.IBundle, resourceId: string | undefined, composition?:R4.IComposition): string {
+    if (!resourceId) return ""
+  
+    // It gets the composition if some is available in the document and it was not given as parameter
+    if (!composition) {
+      const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
+      if (compositions && compositions.length && compositions.length>0) {
+          composition = compositions[0]
+      }
+    }
+  
+    let result: string = ""
+    // It returns the section code if the resourceId is found in some section as reference (entry)
+    if (composition){
+      if (composition.section && composition.section.length && composition.section.length>0){
+        composition.section.some( function(compositionSection:R4.IComposition_Section){
+          if (compositionSection.code && compositionSection.entry && compositionSection.entry.length && compositionSection.entry.length>0){
+            compositionSection.entry.some( function(reference:R4.IReference){
+              const cleanResourceId = getCleanIdOfResource(resourceId)
+              if (reference.reference && reference.reference.includes(cleanResourceId)){
+                // fhirUtils.codeableConcept.getCodeListInCodeableConcept
+                if (compositionSection.code && compositionSection.code.coding && compositionSection.code.coding.length &&
+                  compositionSection.code.coding.length>0 && compositionSection.code.coding[0].code) {
+                    result = compositionSection.code.coding[0].code
+                    // console.log('section code found = ', result)
+                    return true // it breaks the 'some' iteration
+                  }
+              }
+            })
+            if (result !== '') return true // it breaks the 'some' iteration
+          }
+        })
+      }
+    }
+  
+    return result
 }
 
 export function getCleanIdOfDocumentComposition(fhirBundle:R4.IBundle | undefined): string {
