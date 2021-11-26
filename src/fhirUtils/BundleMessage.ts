@@ -2,8 +2,8 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { getCleanIdOfResource } from "./CommonFHIR"
-import { addResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundleEntries, 
+import { getCleanIdByFhirResource } from "./CommonFHIR"
+import { addResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundle, 
     getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getTagsInBundleResource
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
@@ -59,7 +59,7 @@ export class BundleMessage {
     }
 
     getAllResources(bundle: R4.IBundle): any[] {
-        return getAllResourcesInBundleEntries(bundle)
+        return getAllResourcesInBundle(bundle)
     }
 
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
@@ -99,7 +99,7 @@ export function getCleanIdOfMessageHeader(fhirBundle:R4.IBundle): string {
         return "" // instead of error
     }
     else {
-        return getCleanIdOfResource(fhirBundle.entry[0].resource.id)
+        return getCleanIdByFhirResource(fhirBundle.entry[0].resource.id)
     }
 }
 

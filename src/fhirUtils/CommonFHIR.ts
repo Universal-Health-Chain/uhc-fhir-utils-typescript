@@ -3,6 +3,7 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import canonicalize from "canonicalize"
 import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript";
+import { getSectionCodeForResourceIdInBundle, hasSections } from "./Bundle";
 
 /** URNs are case insensitive
  * "UUID", "UVCI". "DVCI" or "VCID" MUST BE added when an UUID, Health Certificate, SMART Health Card or a Verifiable Credential ID (txId or version ID) exists
@@ -97,21 +98,75 @@ export class CommonFHIR {
   }
 
   /** It returns empty or an ID with no URN prefix and no FHIR Reference prefix */
-  cleanId = (id:string): string => cleanId(id)
-  getCleanIdOfResource = (resource:any | undefined): string => getCleanIdOfResource(resource)
+  getCleanId = (id:string): string => getCleanId(id)
+  getCleanIdByFhirResource = (resource:any | undefined): string => getCleanIdByFhirResource(resource)
   
   /** It returns a normalized and crypto safe predictable FHIR JSON resource or document as string (canonicalized as defined by RFC8785) */
-  normalizedAndCanonicalizedFHIR = (json: any): any => normalizedAndCanonicalizedFHIR(json) 
+  normalizedAndCanonicalizedFHIR = (json: any): any => normalizedAndCanonicalizedFHIR(json)
+}
+/*
+export function addOptionalMetaDataToResource(fhirResource:any, fhirBundle:R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string){
+  let loincSection = getSectionCodeForResourceIdInBundle(fhirBundle, fhirResource.id)
+  if (loincSection === "" && defaultSectionLOINC && defaultSectionLOINC !== ""){
+    loincSection = defaultSectionLOINC
+  }
+  
+  // setting LOINC section in the meta data of the resource (if any)
+  if (loincSection !== "") {
+    fhirResource.meta = { 
+      ... fhirResource.meta,  // it can have 'serviceType' also
+      section: loincSection
+    }
+  }
+
+  // if meta.serviceType does not exist in the FHIR resource, then put the default serviceType (if provided)
+  if (defaultServiceType){
+    if (!fhirResource.meta.serviceType){
+      fhirResource.meta.serviceType = defaultServiceType
+    }
+  }
+
+  return fhirResource
 }
 
+export function getResourceWithOptionalMetaData(fhirResource:any, fhirBundle:R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string){
+  const containsSections = hasSections(fhirBundle)
+  
+  // getting the LOINC section for the resource
+  let loincSectionCode:string = ""
+  if (containsSections) {
+      loincSectionCode = getSectionCodeForResourceIdInBundle(fhirBundle, fhirResource.id)
+  } else if (defaultSectionLOINC) {
+      loincSectionCode = defaultSectionLOINC
+  }
+  
+  // setting LOINC section in the meta data of the resource (if any)
+  if (loincSectionCode !== "") {
+    fhirResource.meta = { 
+      ... fhirResource.meta,  // it can have 'serviceType' also
+      section: loincSectionCode
+    }
+  }
+
+  // if meta.serviceType does not exist in the FHIR resource, then put the default serviceType (if provided)
+  if (defaultServiceType){
+    if (!fhirResource.meta.serviceType){
+      fhirResource.meta.serviceType = defaultServiceType
+    }
+  }
+
+  return fhirResource
+}
+*/
+
 /** It returns empty or an ID without URN prefix or FHIR Reference prefix */
-export function cleanId(id:string): string {
-  const cleanId = getCleanIdOfResource({id: id})
+export function getCleanId(id:string): string {
+  const cleanId = getCleanIdWithoutReferenceFHIROrURN(id)
   return cleanId
 }
 
 /** it gets a single ID from a FHIR reference URI or URN, among others */
-function cleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
+function getCleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
   const splittedReferenceURI:string[] = referenceOrURN.split("/")
   const splittedURN = splittedReferenceURI[splittedReferenceURI.length-1].split(":") // splits the last of them wich will contain an URN string if any
   return splittedURN[splittedURN.length-1] // it returns the last of them wich is the sole identifier
@@ -121,10 +176,10 @@ function cleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
  * It gets a single ID from a FHIR reference URI or URN, among others.
  * If EMPTY result then it should be fixed or deleted by the fronted.
 */
-export function getCleanIdOfResource(resource:any | undefined): string {
+export function getCleanIdByFhirResource(resource:any | undefined): string {
   try {
     if (resource && resource.id){
-      const cleanId = cleanIdWithoutReferenceFHIROrURN(resource.id)
+      const cleanId = getCleanIdWithoutReferenceFHIROrURN(resource.id)
       return cleanId || "" // it can be an URN with the ID at the end of the string
     }
     else return ""

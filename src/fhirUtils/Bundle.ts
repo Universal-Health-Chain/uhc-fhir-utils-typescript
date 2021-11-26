@@ -7,8 +7,8 @@ import { GlobalIndexLOINC } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
-import { covid19VaccineProphylaxisCodesGlobal, covid19LaboratoryTestsCodes, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
-import { getCleanIdOfResource } from "./CommonFHIR"
+import { covid19VaccineProphylaxisCodesGlobal, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
+import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
 import { CodingSystem } from "../models"
 
 export class Bundle {
@@ -102,16 +102,39 @@ export class Bundle {
         return  getReferencesInSection(section)
     }
 
+    /**
+     * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
+     * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
+     */
+    getResourcesWithFilters(fhirBundle:R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?:string,
+        excludeResourceTypes?:string[], includeResourceTypes?:string[], withSectionsLOINC?:string[], fromServiceTypes?:string[], withCodes?:string[]
+    ): any[] {
+        return getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
+           excludeResourceTypes, includeResourceTypes, withSectionsLOINC, fromServiceTypes, withCodes)
+    }
+
+    // TODO: change to use getResourcesWithFilters
     getResourcesInSection(bundleDocument:R4.IBundle, sectionCode:string): any[] {
         return getResourcesInSection(bundleDocument, sectionCode)
     }
 
+    // TODO: change to use getResourcesWithFilters
     getAllResources(bundle: R4.IBundle): any[] {
-        return getAllResourcesInBundleEntries(bundle)
+        return getAllResourcesInBundle(bundle)
     }
 
+    // TODO: change to use getResourcesWithFilters
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
         return getAllResourcesWithoutCompositionOrMessageHeader(bundle)
+    }
+
+    // TODO: change to use getResourcesWithFilters
+    getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
+        return getResourcesByTypes(bundle, resourceTypes)
+    }
+
+    getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
+        return getResourceByIdInBundle(resourceId, bundle)
     }
 
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
@@ -121,14 +144,6 @@ export class Bundle {
 
     getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[] {
         return getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS, sectionCode)
-    }
-
-    getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
-        return getResourcesByTypes(bundle, resourceTypes)
-    }
-
-    getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
-        return getResourceByIdInBundle(resourceId, bundle)
     }
 
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
@@ -143,6 +158,133 @@ export class Bundle {
 
 // ---- FUNCTIONS ----
 // -------------------
+
+export function addOptionalMetaDataToResource(fhirResource:any, fhirBundle:R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string){
+    let loincSection = getSectionCodeForResourceIdInBundle(fhirBundle, fhirResource.id)
+    if (loincSection === "" && defaultSectionLOINC && defaultSectionLOINC !== ""){
+      loincSection = defaultSectionLOINC
+    }
+    
+    // setting LOINC section in the meta data of the resource (if any)
+    if (loincSection !== "") {
+      fhirResource.meta = { 
+        ... fhirResource.meta,  // it can have 'serviceType' also
+        section: loincSection
+      }
+    }
+  
+    // if meta.serviceType does not exist in the FHIR resource, then put the default serviceType (if provided)
+    if (defaultServiceType){
+      if (!fhirResource.meta.serviceType){
+        fhirResource.meta.serviceType = defaultServiceType
+      }
+    }
+  
+    return fhirResource
+}
+  
+export function getResourceWithOptionalMetaData(fhirResource:any, fhirBundle:R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string){
+    const containsSections = hasSections(fhirBundle)
+    
+    // getting the LOINC section for the resource
+    let loincSectionCode:string = ""
+    if (containsSections) {
+        loincSectionCode = getSectionCodeForResourceIdInBundle(fhirBundle, fhirResource.id)
+    } else if (defaultSectionLOINC) {
+        loincSectionCode = defaultSectionLOINC
+    }
+    
+    // setting LOINC section in the meta data of the resource (if any)
+    if (loincSectionCode !== "") {
+      fhirResource.meta = { 
+        ... fhirResource.meta,  // it can have 'serviceType' also
+        section: loincSectionCode
+      }
+    }
+  
+    // if meta.serviceType does not exist in the FHIR resource, then put the default serviceType (if provided)
+    if (defaultServiceType){
+      if (!fhirResource.meta.serviceType){
+        fhirResource.meta.serviceType = defaultServiceType
+      }
+    }
+  
+    return fhirResource
+}
+
+/**
+ * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
+ * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
+ */
+export function getResourcesWithFilters(fhirBundle:R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?:string,
+    excludeResourceTypes?:string[], includeResourceTypes?:string[], withSectionsLOINC?:string[], fromServiceTypes?:string[], withCodes?:string[]
+): any[] {
+    // it adds meta.section if the document has sections or the LOINC section code of the biography if not
+
+    const containsSections = hasSections(fhirBundle)
+    // it puts meta.section for every resource, if available
+    let resources = getAllResourcesInBundle(fhirBundle)
+
+    // exclude some resources or include only the desired resources
+    if (excludeResourceTypes && excludeResourceTypes.length && excludeResourceTypes.length>0) {
+        let filtered:any[] = [] 
+        resources.forEach((fhirResource:any) => {
+            if (fhirResource.resourceType && !excludeResourceTypes.includes(fhirResource.resourceType)){
+                // getting the LOINC section for the resource
+                const result = getResourceWithOptionalMetaData(fhirResource, fhirBundle, defaultSectionLOINC, defaultServiceType)
+                // console.log("match not excluded resource: ", resource.resourceType)    
+                filtered.push(result)
+            }
+        })
+        resources = filtered // overwritting with the filtered ones
+    } else if (includeResourceTypes && includeResourceTypes.length && includeResourceTypes.length>0){
+        let filtered:any[] = [] 
+        resources.forEach((fhirResource:any) => {
+            if (fhirResource.resourceType && includeResourceTypes.includes(fhirResource.resourceType)){
+                // getting the LOINC section for the resource    
+
+                // console.log("match for include resource: ", resource.resourceType)    
+                filtered.push(fhirResource)
+            }
+        })
+        resources = filtered // overwritting with the filtered ones
+    }
+
+    // include only resources from some health sections 
+    if (withSectionsLOINC) {
+        let filtered:any[] = [] 
+        resources.forEach((resource:any) => {
+            if (resource.meta && resource.meta.section && withSectionsLOINC.includes(resource.meta.section)){
+                // console.log("match resource by LOINC section: ", resource.meta.section)    
+                filtered.push(resource)
+            }
+        })
+        resources = filtered // overwritting with the filtered ones
+    }
+
+    // include only resources from some healcare service categories
+    if (fromServiceTypes) {
+        let filtered:any[] = [] 
+        resources.forEach((resource:any) => {
+            if (resource.meta && resource.meta.serviceType && fromServiceTypes.includes(resource.meta.serviceType)){
+                // console.log("match resource by service type: ", resource.meta.serviceType)    
+                filtered.push(resource)
+            }
+        })
+        resources = filtered // overwritting with the filtered ones
+    }
+
+    /* TODO
+    if (withCodes) {
+        let filtered:any[] = []
+        resources.forEach((resource:any) => {
+        if (resource.meta && resource.meta.codes) {
+        }
+        })
+        resources = filtered // overwritting with the filtered ones
+    } */
+    return resources
+}
 
 /**
  * It returns the code of the section or empty string ("") if not found.
@@ -166,7 +308,7 @@ export function getSectionCodeForResourceIdInBundle(bundleDocument:R4.IBundle, r
         composition.section.some( function(compositionSection:R4.IComposition_Section){
           if (compositionSection.code && compositionSection.entry && compositionSection.entry.length && compositionSection.entry.length>0){
             compositionSection.entry.some( function(reference:R4.IReference){
-              const cleanResourceId = getCleanIdOfResource(resourceId)
+              const cleanResourceId = getCleanId(resourceId)
               if (reference.reference && reference.reference.includes(cleanResourceId)){
                 // fhirUtils.codeableConcept.getCodeListInCodeableConcept
                 if (compositionSection.code && compositionSection.code.coding && compositionSection.code.coding.length &&
@@ -195,7 +337,7 @@ export function getCleanIdOfDocumentComposition(fhirBundle:R4.IBundle | undefine
     }
     else {
         // fullUrn should contain the URN and the Compositon.id should 
-        return getCleanIdOfResource(fhirBundle.entry[0].resource)
+        return getCleanIdByFhirResource(fhirBundle.entry[0].resource)
     }
 }
 
@@ -236,7 +378,7 @@ export function isCovid19SoleResource(resource:any): boolean {
 export function getTagsInBundleResource(bundleDocument:R4.IBundle): string[] {
     const tagCovid19:string = covid19Tag
     let uhcCodeTags:string[] = ["Bundle"]
-    let resources:any = getAllResourcesInBundleEntries(bundleDocument)
+    let resources:any = getAllResourcesInBundle(bundleDocument)
     if (resources && resources.length && resources.length > 0) { // the first entry shall be the composition resource
         let flagIsCovid19 = false
         resources.forEach( function(resource:any) {
@@ -399,17 +541,32 @@ export function isIPS(bundleDocument:R4.IBundle): boolean {
     else return true
 }
 
+/** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export function hasSections(bundleDocument:R4.IBundle): boolean {
     if (!bundleDocument || !bundleDocument.type || bundleDocument.type !== R4.BundleTypeKind._document){
+        console.log("no sections in bundle")
         return false
     }
-  
+    
+    /*
     const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
     if (!compositions || !compositions.length || compositions.length<1) {
         return false
     }
 
     if (!compositions[0].section || !compositions[0].section.length || compositions[0].section.length<1){
+        return false
+    }
+    */
+
+    if (!bundleDocument || !bundleDocument.entry || !bundleDocument.entry.length || bundleDocument.entry.length<1
+        || !bundleDocument.entry[0].resource || !bundleDocument.entry[0].resource)
+    {
+        return false
+    }
+
+    const composition = bundleDocument.entry[0].resource as R4.IComposition
+    if (!composition.section || !composition.section.length || composition.section.length<1){
         return false
     }
 
@@ -486,8 +643,12 @@ export function getReferencesInSection(section:R4.IComposition_Section): R4.IRef
     return entryCompositionReferencesInSection
 }
 
-export function getResourcesInSection(bundleDocument:R4.IBundle, loincSectionCode:string): any[] {
-    let compositions:R4.IComposition[] = getResourcesByTypes(bundleDocument, ["Composition"])
+export function getResourcesInSection(fhirBundle:R4.IBundle, loincSectionCode:string): any[] {
+    /*
+    return getResourcesWithFilters(bundle, undefined, undefined,
+        undefined, undefined, [loincSectionCode], undefined, undefined)
+    */
+    let compositions:R4.IComposition[] = getResourcesByTypes(fhirBundle, ["Composition"])
     if (compositions.length < 1 ) return {} as any[]    //returns empty
     if (!compositions[0].section || compositions[0].section.length < 1) return {} as any[]    //returns empty
     
@@ -496,22 +657,50 @@ export function getResourcesInSection(bundleDocument:R4.IBundle, loincSectionCod
     if (!sectionInComposition || !sectionInComposition.entry || sectionInComposition.entry.length < 1) return {} as any[]    //returns empty
     
     let sectionReferences:R4.IReference[] = sectionInComposition.entry
-    let resources:any[] = getResourcesByReferences(bundleDocument, sectionReferences) // search resources by id in a Bundle from the array of references
+    let resources:any[] = getResourcesByReferences(fhirBundle, sectionReferences) // search resources by id in a Bundle from the array of references
     return resources
+    // */
 }
 
-export function getAllResourcesInBundleEntries(bundle: R4.IBundle): any[] {
-    if (!bundle || bundle.resourceType != "Bundle" || !bundle.entry || !bundle.entry.length || bundle.entry.length<1) return []  // or error?
+// getResourcesWithFilters causes RangeError: Maximum call stack size exceeded
+export function getAllResourcesInBundle(fhirBundle: R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string): any[] {
+    /*
+    const test = getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
+        undefined, undefined, undefined, undefined, undefined)
+    */
+    if (!fhirBundle || fhirBundle.resourceType != "Bundle" || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1) return []  // or error?
+
+    let results: any[] = []
+    fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
+      if (entry.resource && entry.resource.resourceType) {
+        const result = getResourceWithOptionalMetaData(entry.resource, fhirBundle, defaultSectionLOINC, defaultServiceType)
+        results.push(result)
+      }
+    })
+    return results
+    // */
+}
+
+export function getAllResourcesWithoutCompositionOrMessageHeader(fhirBundle: R4.IBundle): any[] {
+    const excludeResourceTypes = ['Composition', 'MessageHeader']
+    /*
+    return getResourcesWithFilters(fhirBundle, undefined, undefined,
+        excludeResourceTypes, undefined, undefined, undefined, undefined)
+    */
+    if (!fhirBundle || fhirBundle.resourceType != "Bundle" || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1) return []  // or error?
 
     let results: any[] = []
     // let entries:R4.IBundle_Entry[] = bundle.entry as R4.IBundle_Entry[]
-    bundle.entry.forEach( function(entry:R4.IBundle_Entry){
-      if (entry.resource && entry.resource.resourceType) results.push(entry.resource)
+    fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
+      if (entry.resource && entry.resource.resourceType && entry.resource.resourceType!="Composition" && entry.resource.resourceType!="MessageHeader") results.push(entry.resource)
     })
     return results
 }
 
-export function getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
+/** It gets all the resources excluding some resource types if provided
+ * and adds meta.section if the document has sections or the default LOINC section code if given */
+/*
+export function getResourcesWithOptions(bundle: R4.IBundle, excludedTypes?: string[], defaultSectionLOINC?:string): any[] {
     if (!bundle || bundle.resourceType != "Bundle" || !bundle.entry || !bundle.entry.length || bundle.entry.length<1) return []  // or error?
 
     let results: any[] = []
@@ -521,6 +710,7 @@ export function getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBun
     })
     return results
 }
+*/
 
 // It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash
 export function getResourceIdsInBundle(bundle: R4.IBundle): string[] {
@@ -570,18 +760,27 @@ export function getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IB
     return references
 }
 
-export function getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
-    if (!bundle || bundle.resourceType != "Bundle" || !bundle.entry || !bundle.entry.length || bundle.entry.length<1 || !resourceTypes.length || resourceTypes.length<1) return []  // or error?
+export function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes:string[]): any[] {
+    /*
+    return getResourcesWithFilters(bundle, undefined, undefined,
+        undefined, includeResourceTypes, undefined, undefined, undefined)
+    */
+    if (!fhirBundle || fhirBundle.resourceType != "Bundle" || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1
+        || !includeResourceTypes.length || includeResourceTypes.length<1)
+    {
+        return []  // or error?
+    }
 
     let results: any[] = []
     // let entries:R4.IBundle_Entry[] = bundle.entry as R4.IBundle_Entry[]
-    bundle.entry.forEach( function(entry:R4.IBundle_Entry){
-        if (entry.resource && entry.resource.resourceType && resourceTypes.includes(entry.resource.resourceType)){
+    fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
+        if (entry.resource && entry.resource.resourceType && includeResourceTypes.includes(entry.resource.resourceType)){
             // console.log("resource by type found: ", entry.resource.resourceType)    
             results.push(entry.resource)
         }
     })
     return results
+    // */
 }
 
 export function getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{

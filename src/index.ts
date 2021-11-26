@@ -12,7 +12,7 @@ export * from "./fhirUtils/index";   // independent classes
 
 // export consts and enums (and functions outside classes)
 export { MimeType } from "./fhirUtils/Attachment"
-export { getCleanIdOfResource as getCleanId, getBundleEntriesMap, normalizedAndCanonicalizedFHIR, anonymizeResource} from "./fhirUtils/CommonFHIR"
+export { getCleanIdByFhirResource as getCleanId, getBundleEntriesMap, normalizedAndCanonicalizedFHIR, anonymizeResource} from "./fhirUtils/CommonFHIR"
 export { GlobalIndexATC } from "./fhirUtils/Atc"
 export { GlobalIndexEMA } from "./fhirUtils/Ema"
 export { GlobalIndexFHIR } from "./fhirUtils/Hl7"

@@ -2,6 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
+import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition} from "../../test/data/dataForImmunizations"
 
 // importbundleUtils = require('../../src/fhirUtils/Bundle')
 // import { Bundle } from '../../src/fhirUtils/Bundle';
@@ -108,6 +109,83 @@ describe("testing bundle composition functions", () => {
 
 })
 
+// TODO: what happens with section if Practitioner, Organization, etc.? (USCDI Care Team Members)
+describe("test getting resources from bundle", () => {
+
+  it("should getResourcesWithFilters by IPS document with sections and excluding resources", (done) => {
+    // params with possible options
+    const fhirBundle = bundleIPS as R4.IBundle
+    const defaultSectionLOINC = 'shouldNotBePresent' // should ignore it because IPS has sections
+    const defaultServiceType = undefined
+    const excludeResourceTypes: string[] = ['Patient', 'Practitioner', 'Organization', 'Composition', 'Event', 'MessageHeader']
+    const includeResourceTypes = undefined
+    const withSectionsLOINC = undefined
+    const fromServiceTypes = undefined
+    const withCodes = undefined
+
+    const resources = fhirUtils.bundle.getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
+      excludeResourceTypes, includeResourceTypes, withSectionsLOINC, fromServiceTypes, withCodes)
+    
+    // console.log('getResourcesWithFilters by IPS document with sections and excluding resources = ', resources)
+    expect(resources.length).toBeGreaterThan(1)
+    // console.log("number of resources = ", resources.length)
+
+    expect(resources[0].meta.section).toBeDefined()
+    // console.log('resources[0].meta.section = ', resources[0].meta.section)
+    expect(resources[0].meta.section!=='shouldNotBePresent').toBeTruthy()
+
+    done()
+  })
+
+  it("should get resources by document whitout sections but with default section", (done) => {
+    // params with possible options
+    const fhirBundle = {...testBundleDocumentWithCovid19ImmunizationsWithoutComposition}
+    const defaultSectionLOINC = 'shoulBePresent' // should put it because IPS has sections
+    const defaultServiceType = undefined
+    const excludeResourceTypes: string[] = ['Patient', 'Practitioner', 'Organization', 'Composition', 'Event', 'MessageHeader']
+    const includeResourceTypes = undefined
+    const withSectionsLOINC = undefined
+    const fromServiceTypes = undefined
+    const withCodes = undefined
+
+    const resources = fhirUtils.bundle.getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
+      excludeResourceTypes, includeResourceTypes, withSectionsLOINC, fromServiceTypes, withCodes)
+    
+    // console.log('getResourcesWithFilters by IPS document with sections and excluding resources = ', resources)
+    expect(resources.length).toBeGreaterThan(1)
+    // console.log("number of resources = ", resources.length)
+
+    expect(resources[0].meta.section).toBeDefined()
+    // console.log('resources[0].meta.section = ', resources[0].meta.section)
+    expect(resources[0].meta.section==='shoulBePresent').toBeTruthy()
+
+    done()
+  })
+
+  it("should getResourcesWithFilters by document without setting section", (done) => {
+    // params with possible options
+    const fhirBundle = {...testBundleDocumentWithCovid19ImmunizationsWithoutComposition}
+    const defaultSectionLOINC = undefined
+    const defaultServiceType = undefined
+    const excludeResourceTypes: string[] = ['Patient', 'Practitioner', 'Organization', 'Composition', 'Event', 'MessageHeader']
+    const includeResourceTypes = undefined
+    const withSectionsLOINC = undefined
+    const fromServiceTypes = undefined
+    const withCodes = undefined
+
+    const resources = fhirUtils.bundle.getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
+      excludeResourceTypes, includeResourceTypes, withSectionsLOINC, fromServiceTypes, withCodes)
+    
+    // console.log('getResourcesWithFilters by IPS document with sections and excluding resources = ', resources)
+    expect(resources.length).toBeGreaterThan(1)
+    // console.log("number of resources = ", resources.length)
+
+    expect(resources[0].meta).toBeUndefined()
+    done()
+  })
+
+})
+
 describe("create FHIR Document Bundle and operates with it", () => { 
   it("should build an empty FHIR Bundle", (done) => {
       // const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
@@ -167,7 +245,6 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
 });
-
 
 describe("create bundle Documents and operates with it", () => {
 

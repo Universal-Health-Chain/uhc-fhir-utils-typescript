@@ -30,18 +30,30 @@ export declare class Bundle {
     addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
     addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
     getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
+    /**
+     * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
+     * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
+     */
+    getResourcesWithFilters(fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string, excludeResourceTypes?: string[], includeResourceTypes?: string[], withSectionsLOINC?: string[], fromServiceTypes?: string[], withCodes?: string[]): any[];
     getResourcesInSection(bundleDocument: R4.IBundle, sectionCode: string): any[];
     getAllResources(bundle: R4.IBundle): any[];
     getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
+    getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
+    getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
     getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[];
-    getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
-    getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
+export declare function addOptionalMetaDataToResource(fhirResource: any, fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string): any;
+export declare function getResourceWithOptionalMetaData(fhirResource: any, fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string): any;
+/**
+ * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
+ * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
+ */
+export declare function getResourcesWithFilters(fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string, excludeResourceTypes?: string[], includeResourceTypes?: string[], withSectionsLOINC?: string[], fromServiceTypes?: string[], withCodes?: string[]): any[];
 /**
  * It returns the code of the section or empty string ("") if not found.
  * Optionally, the main function can pass the composition as parameter, but it is not required.
@@ -58,18 +70,21 @@ export declare function addResourceToBundle(bundle: R4.IBundle, resource: any): 
 export declare function addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
 export declare function createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
 export declare function isIPS(bundleDocument: R4.IBundle): boolean;
+/** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export declare function hasSections(bundleDocument: R4.IBundle): boolean;
 export declare function createEmptyIPS(authorReferenceId: string): R4.IBundle;
 export declare function addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
 export declare function addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
 export declare function addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
 export declare function getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
-export declare function getResourcesInSection(bundleDocument: R4.IBundle, loincSectionCode: string): any[];
-export declare function getAllResourcesInBundleEntries(bundle: R4.IBundle): any[];
-export declare function getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
+export declare function getResourcesInSection(fhirBundle: R4.IBundle, loincSectionCode: string): any[];
+export declare function getAllResourcesInBundle(fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string): any[];
+export declare function getAllResourcesWithoutCompositionOrMessageHeader(fhirBundle: R4.IBundle): any[];
+/** It gets all the resources excluding some resource types if provided
+ * and adds meta.section if the document has sections or the default LOINC section code if given */
 export declare function getResourceIdsInBundle(bundle: R4.IBundle): string[];
 export declare function getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IBundle, sectionCode: string): string[];
-export declare function getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
+export declare function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes: string[]): any[];
 export declare function getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
 export declare function getObservationsByCode(bundle: R4.IBundle, code: string): any[];
 export declare function replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
