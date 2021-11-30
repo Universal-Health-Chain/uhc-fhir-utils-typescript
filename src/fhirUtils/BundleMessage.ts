@@ -4,7 +4,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { getCleanIdByFhirResource } from "./CommonFHIR"
 import { addResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundle, 
-    getAllResourcesWithoutCompositionOrMessageHeader, getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getTagsInBundleResource
+    getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
@@ -62,10 +62,6 @@ export class BundleMessage {
         return getAllResourcesInBundle(bundle)
     }
 
-    getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
-        return getAllResourcesWithoutCompositionOrMessageHeader(bundle)
-    }
-
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[] {
         return getResourceIdsInBundle(bundle)
@@ -77,11 +73,6 @@ export class BundleMessage {
 
     getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
         return getResourceByIdInBundle(resourceId, bundle)
-    }
-
-    /** Bundle type can be "Message" but also "Document", "Collection", "Batch"... */
-    getTagsInBundle(fhirBundle:R4.IBundle): string[] {
-        return getTagsInBundleResource(fhirBundle)
     }
 
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */

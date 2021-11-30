@@ -4,9 +4,6 @@ export declare const vaccineProphylaxisCodeATC = "J07BX03";
 export declare class Covid19 {
     constructor();
     covid19Tag: () => string;
-    isCovid19Bundle(bundleDocument: R4.IBundle): boolean;
-    /** It checks both Bundle resource and any other type of resource */
-    isCovid19Resource(resource: any | undefined): boolean;
     /** Alert Communications */
     createCovid19DiseaseAlertCommunication: (priorityCode?: string | undefined) => R4.ICommunication;
     createCovid19SuspectedAlertCommunication: (priorityCode?: string | undefined) => R4.ICommunication;

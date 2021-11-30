@@ -15,13 +15,10 @@ export declare class BundleMessage {
     getCleanIdOfDocumentComposition: (fhirBundle: R4.IBundle) => string;
     getTimestamp(fhirBundle: R4.IBundle): string;
     getAllResources(bundle: R4.IBundle): any[];
-    getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[];
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[];
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes: string[]): any[];
     getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
-    /** Bundle type can be "Message" but also "Document", "Collection", "Batch"... */
-    getTagsInBundle(fhirBundle: R4.IBundle): string[];
     /** It replaces the given resource in the right Bundle.entry without generating Bundle.entry[].fullUrl */
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
 }

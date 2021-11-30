@@ -12,7 +12,7 @@ import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
-import { getResourcesByTypes, getTagsInBundleResource, isCovid19SoleResource } from "./Bundle"
+import { getResourcesByTypes } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 
@@ -30,20 +30,6 @@ export class Covid19 {
 
     covid19Tag = ():string => covid19Tag // "COVID-19"
 
-    isCovid19Bundle(bundleDocument:R4.IBundle): boolean {
-        return (getTagsInBundleResource(bundleDocument).includes(covid19Tag))
-    }
-    
-    /** It checks both Bundle resource and any other type of resource */
-    isCovid19Resource(resource:any | undefined): boolean {
-        if (resource && resource.resourceType) {
-            if (resource.resourceType == "Bundle") {
-                return (getTagsInBundleResource(resource).includes(covid19Tag))
-            }
-            else return isCovid19SoleResource(resource)
-        }
-        return false
-    }
 
     /** Alert Communications */
     

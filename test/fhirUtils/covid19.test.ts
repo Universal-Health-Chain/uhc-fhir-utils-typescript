@@ -242,33 +242,19 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
         result = fhirUtils.covid19.isCovid19VaccineProphylaxis(fhirUtils.covid19.vaccineProphylaxisCodesGlobal()[0])
         expect(result).toBeTruthy()
     })
-
-
 })
 
 describe("get COVID-19 resources", () => {
 
-    it("should get COVID-19 Immunizations in a Bundle Document", () => {
+    it("should create document and get COVID-19 Immunizations", () => {
         let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testImmunizationFHIR])
-        let uhcCodeTags = fhirUtils.bundle.getTagsInBundle(bundleDocument)
-        // console.log("uhcCodeTags = ", uhcCodeTags)
-        expect(uhcCodeTags.length).toBeGreaterThan(0)
-        expect(uhcCodeTags.includes("Immunization")).toBeTruthy()
-        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
-
         let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(bundleDocument)
         expect(covid19Immunizations).toBeDefined()
         expect(covid19Immunizations).toHaveLength(1)
     })
 
-    it("should get COVID-19 DiagnosticReports in a Bundle Document", () => {
+    it("should create document and get COVID-19 DiagnosticReports", () => {
         let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testDiagnosticReportFHIR])
-        let uhcCodeTags = fhirUtils.bundle.getTagsInBundle(bundleDocument)
-        // console.log("uhcCodeTags = ", uhcCodeTags)
-        expect(uhcCodeTags.length).toBeGreaterThan(0)
-        expect(uhcCodeTags.includes("DiagnosticReport")).toBeTruthy()
-        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
-
         let covid19Diagnostics = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(bundleDocument)
         expect(covid19Diagnostics).toBeDefined()
         expect(covid19Diagnostics).toHaveLength(1)

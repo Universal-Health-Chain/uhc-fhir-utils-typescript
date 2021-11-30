@@ -96,17 +96,6 @@ describe("testing bundle composition functions", () => {
     done()
   })
 
-  it("should get the list of section codes in the bundle document", (done) => {
-    const bundleDocumentIPS = bundleIPS as R4.IBundle
-    
-    const loincSectionCodes = fhirUtils.bundle.getCodesOfSections(bundleDocumentIPS)
-    console.log("loincSectionCodes = ", loincSectionCodes)
-    
-    expect(loincSectionCodes).toBeDefined()
-    expect(loincSectionCodes.length).toBeGreaterThan(0)
-    done()
-  })
-
 })
 
 // TODO: what happens with section if Practitioner, Organization, etc.? (USCDI Care Team Members)
@@ -295,7 +284,7 @@ describe("create bundle Documents and operates with it", () => {
     // see also fhirMessageUtils.test.ts
 
     
-    it("should add COVID-19 data to an IPS Document ", (done) => {
+    it("should add resource to an IPS Document ", (done) => {
         let documentIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
         // It checks isIPS()
         let checkIPS = fhirUtils.bundle.isIPS(documentIPS)
@@ -313,15 +302,7 @@ describe("create bundle Documents and operates with it", () => {
         
         // console.log("IPS Document = ", JSON.stringify(modifiedIPS))
         // TODO: check if the composition contains the reference to the added resource
-
-        // the tags are get by the frontend and shown to the practitioner
-        let uhcCodeTags = fhirUtils.bundle.getTagsInBundle(documentIPS)
-        console.log("uhcCodeTags = ", uhcCodeTags)
-        expect(uhcCodeTags.length).toBeGreaterThan(0)
-        expect(uhcCodeTags.includes("COVID-19")).toBeTruthy()
-        expect(uhcCodeTags.includes("DiagnosticReport")).toBeTruthy()
-        expect(uhcCodeTags.includes("Immunization")).toBeTruthy()
-        
+ 
         // the practitioner selects COVID-19 tag and then DiagnosticReport tag
         let covid19DiagnosticReports = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(modifiedIPS) as any
         expect(covid19DiagnosticReports.length).toBeGreaterThan(0)
