@@ -45,6 +45,8 @@ export enum medicalHistoryClassification {
     // clinicalNotes   
 }
 
+// export const HealthSectionCode = medicalHistoryClassification
+
 export enum terminologyCodesLOINC {
     serologyTestsGroup  = "LG51018-6",
     naatTestsGroup      = "LG51017-8",

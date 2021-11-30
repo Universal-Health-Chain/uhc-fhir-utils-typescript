@@ -3,7 +3,7 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 // import { convertUuidToUuid58 } from 'uuid58'
-import { GlobalIndexLOINC } from "./Loinc"
+import { GlobalIndexLOINC, medicalHistoryClassification } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
     addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections } from "./Composition"
 import { addExistingTargetCodesInCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
@@ -13,6 +13,15 @@ import { CodingSystem } from "../models"
 
 export class Bundle {
     constructor() {
+    }
+
+    getDocumentKindInComposition(bundleDocument:R4.IBundle): string | undefined {
+        return getDocumentKindInComposition(bundleDocument)
+    }
+
+    /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
+    isIPS(bundleDocument:R4.IBundle): boolean {
+        return isIPS(bundleDocument)
     }
 
     //** returns the list of sections or empty array (but not undefined) */
@@ -52,11 +61,6 @@ export class Bundle {
     /** Bundle type can be "document" but also "collection", "message", "history"... */
     getTagsInBundle(fhirBundle:R4.IBundle): string[] {
         return getTagsInBundleResource(fhirBundle)
-    }
-
-    /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
-    isIPS(bundleDocument:R4.IBundle): boolean {
-        return isIPS(bundleDocument)
     }
 
     // TODO: create another function to add the resource to the composition index
@@ -534,11 +538,25 @@ export function createBundleDocumentWithComposition(resources?:any[], authorRefe
 
  // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
 export function isIPS(bundleDocument:R4.IBundle): boolean {
+    const documentKind = getDocumentKindInComposition(bundleDocument)
+    if (documentKind && documentKind === medicalHistoryClassification.ips) {
+        return true
+    } else {
+        return false
+    }
+}
+
+ // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
+ export function getDocumentKindInComposition(bundleDocument:R4.IBundle): string | undefined {
     if (!bundleDocument || !bundleDocument.type || bundleDocument.type != R4.BundleTypeKind._document || !bundleDocument.entry ||!bundleDocument.entry.length || !bundleDocument.entry[0]
         || !bundleDocument.entry[0].resource || bundleDocument.entry[0].resource.resourceType != "Composition" || !bundleDocument.entry[0].resource.type
         || !bundleDocument.entry[0].resource.type.coding || !bundleDocument.entry[0].resource.type.coding[0] || !bundleDocument.entry[0].resource.type.coding[0].code
-        || bundleDocument.entry[0].resource.type.coding[0].code != "60591-5" ) return false
-    else return true
+    ){
+        return undefined
+    }
+    else {
+        return bundleDocument.entry[0].resource.type.coding[0].code
+    }
 }
 
 /** It assumes the composition index it the 1st resource in the Bundle Document or will return false */

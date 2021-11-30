@@ -162,6 +162,7 @@ describe("test getting resources from bundle", () => {
     done()
   })
 
+  // It fails if it does not run alone!
   it("should getResourcesWithFilters by document without setting section", (done) => {
     // params with possible options
     const fhirBundle = {...testBundleDocumentWithCovid19ImmunizationsWithoutComposition}
