@@ -553,7 +553,7 @@ export function isIPS(bundleDocument:R4.IBundle): boolean {
 /** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export function hasSections(bundleDocument:R4.IBundle): boolean {
     if (!bundleDocument || !bundleDocument.type || bundleDocument.type !== R4.BundleTypeKind._document){
-        console.log("no sections in bundle")
+        // console.log("no sections in bundle")
         return false
     }
     
