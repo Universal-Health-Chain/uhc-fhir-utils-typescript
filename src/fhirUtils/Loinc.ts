@@ -40,9 +40,10 @@ export enum medicalHistoryClassification {
     pregnancy           = "82810-3",
     symptoms            = "10187-3",
     outpatient          = "46240-8",
-    advanceDirectives   = "42348-3"
+    advanceDirectives   = "42348-3",
     // goals
-    // clinicalNotes   
+    // clinicalNotes
+    defaultMedicalRecords = '11503-0' // "Medical records"
 }
 
 // export const HealthSectionCode = medicalHistoryClassification

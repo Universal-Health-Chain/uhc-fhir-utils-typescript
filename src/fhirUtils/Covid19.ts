@@ -12,7 +12,7 @@ import { createCommunication } from "./Communication"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
-import { getResourcesByTypes } from "./Bundle"
+import { getResourcesByTypesWithOptionalMetadata } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 
@@ -221,7 +221,7 @@ export const covid19LaboratoryTestsAndGroupsCodes = ():string[] => [
 
 // it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
 export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4.IDiagnosticReport[] {
-    let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypes(bundleDoc, ["DiagnosticReport"])
+    let diagnosticReports: R4.IDiagnosticReport[] = getResourcesByTypesWithOptionalMetadata(bundleDoc, ["DiagnosticReport"])
     // console.log("diagnosticReports found = ", diagnosticReports)
     const covid19Codes: string[] = covid19LaboratoryTestsAndGroupsCodes()    // full COVID-10 laboratory test codes (currently only LOINC codes)
     // console.log("covid19LaboratoryTestsAndGroupsCodes = ", covid19Codes)
@@ -240,7 +240,7 @@ export function getCovid19DiagnosticReportsInDocument(bundleDoc: R4.IBundle): R4
 
 // it checks and gets only the first code into DiagnosticReport.code.coding[0].code if it matchs
 export function getCovid19ImmunizationsInDocument(bundleDoc: R4.IBundle): R4.IImmunization[] {
-    let immunizations: R4.IImmunization[] = getResourcesByTypes(bundleDoc, ["Immunization"])
+    let immunizations: R4.IImmunization[] = getResourcesByTypesWithOptionalMetadata(bundleDoc, ["Immunization"])
     const covid19Codes: string[] = covid19VaccineProphylaxisCodesGlobal()   // full COVID-10 vaccine codes: ATC and SNOMED codes
     // console.log("FullCovid19VaccineCodes = ", covid19Codes)
     

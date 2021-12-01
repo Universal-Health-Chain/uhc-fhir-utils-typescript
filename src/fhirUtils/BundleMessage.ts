@@ -3,8 +3,8 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { getCleanIdByFhirResource } from "./CommonFHIR"
-import { addResourcesToBundle, getResourcesByTypes, addResourceToBundle, getAllResourcesInBundle, 
-    getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById
+import { addResourcesToBundle, getResourcesByTypesWithOptionalMetadata, addResourceToBundle, 
+    getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getResourcesWithFilters
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
@@ -59,16 +59,27 @@ export class BundleMessage {
     }
 
     getAllResources(bundle: R4.IBundle): any[] {
-        return getAllResourcesInBundle(bundle)
+        // return getAllResourcesInBundle(bundle)
+        return getResourcesWithFilters(bundle, undefined, undefined,
+            undefined, undefined, undefined, undefined, undefined)
+    }
+
+    getAllResourcesWithoutCompositionOrMessageHeader(bundle: R4.IBundle): any[] {
+        // return getAllResourcesWithoutCompositionOrMessageHeader(bundle)
+        const excludedResources = ['Composition', 'MessageHeader']
+        return getResourcesWithFilters(bundle, undefined, undefined,
+            excludedResources, undefined, undefined, undefined, undefined)
+    }
+
+    getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
+        // return getResourcesByTypes(bundle, resourceTypes)
+        return getResourcesWithFilters(bundle, undefined, undefined,
+            undefined, resourceTypes, undefined, undefined, undefined)
     }
 
     /** It returns an arry of IDs, splitting the ID by "/" and getting the last string after the slash */
     getResourceIdsInBundle(bundle: R4.IBundle): string[] {
         return getResourceIdsInBundle(bundle)
-    }
-
-    getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
-        return getResourcesByTypes(bundle, resourceTypes)
     }
 
     getResourceByIdInBundle(resourceId:string, bundle:R4.IBundle): any{
@@ -222,7 +233,7 @@ function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, e
 }
 
 export function getBundleDocumentInBundleMessage(bundleMessage:R4.IBundle): R4.IBundle{
-    let bundleDocuments:R4.IBundle[] = getResourcesByTypes(bundleMessage, ["Bundle"])
+    let bundleDocuments:R4.IBundle[] = getResourcesByTypesWithOptionalMetadata(bundleMessage, ["Bundle"])
     if (bundleDocuments.length && bundleDocuments.length > 0) {
         return bundleDocuments[0]
     }
@@ -245,7 +256,7 @@ export function addCommunicationTextToBundleMessage(fhirMessage:R4.IBundle, text
 }
 
 export function getTextInBundleMessage(fhirMessage:R4.IBundle): string {
-    let resources:any[] = getResourcesByTypes(fhirMessage, ["Communication"])
+    let resources:any[] = getResourcesByTypesWithOptionalMetadata(fhirMessage, ["Communication"])
     if (resources.length < 1) {
         // //console.log(("No communication resource was found in message"))
         return {} as string
@@ -289,7 +300,7 @@ export function addAttachmentsToBundleMessage(fhirMessage:R4.IBundle, attachment
 }
 
 export function getAttachmentsInBundleMessage(fhirMessage:R4.IBundle): R4.IAttachment[] {
-    let resources:any[] = getResourcesByTypes(fhirMessage, ["Communication"])
+    let resources:any[] = getResourcesByTypesWithOptionalMetadata(fhirMessage, ["Communication"])
     if (resources.length < 1) {
         // //console.log(("No communication resource was found in message"))
         return {} as R4.IAttachment[]

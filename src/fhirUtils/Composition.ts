@@ -189,7 +189,6 @@ export function addResourcesToComposition(composition:R4.IComposition, resources
      return newComposition
 }
 
-
 export function createEmptyCompositionSection(sectionCode:string): R4.IComposition_Section {
     // console.log("creating new empty section in composition with code "+ sectionCode + " of system " + sectionSystem)
     // TODO: get display and text for the section

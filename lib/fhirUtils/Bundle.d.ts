@@ -29,10 +29,14 @@ export declare class Bundle {
     addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
     addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
-    /** It create Bundle Document and Composition with URNs
-     * It sets by defautl the status as 'final',  the title as `${typeDocumentDisplay} (${date})`
+    /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
+    createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
+    /** It creates Bundle Document and Composition with URNs.
+     * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
      * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
     createBundleDocumentWithTypeLOINC(authorReferenceId: string, typeDocumentCodeLOINC?: string, resources?: any[]): R4.IBundle;
+    /** It creates Bundle Document and Composition with URNs.
+     * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
     addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
@@ -51,17 +55,24 @@ export declare class Bundle {
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
 /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-export declare function createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[]): R4.IBundle;
+export declare function createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
+/** It create Bundle Document and Composition with URNs
+ * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
+ * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
+export declare function createBundleDocumentWithTypeLOINC(authorReferenceId: string, typeDocumentCodeLOINC?: string, resources?: any[]): R4.IBundle;
+/** It create Bundle Document and Composition with URNs
+ * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
+export declare function createEmptyIPS(authorReferenceId: string): R4.IBundle;
 /** deprecated: use createBundleDocumentAndCompositionWithIds */
-export declare function createBundleDocumentWithComposition(authorReferenceId: string, typeDocumentCodeLOINC?: string, resources?: any[]): R4.IBundle;
-export declare function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes: string[]): any[];
+/** It filters resources by types adding section code LOINC from 1) Composition type, 2) given defaultCodeLOINC or 3) generic 'Medical records' */
+export declare function getResourcesByTypesWithOptionalMetadata(fhirBundle: R4.IBundle, includeResourceTypes: string[], defaultCodeLOINC?: string): any[];
 /**
  * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
  * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
  */
 export declare function getResourcesWithFilters(fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string, excludeResourceTypes?: string[], includeResourceTypes?: string[], withSectionsLOINC?: string[], fromServiceTypes?: string[], withCodes?: string[]): any[];
 export declare function getResourcesInSection(fhirBundle: R4.IBundle, loincSectionCode: string): any[];
-export declare function getAllResourcesInBundle(fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string): any[];
+/** It gets the section code LOINC for the resource from the Bundle document Composition, use the given 'defaultSectionLOINC' if not found or generic 'Medical records' if none */
 export declare function getResourceWithOptionalMetaData(fhirResource: any, fhirBundle: R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?: string): any;
 /**
  * It returns the code of the section or empty string ("") if not found.
@@ -76,9 +87,15 @@ export declare function addResourcesToBundle(bundle: R4.IBundle, resources?: any
 export declare function isIPS(bundleDocument: R4.IBundle): boolean;
 /** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export declare function hasSections(bundleDocument: R4.IBundle): boolean;
-export declare function createEmptyIPS(authorReferenceId: string): R4.IBundle;
 export declare function addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
-export declare function addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
+/** It returns error if composition does not exits in the document bundle. TODO: create and add a new composition?
+ * It adds resources by section excluding resources if the resourceType is that are not in the exclusion list.
+ * TODO: generate the entry.fullUrl and reference as "resourceType/id"
+ */
+export declare function addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[], excludeResources?: string[]): R4.IBundle;
+/** It returns error if composition does not exits in the document bundle. TODO: create and add a new composition?
+ * TODO: exlude resources by resourceType
+ */
 export declare function addEntriesBySection(bundleDocument: R4.IBundle, bundleEntries: R4.IBundle_Entry[], sectionCode: string, sectionSystem: string): R4.IBundle;
 export declare function getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
 /** It gets all the resources excluding some resource types if provided
@@ -88,3 +105,8 @@ export declare function getResourceReferencesBySectionCodeLOINC(bundleDocumentIP
 export declare function getResourceByIdInBundle(resourceId: string, bundle: R4.IBundle): any;
 export declare function replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
 export declare function getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
+/** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
+ * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
+export declare function getBundleDocumentCompositionWithValidation(fhirBundleDocument: R4.IBundle): R4.IComposition | undefined;
+/** it does not validate bundle document properties or Composition mandatory properties */
+export declare function getBundleDocumentComposition(fhirBundleDocument: R4.IBundle): R4.IComposition | undefined;

@@ -79,27 +79,27 @@ export class Bundle {
         return addResourcesToBundle(bundle, resources)
     }
 
-    /** It create Bundle Document and Composition with URNs
-     * It sets by defautl the status as 'final',  the title as `${typeDocumentDisplay} (${date})`
-     * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
-    createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
-        if (!typeDocumentCodeLOINC) {
-            typeDocumentCodeLOINC = '11503-0'; // generic 'Medical records' type of document if not provided
-        }
-        const typeDocumentDisplay = getDisplayOrTextByCodeLOINC(typeDocumentCodeLOINC)
-        const newId = uuidv4()
-        const bundleDocumentURN = 'URN:FHIR:DOCUMENT:UUID:' + newId
-        const documentCompositionURN = 'URN:FHIR:COMPOSITION:UUID:' + newId
-        const datetime = new Date().toISOString()
-        const title = `${typeDocumentDisplay} (${datetime})`
-
-        return createBundleDocumentAndCompositionWithIds(bundleDocumentURN, documentCompositionURN, authorReferenceId, datetime,
-            title, R4.CompositionStatusKind._final, typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, undefined, resources)
+    /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
+    createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string, title:string, status:R4.CompositionStatusKind,
+        typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
+    ): R4.IBundle {
+        return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorReferenceId, date, title, status,
+            typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, typeDocumentDisplay, resources, excludeResources
+        )
     }
 
-    // TODO: set the UHC identifier, not only the id
+    /** It creates Bundle Document and Composition with URNs.
+     * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
+     * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
+    createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
+        return createBundleDocumentWithTypeLOINC(authorReferenceId, typeDocumentCodeLOINC, resources)
+    }
+
+    /** It creates Bundle Document and Composition with URNs.
+     * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
     createEmptyIPS(authorReferenceId:string): R4.IBundle{
-        return createEmptyIPS(authorReferenceId)
+        // return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
+        return createBundleDocumentWithTypeLOINC(authorReferenceId, medicalHistoryClassification.ips)
     }
 
     // TODO: it does not check for the meta.version of the document
@@ -138,6 +138,7 @@ export class Bundle {
             excludedResources, undefined, undefined, undefined, undefined)
     }
 
+    // TODO review, use getResourcesByTypes instead of getResourcesWithFilters to avoid circular dependencies
     getResourcesByTypes(bundle: R4.IBundle, resourceTypes:string[]): any[] {
         // return getResourcesByTypes(bundle, resourceTypes)
         return getResourcesWithFilters(bundle, undefined, undefined,
@@ -171,8 +172,8 @@ export class Bundle {
 // NOTE: the exported functions can be used by other external managers (classes)
 
 /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string,
-    title:string, status:R4.CompositionStatusKind, typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[]
+export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string, title:string, status:R4.CompositionStatusKind,
+    typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
 ): R4.IBundle {
     // console.log(`createBundleDocumentWithCompositionAndURNs with ${resources.length} resources`)
     let basicComposition:R4.IComposition = createCompositionWithId(compositionId, authorReferenceId, date, title, status,
@@ -190,7 +191,45 @@ export function createBundleDocumentAndCompositionWithIds(bundleId:string, compo
     return bundle
 }
 
+/** createEmptyBundleWithId does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithCompositionAndId for that) */
+function createEmptyBundleWithId(id:string, bundleType:R4.BundleTypeKind, language?:string): R4.IBundle{
+    let bundle: R4.IBundle = {
+        id: id,
+        resourceType: "Bundle",
+        timestamp: new Date().toISOString(),
+        type: bundleType,
+    }
+    if (language) bundle.language = language
+    return bundle
+}
+
+/** It create Bundle Document and Composition with URNs
+ * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
+ * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
+export function createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
+    if (!typeDocumentCodeLOINC) {
+        typeDocumentCodeLOINC = '11503-0'; // generic 'Medical records' type of document if not provided
+    }
+    const typeDocumentDisplay = getDisplayOrTextByCodeLOINC(typeDocumentCodeLOINC)
+    const newId = uuidv4()
+    const bundleDocumentURN = 'URN:FHIR:DOCUMENT:UUID:' + newId
+    const documentCompositionURN = 'URN:FHIR:COMPOSITION:UUID:' + newId
+    const datetime = new Date().toISOString()
+    const title = `${typeDocumentDisplay} (${datetime})`
+
+    return createBundleDocumentAndCompositionWithIds(bundleDocumentURN, documentCompositionURN, authorReferenceId, datetime,
+        title, R4.CompositionStatusKind._preliminary, typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, undefined, resources)
+}
+
+/** It create Bundle Document and Composition with URNs
+ * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
+export function createEmptyIPS(authorReferenceId:string): R4.IBundle{
+    // return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
+    return createBundleDocumentWithTypeLOINC(authorReferenceId, medicalHistoryClassification.ips)
+}
+
 /** deprecated: use createBundleDocumentAndCompositionWithIds */
+/*
 export function createBundleDocumentWithComposition(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
     // console.log("createBundleDocumentWithComposition with resources = ", JSON.stringify(resources))
     let emptyComposition:R4.IComposition = createDefaultComposition(authorReferenceId, typeDocumentCodeLOINC)
@@ -206,39 +245,44 @@ export function createBundleDocumentWithComposition(authorReferenceId:string, ty
     // console.log("createBundleDocumentWithComposition resulting bundle= ", JSON.stringify(bundle))
     return bundle
 }
-
+*/
 
 // -------------------
 // TODO: remove old getResources functions
+// -------------------
 
-export function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes:string[]): any[] {
-    /*
-    return getResourcesWithFilters(bundle, undefined, undefined,
-        undefined, includeResourceTypes, undefined, undefined, undefined)
-    */
-    if (!fhirBundle || fhirBundle.resourceType != "Bundle" || !fhirBundle.entry || !fhirBundle.entry.length || fhirBundle.entry.length<1
-        || !includeResourceTypes.length || includeResourceTypes.length<1)
-    {
-        return []  // or error?
-    }
-
+/** It filters resources by types adding section code LOINC from 1) Composition type, 2) given defaultCodeLOINC or 3) generic 'Medical records' */
+export function getResourcesByTypesWithOptionalMetadata(fhirBundle: R4.IBundle, includeResourceTypes:string[], defaultCodeLOINC?: string): any[] {
+    // not using getResourcesWithFilters here to avoid circular dependencies
     let results: any[] = []
-    // let entries:R4.IBundle_Entry[] = bundle.entry as R4.IBundle_Entry[]
-    fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
-        if (entry.resource && entry.resource.resourceType && includeResourceTypes.includes(entry.resource.resourceType)){
-            // console.log("resource by type found: ", entry.resource.resourceType)    
-            results.push(entry.resource)
-        }
-    })
+    
+    if (fhirBundle && fhirBundle.resourceType === "Bundle" && fhirBundle.entry && fhirBundle.entry.length
+        && fhirBundle.entry.length>0 && includeResourceTypes.length && includeResourceTypes.length>0)
+    {
+        fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
+            if (entry.resource && entry.resource.resourceType && includeResourceTypes.includes(entry.resource.resourceType)){
+                // console.log("resource by type found: ", entry.resource.resourceType)
+                let sectionCodeLOINC = getSectionCodeForResourceIdInBundle(fhirBundle, entry.resource.id)
+                if (!sectionCodeLOINC) {
+                    if (defaultCodeLOINC) {
+                        sectionCodeLOINC = defaultCodeLOINC
+                    } else {
+                        sectionCodeLOINC = medicalHistoryClassification.defaultMedicalRecords
+                    }
+                }
+                const resource = getResourceWithOptionalMetaData(entry.resource, fhirBundle, medicalHistoryClassification.defaultMedicalRecords);
+                results.push(resource)
+            }
+        })
+    }
     return results
-    // */
 }
 
 /**
  * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
  * 'defaultServiceType' is used in case the FHIR resource does not have meta.serviceType as creator healthcare service of the resource.
  */
- export function getResourcesWithFilters(fhirBundle:R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?:string,
+export function getResourcesWithFilters(fhirBundle:R4.IBundle, defaultSectionLOINC?: string, defaultServiceType?:string,
     excludeResourceTypes?:string[], includeResourceTypes?:string[], withSectionsLOINC?:string[], fromServiceTypes?:string[], withCodes?:string[]
 ): any[] {
     // it adds meta.section if the document has sections or the LOINC section code of the biography if not
@@ -246,10 +290,7 @@ export function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes
     const containsSections = hasSections(fhirBundle)
     
     // it puts meta.section for every resource, if available
-    let resources = getAllResourcesInBundle(fhirBundle)
-    // fhirBundle.entry.forEach( function(entry:R4.IBundle_Entry){
-      // if (entry.resource && entry.resource.resourceType) {
-        // const result = getResourceWithOptionalMetaData(entry.resource, fhirBundle, defaultSectionLOINC, defaultServiceType)
+    let resources = getResourcesWithOptionalMetadata(fhirBundle)
 
     // exclude some resources or include only the desired resources
     if (excludeResourceTypes && excludeResourceTypes.length && excludeResourceTypes.length>0) {
@@ -313,26 +354,30 @@ export function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes
 }
 
 export function getResourcesInSection(fhirBundle:R4.IBundle, loincSectionCode:string): any[] {
-    /*
+    /* do not use it to avoid circular dependencies
     return getResourcesWithFilters(bundle, undefined, undefined,
         undefined, undefined, [loincSectionCode], undefined, undefined)
     */
-    let compositions:R4.IComposition[] = getResourcesByTypes(fhirBundle, ["Composition"])
-    if (compositions.length < 1 ) return {} as any[]    //returns empty
-    if (!compositions[0].section || compositions[0].section.length < 1) return {} as any[]    //returns empty
-    
-    let sectionInComposition = getSectionByCodeInComposition(compositions[0], loincSectionCode)
+    let resources:any[] = []
+
+    let composition = getBundleDocumentComposition(fhirBundle)
+    if (!composition){
+        return resources
+    }
+
+    let sectionInComposition = getSectionByCodeInComposition(composition, loincSectionCode)
     // It checks if the section has references to resources
-    if (!sectionInComposition || !sectionInComposition.entry || sectionInComposition.entry.length < 1) return {} as any[]    //returns empty
+    if (!sectionInComposition || !sectionInComposition.entry || sectionInComposition.entry.length < 1){
+        return resources // empty
+    }
     
     let sectionReferences:R4.IReference[] = sectionInComposition.entry
-    let resources:any[] = getResourcesByReferences(fhirBundle, sectionReferences) // search resources by id in a Bundle from the array of references
+    resources = getResourcesByReferences(fhirBundle, sectionReferences) // search resources by id in a Bundle from the array of references
     return resources
     // */
 }
 
-// getResourcesWithFilters causes RangeError: Maximum call stack size exceeded
-export function getAllResourcesInBundle(fhirBundle: R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string): any[] {
+function getResourcesWithOptionalMetadata(fhirBundle: R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string): any[] {
     /*
     const test = getResourcesWithFilters(fhirBundle, defaultSectionLOINC, defaultServiceType,
         undefined, undefined, undefined, undefined, undefined)
@@ -352,6 +397,7 @@ export function getAllResourcesInBundle(fhirBundle: R4.IBundle, defaultSectionLO
 
 //----
 
+/** It gets the section code LOINC for the resource from the Bundle document Composition, use the given 'defaultSectionLOINC' if not found or generic 'Medical records' if none */
 export function getResourceWithOptionalMetaData(fhirResource:any, fhirBundle:R4.IBundle, defaultSectionLOINC?:string, defaultServiceType?:string){
     const containsSections = hasSections(fhirBundle)
     
@@ -361,6 +407,8 @@ export function getResourceWithOptionalMetaData(fhirResource:any, fhirBundle:R4.
         loincSectionCode = getSectionCodeForResourceIdInBundle(fhirBundle, fhirResource.id)
     } else if (defaultSectionLOINC) {
         loincSectionCode = defaultSectionLOINC
+    } else {
+        loincSectionCode = medicalHistoryClassification.defaultMedicalRecords
     }
     
     // setting LOINC section in the meta data of the resource (if any)
@@ -390,34 +438,32 @@ export function getSectionCodeForResourceIdInBundle(bundleDocument:R4.IBundle, r
   
     // It gets the composition if some is available in the document and it was not given as parameter
     if (!composition) {
-      const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
-      if (compositions && compositions.length && compositions.length>0) {
-          composition = compositions[0]
-      }
+        composition = getBundleDocumentComposition(bundleDocument)
     }
   
     let result: string = ""
     // It returns the section code if the resourceId is found in some section as reference (entry)
     if (composition){
-      if (composition.section && composition.section.length && composition.section.length>0){
-        composition.section.some( function(compositionSection:R4.IComposition_Section){
-          if (compositionSection.code && compositionSection.entry && compositionSection.entry.length && compositionSection.entry.length>0){
-            compositionSection.entry.some( function(reference:R4.IReference){
-              const cleanResourceId = getCleanId(resourceId)
-              if (reference.reference && reference.reference.includes(cleanResourceId)){
-                // fhirUtils.codeableConcept.getCodeListInCodeableConcept
-                if (compositionSection.code && compositionSection.code.coding && compositionSection.code.coding.length &&
-                  compositionSection.code.coding.length>0 && compositionSection.code.coding[0].code) {
-                    result = compositionSection.code.coding[0].code
-                    // console.log('section code found = ', result)
-                    return true // it breaks the 'some' iteration
-                  }
-              }
+        if (composition.section && composition.section.length && composition.section.length>0){
+            composition.section.some( function(compositionSection:R4.IComposition_Section){
+            if (compositionSection.code && compositionSection.entry && compositionSection.entry.length && compositionSection.entry.length>0){
+                compositionSection.entry.some( function(reference:R4.IReference){
+                    const cleanResourceId = getCleanId(resourceId)
+                    if (reference.reference && reference.reference.includes(cleanResourceId)){
+                        // fhirUtils.codeableConcept.getCodeListInCodeableConcept
+                        if (compositionSection.code && compositionSection.code.coding && compositionSection.code.coding.length &&
+                            compositionSection.code.coding.length>0 && compositionSection.code.coding[0].code)
+                        {
+                            result = compositionSection.code.coding[0].code
+                            // console.log('section code found = ', result)
+                            return true // it breaks the 'some' iteration
+                        }
+                    }
+                })
+                if (result !== '') return true // it breaks the 'some' iteration
+            }
             })
-            if (result !== '') return true // it breaks the 'some' iteration
-          }
-        })
-      }
+        }
     }
   
     return result
@@ -442,30 +488,6 @@ export function getTimestamp(fhirBundle:R4.IBundle): string {
         && fhirBundle.entry[0].resource.resourceType && fhirBundle.entry[0].resource.resourceType == "Composition"
         && fhirBundle.entry[0].resource.date ) return fhirBundle.entry[0].resource.date
     return ""   // else returns empty
-}
-
-/** deprecated: use createEmptyBundleWithId. CreateEmptyBundle does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithComposition) */
-function createEmptyBundle(bundleType:R4.BundleTypeKind, language?:string): R4.IBundle{
-    let bundle: R4.IBundle = {
-        resourceType: "Bundle",
-        type: bundleType,
-        id: uuidv4(), // convertUuidToUuid58(uuidv4()),  // base58
-        timestamp: new Date().toISOString()
-    }
-    if (language) bundle.language = language
-    return bundle
-}
-
-/** createEmptyBundleWithId does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithCompositionAndId) */
-function createEmptyBundleWithId(id:string, bundleType:R4.BundleTypeKind, language?:string): R4.IBundle{
-    let bundle: R4.IBundle = {
-        id: id,
-        resourceType: "Bundle",
-        timestamp: new Date().toISOString(),
-        type: bundleType,
-    }
-    if (language) bundle.language = language
-    return bundle
 }
 
 // TODO: create another function to add the resource to the composition index
@@ -527,19 +549,24 @@ export function addResourcesToBundle(bundle:R4.IBundle, resources?:any[]): R4.IB
     return newBundle
 }
 
-function getResourcesByReferences(bundle:R4.IBundle, references:R4.IReference[]): any[] {
-    const validBundle = bundle
-
-    if (!validBundle.entry || validBundle.entry.length < 1) return []
-
+/** It sets the section code LOINC for each resource from the Bundle document Composition, use the given 'defaultSectionLOINC' if not found or generic 'Medical records' if none */
+function getResourcesByReferences(bundle:R4.IBundle, references:R4.IReference[], defaultCodeLOINC?:string): any[] {
     let results:any[] = []
-    references.forEach( function(item:R4.IReference) {
-        const validItem = item
-        if (validItem && validItem.reference) {
-            let reference:string[] = validItem.reference.split("/")
-            // The ID of the resource will be in the position "reference.length-1" of the splitted string
-            if (reference.length > 0) { // there is an ID
-                results.push( getResourceByIdInBundle(reference[reference.length-1], validBundle) )
+
+    if (!bundle.entry || bundle.entry.length < 1) {
+        return results // empty
+    }  
+
+    references.forEach( function(fhirReference:R4.IReference) {
+        if (fhirReference && fhirReference.reference) {
+            // do not use cleanId because if URN the cleanId will not match in the search
+            let splittedReferenceURN:string[] = fhirReference.reference.split("/")
+            // The ID of the resource will be in the position "reference.length-1" (last position) of the splitted string
+            if (splittedReferenceURN.length > 0) { // there is an ID
+                const resourceId = splittedReferenceURN[splittedReferenceURN.length-1]
+                let resource = getResourceByIdInBundle(resourceId, bundle)
+                resource = getResourceWithOptionalMetaData(resource, bundle, defaultCodeLOINC)
+                results.push(resource)
             }
         }
     })
@@ -593,20 +620,8 @@ export function isIPS(bundleDocument:R4.IBundle): boolean {
 /** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export function hasSections(bundleDocument:R4.IBundle): boolean {
     if (!bundleDocument || !bundleDocument.type || bundleDocument.type !== R4.BundleTypeKind._document){
-        // console.log("no sections in bundle")
         return false
     }
-    
-    /*
-    const compositions = getResourcesByTypes(bundleDocument, ['Composition'])
-    if (!compositions || !compositions.length || compositions.length<1) {
-        return false
-    }
-
-    if (!compositions[0].section || !compositions[0].section.length || compositions[0].section.length<1){
-        return false
-    }
-    */
 
     if (!bundleDocument || !bundleDocument.entry || !bundleDocument.entry.length || bundleDocument.entry.length<1
         || !bundleDocument.entry[0].resource || !bundleDocument.entry[0].resource)
@@ -620,11 +635,6 @@ export function hasSections(bundleDocument:R4.IBundle): boolean {
     }
 
     return true
-}
-
-// TODO: set the UHC identifier, not only the id
-export function createEmptyIPS(authorReferenceId:string): R4.IBundle{
-    return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
 }
 
 // TODO: it does not check for the meta.version of the document
@@ -647,15 +657,27 @@ export function addEntriesToBundle(bundle:R4.IBundle, entries:R4.IBundle_Entry[]
     return newBundle
 }
 
-// TODO: generate the entry.fullUrl and reference as "resourceType/id"
-export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, resources:any[]): R4.IBundle {
-    let compositions:R4.IComposition[] = getResourcesByTypes(bundleDocument, ["Composition"])
-    if (compositions.length < 1 ) return {} as R4.IBundle   //returns empty TODO: error or create new Composition?
+/** It returns error if composition does not exits in the document bundle. TODO: create and add a new composition?
+ * It adds resources by section excluding resources if the resourceType is that are not in the exclusion list.
+ * TODO: generate the entry.fullUrl and reference as "resourceType/id"
+ */
+export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:string, resources:any[], excludeResources?:string[]): R4.IBundle {
+    const composition = getBundleDocumentComposition(bundleDocument)
+    if (!composition) {
+        // TODO: create and add a new composition?
+        throw new Error (`Bundle has any composition`)
+    }
 
     // if it was created as an empty IPS document then it does not have any section yet
+    if (excludeResources && excludeResources.length && excludeResources.length>0){
+        resources = resources.filter(resource => {
+            // filter that includes only resources that are not in the exclusion list
+            return !(excludeResources.includes(resource.resourceType))
+        });
+    }
 
     // It updates the resources references of the section into the composition entry of the bundle
-    let newComposition:R4.IComposition = addResourcesToComposition(compositions[0], resources, sectionCode)
+    let newComposition:R4.IComposition = addResourcesToComposition(composition, resources, sectionCode)
     
     // Then it adds the new resources to the bundle
     let newBundle:R4.IBundle = addResourcesToBundle(bundleDocument, resources)
@@ -665,14 +687,18 @@ export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:str
     return newBundle
 }
 
+/** It returns error if composition does not exits in the document bundle. TODO: create and add a new composition?
+ * TODO: exlude resources by resourceType
+ */
 export function addEntriesBySection(bundleDocument:R4.IBundle, bundleEntries:R4.IBundle_Entry[], sectionCode:string, sectionSystem:string): R4.IBundle {
-    let compositions:R4.IComposition[] = getResourcesByTypes(bundleDocument, ["Composition"])
-    if (compositions.length < 1 ) return {} as R4.IBundle   //returns empty
+    const composition = getBundleDocumentComposition(bundleDocument)
+    if (!composition) {
+        // TODO: create and add a new composition?
+        throw new Error (`Bundle has any composition`)
+    }
 
-    // if it was created as an empty IPS document then it does not have any section yet
-    let resources
     // It updates the resources references of the section into the composition entry of the bundle
-    let newComposition:R4.IComposition = addReferencesInBundleEntriesToComposition(compositions[0], bundleEntries, sectionCode)
+    let newComposition:R4.IComposition = addReferencesInBundleEntriesToComposition(composition, bundleEntries, sectionCode)
     // Then it adds the new resources to the bundle
     let newBundle:R4.IBundle = addEntriesToBundle(bundleDocument, bundleEntries)
     // Finally it replaces the composition with the new references to the added resources
@@ -734,7 +760,6 @@ export function getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS: R4.IB
 
     // the health sections are in the Composition resource (first entry in the bundle document): document.entry[0].resource.section[]
     const documentComposition:R4.IComposition = bundleDocumentIPS.entry[0].resource as R4.IComposition
-    // const documentComposition = getResourcesByTypes(bundleDocumentIPS, ["Composition"])[0]
     if (!documentComposition || !documentComposition.section || !documentComposition.section.length || documentComposition.section.length<1){
         return []
     }
@@ -799,4 +824,40 @@ function getMediaInBundleEntries(entries: R4.IBundle_Entry[]): R4.IMedia[]{
         if (item.resource && item.resource.resourceType=="Media") mediaContents.push(item.resource)
     })
     return mediaContents
+}
+
+/** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
+ * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
+export function getBundleDocumentCompositionWithValidation(fhirBundleDocument:R4.IBundle): R4.IComposition | undefined {
+    // first checking if it is a valid composition with title, type, date and status as first resource in the FHIR Bundle document
+    if (fhirBundleDocument && fhirBundleDocument.id && fhirBundleDocument.resourceType && fhirBundleDocument.resourceType === 'Bundle'
+        && fhirBundleDocument.type && fhirBundleDocument.type === R4.BundleTypeKind._document
+        && fhirBundleDocument.entry && fhirBundleDocument.entry.length && fhirBundleDocument.entry.length>0
+        && fhirBundleDocument.entry[0].resource && fhirBundleDocument.entry[0].resource.id
+        && fhirBundleDocument.entry[0].resource.resourceType && fhirBundleDocument.entry[0].resource.resourceType === 'Composition'
+        && fhirBundleDocument.entry[0].resource.type && fhirBundleDocument.entry[0].resource.type.coding
+        && fhirBundleDocument.entry[0].resource.type.coding.length && fhirBundleDocument.entry[0].resource.type.coding.length>0
+        && fhirBundleDocument.entry[0].resource.type.coding[0].code && fhirBundleDocument.entry[0].resource.status
+        && fhirBundleDocument.entry[0].resource.date && fhirBundleDocument.entry[0].resource.date !== ''
+        && fhirBundleDocument.entry[0].resource.title && fhirBundleDocument.entry[0].resource.title !== ''
+    ) {
+        // TODO: ckeck date and status
+        return fhirBundleDocument.entry[0].resource
+    } else {
+        return undefined
+    }
+}
+
+/** it does not validate bundle document properties or Composition mandatory properties */
+ export function getBundleDocumentComposition(fhirBundleDocument:R4.IBundle): R4.IComposition | undefined {
+    // it does not validate bundle document nor composition mandatory properties
+    if (fhirBundleDocument && fhirBundleDocument.entry && fhirBundleDocument.entry.length
+        && fhirBundleDocument.entry.length>0 && fhirBundleDocument.entry[0].resource
+        && fhirBundleDocument.entry[0].resource.resourceType
+        && fhirBundleDocument.entry[0].resource.resourceType === 'Composition'
+    ) {
+        return fhirBundleDocument.entry[0].resource
+    } else {
+        return undefined
+    }
 }

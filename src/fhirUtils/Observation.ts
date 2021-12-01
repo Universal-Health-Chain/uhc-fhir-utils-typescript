@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
-import { createBundleDocumentWithComposition } from "./Bundle"
+import { createBundleDocumentWithTypeLOINC } from "./Bundle"
 import { terminologyCodesLOINC, getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
 import { CodingSystem } from "../models/CommonModels"
 
@@ -62,7 +62,7 @@ export function createBloodTypingMainBundleFHIR(authorIdOrURN: string, authorTyp
       authorReferenceURN = authorType + '/' + authorIdOrURN
     }
 
-    return createBundleDocumentWithComposition(authorReferenceURN,
+    return createBundleDocumentWithTypeLOINC(authorReferenceURN,
       medicalHistoryClassification.diagnosticResults, [mainBloodTypingObservation]
     )
 }

@@ -29,7 +29,8 @@ export declare enum medicalHistoryClassification {
     pregnancy = "82810-3",
     symptoms = "10187-3",
     outpatient = "46240-8",
-    advanceDirectives = "42348-3"
+    advanceDirectives = "42348-3",
+    defaultMedicalRecords = "11503-0"
 }
 export declare enum terminologyCodesLOINC {
     serologyTestsGroup = "LG51018-6",

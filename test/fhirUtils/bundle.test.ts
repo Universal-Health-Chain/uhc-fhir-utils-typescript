@@ -83,10 +83,8 @@ describe("testing bundle composition functions", () => {
   it("should get the resources references in a section of the bundle document", (done) => {
     const sectionCodeLOINC = medicalHistoryClassification.allergies
     const bundleDocumentIPS = bundleIPS as R4.IBundle
-    
     const references = fhirUtils.bundle.getResourceReferencesBySectionCodeLOINC(bundleDocumentIPS, sectionCodeLOINC)
-    console.log("references = ", references)
-    
+    // console.log("references = ", references)
     expect(references).toBeDefined()
     expect(references.length).toBeGreaterThan(0)
     done()
@@ -178,7 +176,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
   it("should build an empty FHIR Bundle", (done) => {
       // const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
       const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId) as any
-      console.log('createBundleDocument = ', JSON.stringify(result, undefined, 2))
+      // console.log('createBundleDocument = ', JSON.stringify(result, undefined, 2))
       expect(result.resourceType).toBe("Bundle")
       expect(result.id).toBeDefined()
       expect(result.entry.length).toBe(1)
