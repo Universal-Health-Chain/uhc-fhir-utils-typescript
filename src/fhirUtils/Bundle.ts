@@ -5,7 +5,9 @@ import { v4 as uuidv4 } from 'uuid'
 // import { convertUuidToUuid58 } from 'uuid58'
 import { getDisplayOrTextByCodeLOINC, GlobalIndexLOINC, medicalHistoryClassification } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
-    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections, getTypeOfBundleDocumentComposition, createCompositionWithId } from "./Composition"
+    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition,
+    getCodesOfSections, getTypeOfBundleDocumentComposition, createCompositionWithId
+} from "./Composition"
 import {getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
 import { CodingSystem } from "../models"
@@ -665,7 +667,7 @@ export function addResourcesBySection(bundleDocument:R4.IBundle, sectionCode:str
     const composition = getBundleDocumentComposition(bundleDocument)
     if (!composition) {
         // TODO: create and add a new composition?
-        throw new Error (`Bundle has any composition`)
+        throw new Error (`Bundle document does not have Composition`)
     }
 
     // if it was created as an empty IPS document then it does not have any section yet
@@ -694,7 +696,7 @@ export function addEntriesBySection(bundleDocument:R4.IBundle, bundleEntries:R4.
     const composition = getBundleDocumentComposition(bundleDocument)
     if (!composition) {
         // TODO: create and add a new composition?
-        throw new Error (`Bundle has any composition`)
+        throw new Error (`Bundle does not have Composition`)
     }
 
     // It updates the resources references of the section into the composition entry of the bundle

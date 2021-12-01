@@ -19,7 +19,7 @@ export class Composition {
         return getTypeOfBundleDocumentComposition(fhirBundleDocument)
     }
 
-    getCodesOfSections(sections:R4.IComposition_Section[], system:string): string[] {
+    getCodesOfSections(sections:R4.IComposition_Section[] | undefined, system:string): string[] {
         return getCodesOfSections(sections, system)
     }
     
@@ -90,9 +90,12 @@ export function getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle
     }
 }
 
-// It returns an array of strings with the codes of a specific system in the sections of a Composition
-export function getCodesOfSections(sections:R4.IComposition_Section[], system:string): string[] {
+// It returns an array of strings with the codes of a specific system in the sections of a Composition or empty
+export function getCodesOfSections(sections:R4.IComposition_Section[] | undefined, system:string): string[] {
     let results:string[] = []
+    if (!sections){
+        return results
+    }
     sections.forEach( function(section:R4.IComposition_Section) {
         if (section.code && section.code.coding && section.code.coding.length > 0) {
             section.code.coding.forEach( function(item:R4.ICoding){
