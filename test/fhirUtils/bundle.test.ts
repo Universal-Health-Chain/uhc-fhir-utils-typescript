@@ -1,19 +1,15 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
-import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition} from "../../test/data/dataForImmunizations"
-
-// importbundleUtils = require('../../src/fhirUtils/Bundle')
-// import { Bundle } from '../../src/fhirUtils/Bundle';
-// const bundleUtils = new Bundle()
-
 import { FhirUtils } from '../../src/FhirUtils';
 import { CodingSystem, medicalHistoryClassification } from "../../src";
+import { getCodeListInCodeableConcept } from "../../src/fhirUtils/CodeableConcept";
+import { testAuthorReferenceId } from "../data/dataForCommonTests";
+import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition} from "../../test/data/dataForImmunizations"
+
 const fhirUtils = new FhirUtils()
 
 const authorReferenceIdForTesting = "author-reference-uuid"
-const patientSubject = "2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
 
 // -- Immunization --
 const targetDisease:string = "840539006"
@@ -177,9 +173,12 @@ describe("test getting resources from bundle", () => {
 })
 
 describe("create FHIR Document Bundle and operates with it", () => { 
+
+  // TODO: test other properties
   it("should build an empty FHIR Bundle", (done) => {
       // const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
-      const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
+      const result = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId) as any
+      console.log('createBundleDocument = ', JSON.stringify(result, undefined, 2))
       expect(result.resourceType).toBe("Bundle")
       expect(result.id).toBeDefined()
       expect(result.entry.length).toBe(1)
@@ -187,7 +186,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
   it("should add a FHIR resource to a FHIR Bundle", (done) => {
-      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC() as any
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId) as any
       bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [DiagnosticReportCovid19])
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
@@ -200,7 +199,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });
   it("should create a FHIR bundle from an observation", (done) => {
-      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([observationForTesting]) as any
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId, medicalHistoryClassification.diagnosticResults,[observationForTesting]) as any
       expect(bundle.resourceType).toBe("Bundle")
       expect(bundle.id).toBeDefined()
       expect(bundle.entry).toBeDefined()
@@ -210,7 +209,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });    
   it("should get FHIR resources from a FHIR Bundle", (done) => {
-      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId)
       bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resources = fhirUtils.bundle.getAllResources(bundle)
       expect(resources).toHaveLength(2)   // updated with the composition resource included
@@ -218,7 +217,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
       done()
   });    
   it("should get FHIR resources by type from a FHIR Bundle", (done) => {
-      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      let bundle = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId)
       bundle = fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resources = fhirUtils.bundle.getResourcesByTypes(bundle, ["Observation"])
       // //console.log("Resources = ", resources)
@@ -228,7 +227,7 @@ describe("create FHIR Document Bundle and operates with it", () => {
   });
 
   it("should get a FHIR resource by ID from a FHIR Bundle", (done) => {
-      let bundle =fhirUtils.bundle.createBundleDocumentWithTypeLOINC()
+      let bundle =fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testAuthorReferenceId)
       bundle =fhirUtils.bundle.addResourcesToBundle(bundle, [observationForTesting])
       let resource =fhirUtils.bundle.getResourceByIdInBundle("observation-for-testing-uuid", bundle)
       expect(resource).toEqual(observationForTesting)

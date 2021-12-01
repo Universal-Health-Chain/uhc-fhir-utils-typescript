@@ -1,9 +1,9 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { GlobalIndexLOINC } from "../../src/fhirUtils/Loinc"
-
-const Bundle = require ('../../src/fhirUtils/Bundle')
+import { createBundleDocumentWithComposition } from "../../src/fhirUtils/Bundle"
+import { medicalHistoryClassification } from "../../src/fhirUtils/Loinc"
+import { testSubjectId } from "../data/dataForCommonTests"
 
 const observationForTesting: R4.IObservation = {
     resourceType: "Observation",
@@ -26,7 +26,7 @@ describe("test FHIR Bundle of type Message", () => {
 
     it("should create a FHIR Message", async (done) => {
         // Not necessary: It creates a Bundle document from an observation       
-        const healthDocument = Bundle.createBundleDocumentWithComposition([observationForTesting]) as any
+        const healthDocument = createBundleDocumentWithComposition(testSubjectId, medicalHistoryClassification.immunization, [observationForTesting]) as any
         expect(healthDocument.id).toBeDefined()
         expect(healthDocument.resourceType).toBe("Bundle")
         expect(healthDocument.type).toBe(R4.BundleTypeKind._document)

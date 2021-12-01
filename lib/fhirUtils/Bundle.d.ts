@@ -1,7 +1,9 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 export declare class Bundle {
     constructor();
-    getDocumentKindInComposition(bundleDocument: R4.IBundle): string | undefined;
+    /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
+     * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
+    getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle): string | undefined;
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
     isIPS(bundleDocument: R4.IBundle): boolean;
     hasSections(bundleDocument: R4.IBundle): boolean;
@@ -27,7 +29,10 @@ export declare class Bundle {
     addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
     /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
     addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
-    createBundleDocumentWithTypeLOINC(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
+    /** It create Bundle Document and Composition with URNs
+     * It sets by defautl the status as 'final',  the title as `${typeDocumentDisplay} (${date})`
+     * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
+    createBundleDocumentWithTypeLOINC(authorReferenceId: string, typeDocumentCodeLOINC?: string, resources?: any[]): R4.IBundle;
     createEmptyIPS(authorReferenceId: string): R4.IBundle;
     addEntriesToBundle(bundle: R4.IBundle, entries: R4.IBundle_Entry[]): R4.IBundle;
     addResourcesBySection(bundleDocument: R4.IBundle, sectionCode: string, resources: any[]): R4.IBundle;
@@ -45,6 +50,10 @@ export declare class Bundle {
     replaceResourceById(resource: any, bundle: R4.IBundle): R4.IBundle;
     getMediaInBundle(bundle: R4.IBundle): R4.IMedia[];
 }
+/** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
+export declare function createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[]): R4.IBundle;
+/** deprecated: use createBundleDocumentAndCompositionWithIds */
+export declare function createBundleDocumentWithComposition(authorReferenceId: string, typeDocumentCodeLOINC?: string, resources?: any[]): R4.IBundle;
 export declare function getResourcesByTypes(fhirBundle: R4.IBundle, includeResourceTypes: string[]): any[];
 /**
  * 'defaultSectionLOINC' is used in case the FHIR Bundle does not have any section in a composition resource.
@@ -64,9 +73,7 @@ export declare function getTimestamp(fhirBundle: R4.IBundle): string;
 export declare function addResourceToBundle(bundle: R4.IBundle, resource: any): R4.IBundle;
 /** It adds resources except 'Composition', 'MessageHeader' and also skips if empty resource.id or already exists, both for Bundle Document and Bundle Message */
 export declare function addResourcesToBundle(bundle: R4.IBundle, resources?: any[]): R4.IBundle;
-export declare function createBundleDocumentWithComposition(resources?: any[], authorReferenceId?: string, typeDocumentCodeLOINC?: string): R4.IBundle;
 export declare function isIPS(bundleDocument: R4.IBundle): boolean;
-export declare function getDocumentKindInComposition(bundleDocument: R4.IBundle): string | undefined;
 /** It assumes the composition index it the 1st resource in the Bundle Document or will return false */
 export declare function hasSections(bundleDocument: R4.IBundle): boolean;
 export declare function createEmptyIPS(authorReferenceId: string): R4.IBundle;

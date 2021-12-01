@@ -14,6 +14,7 @@ export interface ObservationChoiceValueFhirR4 {
 }
 export declare function getChoiceNameFromValueFHIR(fhir: any): string;
 export declare function addObservationAsMemberToMainObservation(member: R4.IObservation, main: R4.IObservation): R4.IObservation;
-export declare function createBloodTypingMainBundleFHIR(): R4.IBundle;
+/** It creates FHIR reference if authorType is provided and returns bundle document with diagnostic results type */
+export declare function createBloodTypingMainBundleFHIR(authorIdOrURN: string, authorType?: string): R4.IBundle;
 export declare function createBloodTypeFHIRObservationFromSNOMED(snomedCode: string, language: string): R4.IObservation;
 export declare function createABOBloodTypeCodeableConceptFromSNOMED(code: string): R4.ICodeableConcept;

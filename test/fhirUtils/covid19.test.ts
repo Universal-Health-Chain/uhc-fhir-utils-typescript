@@ -1,8 +1,10 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { FhirUtils, CodingSystem } from "../../src/"
+import { FhirUtils, CodingSystem, medicalHistoryClassification } from "../../src/"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getCodeListInArrayOfCodeableConcepts } from "../../src/fhirUtils/CodeableConcept"
+import { testSubjectId } from "../data/dataForCommonTests"
+
 const fhirUtils = new FhirUtils()
 
 const diagnosticReportCodeLOINC:string = "LG51018-6" // "94762-2"
@@ -247,14 +249,14 @@ describe("get specific COVID-19 related code(s) by system(s)", () => {
 describe("get COVID-19 resources", () => {
 
     it("should create document and get COVID-19 Immunizations", () => {
-        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testImmunizationFHIR])
+        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testSubjectId, medicalHistoryClassification.immunization,  [testImmunizationFHIR])
         let covid19Immunizations = fhirUtils.covid19.getCovid19ImmunizationsInDocument(bundleDocument)
         expect(covid19Immunizations).toBeDefined()
         expect(covid19Immunizations).toHaveLength(1)
     })
 
     it("should create document and get COVID-19 DiagnosticReports", () => {
-        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC([testDiagnosticReportFHIR])
+        let bundleDocument = fhirUtils.bundle.createBundleDocumentWithTypeLOINC(testSubjectId, medicalHistoryClassification.diagnosticResults, [testDiagnosticReportFHIR])
         let covid19Diagnostics = fhirUtils.covid19.getCovid19DiagnosticReportsInDocument(bundleDocument)
         expect(covid19Diagnostics).toBeDefined()
         expect(covid19Diagnostics).toHaveLength(1)

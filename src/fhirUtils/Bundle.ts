@@ -3,20 +3,24 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 // import { convertUuidToUuid58 } from 'uuid58'
-import { GlobalIndexLOINC, medicalHistoryClassification } from "./Loinc"
+import { getDisplayOrTextByCodeLOINC, GlobalIndexLOINC, medicalHistoryClassification } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
-    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections } from "./Composition"
-import { addExistingTargetCodesInCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
-import { covid19VaccineProphylaxisCodesGlobal, covid19Tag, covid19LaboratoryTestsAndGroupsCodes } from "./Covid19"
+    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition, getCodesOfSections, getTypeOfBundleDocumentComposition, createCompositionWithId } from "./Composition"
+import {getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
 import { CodingSystem } from "../models"
+
+// TODO: isValidFhirBundleDocument
+
 
 export class Bundle {
     constructor() {
     }
 
-    getDocumentKindInComposition(bundleDocument:R4.IBundle): string | undefined {
-        return getDocumentKindInComposition(bundleDocument)
+    /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
+     * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
+    getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle): string | undefined {
+        return getTypeOfBundleDocumentComposition(fhirBundleDocument)
     }
 
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
@@ -75,8 +79,22 @@ export class Bundle {
         return addResourcesToBundle(bundle, resources)
     }
 
-    createBundleDocumentWithTypeLOINC(resources?:any[], authorReferenceId?:string, typeDocumentCodeLOINC?:string): R4.IBundle {
-        return createBundleDocumentWithComposition(resources, authorReferenceId, typeDocumentCodeLOINC)
+    /** It create Bundle Document and Composition with URNs
+     * It sets by defautl the status as 'final',  the title as `${typeDocumentDisplay} (${date})`
+     * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
+    createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
+        if (!typeDocumentCodeLOINC) {
+            typeDocumentCodeLOINC = '11503-0'; // generic 'Medical records' type of document if not provided
+        }
+        const typeDocumentDisplay = getDisplayOrTextByCodeLOINC(typeDocumentCodeLOINC)
+        const newId = uuidv4()
+        const bundleDocumentURN = 'URN:FHIR:DOCUMENT:UUID:' + newId
+        const documentCompositionURN = 'URN:FHIR:COMPOSITION:UUID:' + newId
+        const datetime = new Date().toISOString()
+        const title = `${typeDocumentDisplay} (${datetime})`
+
+        return createBundleDocumentAndCompositionWithIds(bundleDocumentURN, documentCompositionURN, authorReferenceId, datetime,
+            title, R4.CompositionStatusKind._final, typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, undefined, resources)
     }
 
     // TODO: set the UHC identifier, not only the id
@@ -150,6 +168,45 @@ export class Bundle {
 } // end class Bundle
 
 // ---- FUNCTIONS ----
+// NOTE: the exported functions can be used by other external managers (classes)
+
+/** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
+export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string,
+    title:string, status:R4.CompositionStatusKind, typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[]
+): R4.IBundle {
+    // console.log(`createBundleDocumentWithCompositionAndURNs with ${resources.length} resources`)
+    let basicComposition:R4.IComposition = createCompositionWithId(compositionId, authorReferenceId, date, title, status,
+        typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, language)
+    //console.log("basicComposition = ", basicComposition)
+
+    // It creates the bundle documment, adds the composition and the additional resources
+    let bundle = createEmptyBundleWithId(bundleId, R4.BundleTypeKind._document)
+    bundle = addResourceToBundle(bundle, basicComposition)
+
+    // TODO: addAdditionalResourcesToBundle SHOULD ADD RESOURCES TO COMPOSITION
+    if (resources && resources.length && resources.length >0) bundle = addResourcesToBundle(bundle, resources)
+    
+    // console.log("createBundleDocumentWithComposition resulting bundle= ", JSON.stringify(bundle))
+    return bundle
+}
+
+/** deprecated: use createBundleDocumentAndCompositionWithIds */
+export function createBundleDocumentWithComposition(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
+    // console.log("createBundleDocumentWithComposition with resources = ", JSON.stringify(resources))
+    let emptyComposition:R4.IComposition = createDefaultComposition(authorReferenceId, typeDocumentCodeLOINC)
+    //console.log("emptyComposition = ", emptyComposition)
+
+    // It creates the bundle documment, adds the composition and the additional resources
+    let bundle = createEmptyBundle(R4.BundleTypeKind._document)
+    bundle = addResourceToBundle(bundle, emptyComposition)
+
+    // TODO: addAdditionalResourcesToBundle SHOULD ADD RESOURCES TO COMPOSITION
+    if (resources && resources.length && resources.length >0) bundle = addResourcesToBundle(bundle, resources)
+    
+    // console.log("createBundleDocumentWithComposition resulting bundle= ", JSON.stringify(bundle))
+    return bundle
+}
+
 
 // -------------------
 // TODO: remove old getResources functions
@@ -387,13 +444,25 @@ export function getTimestamp(fhirBundle:R4.IBundle): string {
     return ""   // else returns empty
 }
 
-// createEmptyBundle does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithComposition)
+/** deprecated: use createEmptyBundleWithId. CreateEmptyBundle does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithComposition) */
 function createEmptyBundle(bundleType:R4.BundleTypeKind, language?:string): R4.IBundle{
     let bundle: R4.IBundle = {
         resourceType: "Bundle",
         type: bundleType,
         id: uuidv4(), // convertUuidToUuid58(uuidv4()),  // base58
         timestamp: new Date().toISOString()
+    }
+    if (language) bundle.language = language
+    return bundle
+}
+
+/** createEmptyBundleWithId does not adds composition as the default Bundle.entry[0] resource (use createBundleDocumentWithCompositionAndId) */
+function createEmptyBundleWithId(id:string, bundleType:R4.BundleTypeKind, language?:string): R4.IBundle{
+    let bundle: R4.IBundle = {
+        id: id,
+        resourceType: "Bundle",
+        timestamp: new Date().toISOString(),
+        type: bundleType,
     }
     if (language) bundle.language = language
     return bundle
@@ -511,42 +580,13 @@ function addReferencesInBundleEntriesToComposition(composition:R4.IComposition, 
     return newComposition
 }
 
-export function createBundleDocumentWithComposition(resources?:any[], authorReferenceId?:string, typeDocumentCodeLOINC?:string): R4.IBundle {
-    // console.log("createBundleDocumentWithComposition with resources = ", JSON.stringify(resources))
-    let emptyComposition:R4.IComposition = createDefaultComposition(authorReferenceId, typeDocumentCodeLOINC)
-    //console.log("emptyComposition = ", emptyComposition)
-
-    // It creates the bundle documment, adds the composition and the additional resources
-    let bundle = createEmptyBundle(R4.BundleTypeKind._document)
-    bundle = addResourceToBundle(bundle, emptyComposition)
-
-    // TODO: addAdditionalResourcesToBundle SHOULD ADD RESOURCES TO COMPOSITION
-    if (resources && resources.length && resources.length >0) bundle = addResourcesToBundle(bundle, resources)
-    
-    // console.log("createBundleDocumentWithComposition resulting bundle= ", JSON.stringify(bundle))
-    return bundle
-}
-
  // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
 export function isIPS(bundleDocument:R4.IBundle): boolean {
-    const documentKind = getDocumentKindInComposition(bundleDocument)
+    const documentKind = getTypeOfBundleDocumentComposition(bundleDocument)
     if (documentKind && documentKind === medicalHistoryClassification.ips) {
         return true
     } else {
         return false
-    }
-}
-
- // the first resource type in the bundle document must be a composition: http://hl7.org/fhir/bundle.html
- export function getDocumentKindInComposition(bundleDocument:R4.IBundle): string | undefined {
-    if (!bundleDocument || !bundleDocument.type || bundleDocument.type != R4.BundleTypeKind._document || !bundleDocument.entry ||!bundleDocument.entry.length || !bundleDocument.entry[0]
-        || !bundleDocument.entry[0].resource || bundleDocument.entry[0].resource.resourceType != "Composition" || !bundleDocument.entry[0].resource.type
-        || !bundleDocument.entry[0].resource.type.coding || !bundleDocument.entry[0].resource.type.coding[0] || !bundleDocument.entry[0].resource.type.coding[0].code
-    ){
-        return undefined
-    }
-    else {
-        return bundleDocument.entry[0].resource.type.coding[0].code
     }
 }
 
@@ -584,8 +624,7 @@ export function hasSections(bundleDocument:R4.IBundle): boolean {
 
 // TODO: set the UHC identifier, not only the id
 export function createEmptyIPS(authorReferenceId:string): R4.IBundle{
-    let typeDocumentCodeLOINC:string = GlobalIndexLOINC.categorization.healthSection.compositionIPS
-    return createBundleDocumentWithComposition(undefined, authorReferenceId, typeDocumentCodeLOINC)
+    return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
 }
 
 // TODO: it does not check for the meta.version of the document
