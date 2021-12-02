@@ -2,12 +2,20 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { CodingSystem } from "../../src/models/CommonModels"
 
 // GENERAL
-export const testDatetime1 = "2021-02-18"
-export const testDatetime2 = "2020-05-14"
-export const testPngBytesBase64Encoded:string = "iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAA1BMVEX///+nxBvIAAAASElEQVR4nO3BgQAAAADDoPlTX+AIVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDcaiAAFXD1ujAAAAAElFTkSuQmCC"
-export const sha1Base64 = "L1uon1STCviB2+q3RZnDNm/TeSY="
-export const testAuthorReferenceId = "author-reference-uuid"
-export const testSubjectId = "uhc-subject-uuid"
+export const testDatetime1 = "2021-02-18";
+export const testDatetime2 = "2021-11-29";
+export const testAuthorReferenceId = "author-reference-uuid";
+export const testSubjectId = "uhc-subject-uuid";
+export const testSubjectReference = "Patient/" + testSubjectId;
+export const testLanguageEN = "en";
+export const testLanguageES = "es";
+
+export const testTypeDocumentCodeLOINC = '11503-0';
+export const testTypeDocumentDisplay = 'Medica records';
+export const testBundleDocumentId = 'test-bundle-document-id';
+export const testDocumentCompositionId = 'test-document-composition-id';
+export const testDocumentCompositionStatus = R4.CompositionStatusKind._preliminary;
+export const testTitleDocumentComposition = 'Document title';
 
 // MEDICAL DATA
 export const testDoseQuantityML: R4.IQuantity = {

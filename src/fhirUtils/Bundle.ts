@@ -1,12 +1,9 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { v4 as uuidv4 } from 'uuid'
-// import { convertUuidToUuid58 } from 'uuid58'
-import { getDisplayOrTextByCodeLOINC, GlobalIndexLOINC, medicalHistoryClassification } from "./Loinc"
+import { medicalHistoryClassification } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
-    addReferencesToCompositionSection, putSectionInComposition, createDefaultComposition,
-    getCodesOfSections, getTypeOfBundleDocumentComposition, createCompositionWithId
+    addReferencesToCompositionSection, putSectionInComposition, getTypeOfBundleDocumentComposition, createCompositionWithId
 } from "./Composition"
 import {getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
@@ -23,6 +20,17 @@ export class Bundle {
      * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
     getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle): string | undefined {
         return getTypeOfBundleDocumentComposition(fhirBundleDocument)
+    }
+
+    /** it does not validate bundle document properties or Composition mandatory properties */
+    getBundleDocumentComposition(fhirBundleDocument:R4.IBundle | undefined): R4.IComposition | undefined {
+        return getBundleDocumentComposition(fhirBundleDocument)
+    }
+
+    /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
+     * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
+    getBundleDocumentCompositionWithValidation(fhirBundleDocument:R4.IBundle | undefined): R4.IComposition | undefined {
+        return getBundleDocumentCompositionWithValidation(fhirBundleDocument)
     }
 
     /** The first resource type in the bundle document must be a Composition of resources (the index): http://hl7.org/fhir/bundle.html */
@@ -88,20 +96,6 @@ export class Bundle {
         return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorReferenceId, date, title, status,
             typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, typeDocumentDisplay, resources, excludeResources
         )
-    }
-
-    /** It creates Bundle Document and Composition with URNs.
-     * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
-     * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
-    createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
-        return createBundleDocumentWithTypeLOINC(authorReferenceId, typeDocumentCodeLOINC, resources)
-    }
-
-    /** It creates Bundle Document and Composition with URNs.
-     * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
-    createEmptyIPS(authorReferenceId:string): R4.IBundle{
-        // return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
-        return createBundleDocumentWithTypeLOINC(authorReferenceId, medicalHistoryClassification.ips)
     }
 
     // TODO: it does not check for the meta.version of the document
@@ -203,31 +197,6 @@ function createEmptyBundleWithId(id:string, bundleType:R4.BundleTypeKind, langua
     }
     if (language) bundle.language = language
     return bundle
-}
-
-/** It create Bundle Document and Composition with URNs
- * It sets by default the status as 'preliminary',  the title as `${typeDocumentDisplay} (${date})`
- * and the type of document composition as '11503-0' (generic 'Medical records') if not provided */
-export function createBundleDocumentWithTypeLOINC(authorReferenceId:string, typeDocumentCodeLOINC?:string, resources?:any[]): R4.IBundle {
-    if (!typeDocumentCodeLOINC) {
-        typeDocumentCodeLOINC = '11503-0'; // generic 'Medical records' type of document if not provided
-    }
-    const typeDocumentDisplay = getDisplayOrTextByCodeLOINC(typeDocumentCodeLOINC)
-    const newId = uuidv4()
-    const bundleDocumentURN = 'URN:FHIR:DOCUMENT:UUID:' + newId
-    const documentCompositionURN = 'URN:FHIR:COMPOSITION:UUID:' + newId
-    const datetime = new Date().toISOString()
-    const title = `${typeDocumentDisplay} (${datetime})`
-
-    return createBundleDocumentAndCompositionWithIds(bundleDocumentURN, documentCompositionURN, authorReferenceId, datetime,
-        title, R4.CompositionStatusKind._preliminary, typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, undefined, resources)
-}
-
-/** It create Bundle Document and Composition with URNs
- * It sets by default the status as 'preliminary' and the title as `${typeDocumentDisplay} (${date})` */
-export function createEmptyIPS(authorReferenceId:string): R4.IBundle{
-    // return createBundleDocumentWithComposition(authorReferenceId, medicalHistoryClassification.ips)
-    return createBundleDocumentWithTypeLOINC(authorReferenceId, medicalHistoryClassification.ips)
 }
 
 /** deprecated: use createBundleDocumentAndCompositionWithIds */
@@ -830,7 +799,7 @@ function getMediaInBundleEntries(entries: R4.IBundle_Entry[]): R4.IMedia[]{
 
 /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
  * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
-export function getBundleDocumentCompositionWithValidation(fhirBundleDocument:R4.IBundle): R4.IComposition | undefined {
+export function getBundleDocumentCompositionWithValidation(fhirBundleDocument:R4.IBundle | undefined): R4.IComposition | undefined {
     // first checking if it is a valid composition with title, type, date and status as first resource in the FHIR Bundle document
     if (fhirBundleDocument && fhirBundleDocument.id && fhirBundleDocument.resourceType && fhirBundleDocument.resourceType === 'Bundle'
         && fhirBundleDocument.type && fhirBundleDocument.type === R4.BundleTypeKind._document
@@ -851,7 +820,7 @@ export function getBundleDocumentCompositionWithValidation(fhirBundleDocument:R4
 }
 
 /** it does not validate bundle document properties or Composition mandatory properties */
- export function getBundleDocumentComposition(fhirBundleDocument:R4.IBundle): R4.IComposition | undefined {
+export function getBundleDocumentComposition(fhirBundleDocument:R4.IBundle | undefined): R4.IComposition | undefined {
     // it does not validate bundle document nor composition mandatory properties
     if (fhirBundleDocument && fhirBundleDocument.entry && fhirBundleDocument.entry.length
         && fhirBundleDocument.entry.length>0 && fhirBundleDocument.entry[0].resource

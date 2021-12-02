@@ -2,7 +2,6 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
-import { createBundleDocumentWithTypeLOINC } from "./Bundle"
 import { terminologyCodesLOINC, getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
 import { CodingSystem } from "../models/CommonModels"
 
@@ -43,28 +42,6 @@ export function addObservationAsMemberToMainObservation(member:R4.IObservation, 
     })
     main.hasMember = members
     return main
-}
-
-/** It creates FHIR reference if authorType is provided and returns bundle document with diagnostic results type */
-export function createBloodTypingMainBundleFHIR(authorIdOrURN: string, authorType?:string) : R4.IBundle{
-    let mainBloodTypingObservation:R4.IObservation = {
-        resourceType: 'Observation',
-        code: {
-        // text: BLOOD_TYPING_MAIN_CODE_TEXT
-        },
-        // TODO: category, effectiveDateTime, subject, ...
-        status: R4.ObservationStatusKind._final
-    }
-    
-    // creating FHIR reference if authorType is provided
-    let authorReferenceURN = authorIdOrURN
-    if (authorType) {
-      authorReferenceURN = authorType + '/' + authorIdOrURN
-    }
-
-    return createBundleDocumentWithTypeLOINC(authorReferenceURN,
-      medicalHistoryClassification.diagnosticResults, [mainBloodTypingObservation]
-    )
 }
 
 export function createBloodTypeFHIRObservationFromSNOMED(snomedCode: string, language: string): R4.IObservation{
