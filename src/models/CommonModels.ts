@@ -65,6 +65,7 @@ export enum CodingSystem {
     
     diagnosticServiceSections   = "http://terminology.hl7.org/CodeSystem/v2-0074",  // use System (CLD) but not ValueSet
     communicationCategory       = "http://terminology.hl7.org/CodeSystem/communication-category",
+    compositionStatus           = "http://hl7.org/fhir/composition-status",
     eventStatus                 = "http://hl7.org/fhir/event-status",
     organizationType            = "http://terminology.hl7.org/CodeSystem/organization-type",
     locationMode                = "http://hl7.org/fhir/location-mode",

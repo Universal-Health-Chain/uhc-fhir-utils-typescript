@@ -24,6 +24,7 @@ export enum ExtensionsFHIR {
 
 // for indexing the ACTIVE codes
 export interface GroupedCodesFHIR {  // https://csvjson.com/json2csv
+    compositionStatus:          CodesAndSystem
     identifierBusiness:         CodesAndSystem
     identifierPersonal:         CodesAndSystem
     identiferPatient:           CodesAndSystem

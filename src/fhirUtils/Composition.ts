@@ -15,7 +15,7 @@ export class Composition {
 
     /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
      * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
-    getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle): string | undefined {
+    getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle | undefined): string | undefined {
         return getTypeOfBundleDocumentComposition(fhirBundleDocument)
     }
 
@@ -69,7 +69,7 @@ export class Composition {
 
 /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
  * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
-export function getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle): string | undefined {
+export function getTypeOfBundleDocumentComposition(fhirBundleDocument:R4.IBundle | undefined): string | undefined {
     // first checking if it is a valid composition with title, type, date and status as first resource in the FHIR Bundle document
     if (fhirBundleDocument && fhirBundleDocument.id && fhirBundleDocument.resourceType && fhirBundleDocument.resourceType === 'Bundle'
         && fhirBundleDocument.type && fhirBundleDocument.type === R4.BundleTypeKind._document

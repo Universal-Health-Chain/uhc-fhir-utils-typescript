@@ -3,7 +3,7 @@ export declare class Composition {
     constructor();
     /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
      * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
-    getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle): string | undefined;
+    getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle | undefined): string | undefined;
     getCodesOfSections(sections: R4.IComposition_Section[] | undefined, system: string): string[];
     createDefaultComposition(authorReferenceId: string, typeDocumentCodeLOINC?: string, id?: string): R4.IComposition;
     /** deprecated: create the empty IPS document and then add resources by section
@@ -19,7 +19,7 @@ export declare class Composition {
 }
 /** First it checks if there is a valid 'Composition' resource (with title, type, date and status)
  * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
-export declare function getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle): string | undefined;
+export declare function getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle | undefined): string | undefined;
 export declare function getCodesOfSections(sections: R4.IComposition_Section[] | undefined, system: string): string[];
 /** TODO: create title translating the LOINC document type code.
  * The default 'typeDocumentCodeLOINC' is set to '11503-0' (generic 'Medical records') if not provided.

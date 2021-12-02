@@ -15,6 +15,7 @@ export declare enum ExtensionsFHIR {
     mothersMaidenName = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
 }
 export interface GroupedCodesFHIR {
+    compositionStatus: CodesAndSystem;
     identifierBusiness: CodesAndSystem;
     identifierPersonal: CodesAndSystem;
     identiferPatient: CodesAndSystem;

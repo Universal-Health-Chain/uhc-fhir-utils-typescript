@@ -45,6 +45,10 @@ export function getVaccinesCovid19CVX(): string[] {
 export const GlobalIndexFHIR:IndexFHIR = {
     extension:      ExtensionsFHIR,
     groupedCodes:   {
+        compositionStatus: {
+            codes: ["preliminary","amended","final","entered-in-error"],
+            system: CodingSystem.compositionStatus
+        },       
         identifierBusiness: {
             codes: ["TAX","PRN"],
             system: CodingSystem.identifierBusiness

@@ -53,6 +53,7 @@ export declare enum CodingSystem {
     identifierGeneral = "http://terminology.hl7.org/CodeSystem/v2-0203",
     diagnosticServiceSections = "http://terminology.hl7.org/CodeSystem/v2-0074",
     communicationCategory = "http://terminology.hl7.org/CodeSystem/communication-category",
+    compositionStatus = "http://hl7.org/fhir/composition-status",
     eventStatus = "http://hl7.org/fhir/event-status",
     organizationType = "http://terminology.hl7.org/CodeSystem/organization-type",
     locationMode = "http://hl7.org/fhir/location-mode",
