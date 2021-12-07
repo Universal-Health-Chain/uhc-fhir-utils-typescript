@@ -133,8 +133,8 @@ describe("test getting resources from bundle", () => {
     done()
   })
 
-  // It fails if it does not run alone!
-  it("should getResourcesWithFilters by document without setting section", (done) => {
+  // If no composition the default 'Medical records' code will be set as meta.section
+  it("should getResourcesWithFilters by document without setting section", () => {
     // params with possible options
     const fhirBundle = {...testBundleDocumentWithCovid19ImmunizationsWithoutComposition}
     const defaultSectionLOINC = undefined
@@ -152,8 +152,8 @@ describe("test getting resources from bundle", () => {
     expect(resources.length).toBeGreaterThan(1)
     // console.log("number of resources = ", resources.length)
 
-    expect(resources[0].meta).toBeUndefined()
-    done()
+    expect(resources[0].meta).toBeDefined()
+    expect(resources[0].meta.section).toBe(medicalHistoryClassification.defaultMedicalRecords)
   })
 
 })

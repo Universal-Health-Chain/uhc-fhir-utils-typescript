@@ -31,6 +31,8 @@ export declare function createDefaultComposition(authorReferenceURN: string, typ
 /** Create composition with mandatory properties and with URN as ID. Title is mandatory, it is not automatically generated */
 export declare function createCompositionWithId(idOrURN: string, authorReferenceURN: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay?: string, language?: string): R4.IComposition;
 export declare function addResourcesToComposition(composition: R4.IComposition, resources: any[], sectionCode: string): R4.IComposition;
+/** it checks if composition exists and replace it or error. TODO: verify the ID? */
+export declare function updateComposition(bundleDocument: R4.IBundle, composition: R4.IComposition): R4.IBundle;
 export declare function createEmptyCompositionSection(sectionCode: string): R4.IComposition_Section;
 export declare function addReferencesToCompositionSection(section: R4.IComposition_Section, references: R4.IReference[]): R4.IComposition_Section;
 /** getSectionByCodeInComposition returns undefined if no section found */

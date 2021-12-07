@@ -3,8 +3,8 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
 import { getCleanIdByFhirResource } from "./CommonFHIR"
-import { addResourcesToBundle, getResourcesByTypesWithOptionalMetadata, addResourceToBundle, 
-    getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getResourcesWithFilters
+import { getResourcesByTypesWithOptionalMetadata, addResourceAsBundleEntry, 
+    getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getResourcesWithFilters, addResourcesWithOptions
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 
@@ -133,7 +133,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
  
     // It creates the mandatory MessageHeader with id equal to the messageId (which is a document in pouchDB)
     let messageHeader:R4.IMessageHeader = createMessageHeader(messageId)
-    messageBundle = addResourcesToBundle(messageBundle, [messageHeader])
+    messageBundle = addResourcesWithOptions(messageBundle, [messageHeader])
  
     // it adds a text sended by the user (if any)
     if (textMessage) addCommunicationTextToBundleMessage(messageBundle, textMessage)
@@ -153,7 +153,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
     if (bundleDoc) {
         // TODO: create or add to a "Communication" resource with 'contentReference' for a Patient Record Audit Event
         let patientRecordAudit:R4.IAuditEvent = createPatientRecordAuditEvent(senderId, entityTitle, entityDescription)
-        BundleMessage = addResourcesToBundle(BundleMessage, [patientRecordAudit, bundleDoc])
+        BundleMessage = addResourcesWithOptions(BundleMessage, [patientRecordAudit, bundleDoc])
     }
     return BundleMessage
  }
@@ -250,7 +250,7 @@ export function addCommunicationTextToBundleMessage(fhirMessage:R4.IBundle, text
         payload: [newCommunicationPayload]
     }
     // It adds the new communication to the bundle of the message and returns a valid bundle
-    let newMessage:R4.IBundle = addResourceToBundle(fhirMessage, newCommunication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+    let newMessage:R4.IBundle = addResourceAsBundleEntry(fhirMessage, newCommunication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
     // //console.log("newMessage = ", JSON.stringify(newMessage))
     return newMessage
 }
@@ -294,7 +294,7 @@ export function addAttachmentsToBundleMessage(fhirMessage:R4.IBundle, attachment
     })
     
     // It adds the new communication to the bundle of the message and returns a valid bundle
-    let newMessage:R4.IBundle = addResourceToBundle(fhirMessage, communication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+    let newMessage:R4.IBundle = addResourceAsBundleEntry(fhirMessage, communication)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
     // //console.log("newMessage = ", JSON.stringify(newMessage))
     return newMessage
 }
@@ -323,5 +323,5 @@ export function getAttachmentsInBundleMessage(fhirMessage:R4.IBundle): R4.IAttac
 
 export function addAuditEventToBundleMessage(fhirMessage:R4.IBundle, auditEvent:R4.IAuditEvent): R4.IBundle {
         // It adds the audit event to the bundle of the message and returns a valid bundle
-        return addResourceToBundle(fhirMessage, auditEvent)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
+        return addResourceAsBundleEntry(fhirMessage, auditEvent)  // using addResourceToBundle instead of addAdditionalResourcesToBundle
 }

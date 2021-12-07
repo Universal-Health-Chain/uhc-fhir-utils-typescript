@@ -61,7 +61,6 @@ export class Composition {
     putSectionInComposition(composition:R4.IComposition, newSection:R4.IComposition_Section): R4.IComposition {
         return putSectionInComposition(composition, newSection)
     }
-
 }
 
 // ---- FUNCTIONS ----
@@ -190,6 +189,21 @@ export function addResourcesToComposition(composition:R4.IComposition, resources
     // It updates the section in the composition
     newComposition = putSectionInComposition(newComposition, section)    // error if section does not have any code
      return newComposition
+}
+
+/** it checks if composition exists and replace it or error. TODO: verify the ID? */
+export function updateComposition(bundleDocument:R4.IBundle, composition:R4.IComposition): R4.IBundle{
+    if (!bundleDocument || !bundleDocument.entry || !bundleDocument.entry.length
+        || bundleDocument.entry.length<1 || !bundleDocument.entry[0].resource
+        || !bundleDocument.entry[0].resource.resourceType
+        || bundleDocument.entry[0].resource.resourceType !== 'Composition'
+    ) {
+        throw new Error (`Bundle document does not have Composition`)
+    } else {
+        // replacing composition with the new one
+        bundleDocument.entry[0].resource = composition
+        return bundleDocument
+    }    
 }
 
 export function createEmptyCompositionSection(sectionCode:string): R4.IComposition_Section {
