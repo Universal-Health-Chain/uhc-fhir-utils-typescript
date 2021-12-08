@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { medicalHistoryClassification } from "../../src"
-import { testAuthorReferenceId, testDatetime1, testDatetime2, testDoseQuantityML, testEncounterReference, testLocation,
+import { testAuthorId, testDatetime1, testDatetime2, testDoseQuantityML, testEncounterReference, testLocation,
    testManufacturerReferenceByBlockchain, testPerformer
 } from "./dataForCommonTests"
 
@@ -128,7 +128,7 @@ export const testCompositionIndexForImmunizationDocument: R4.IComposition = {
          "system": 'http://loinc.org'
       }]
    },
-   author:[{"reference": testAuthorReferenceId}],
+   author:[{"reference": testAuthorId}],
    section: [
       {
          code: {

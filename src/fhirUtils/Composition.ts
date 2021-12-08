@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { CodingSystem } from "../models"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
+import { type } from "os"
 
 const uuidUtils = new Uuid() 
 
@@ -24,8 +25,8 @@ export class Composition {
     }
     
     // TODO: manage empty authorReferenceId and typeDocumentCodeLOINC
-    createDefaultComposition(authorReferenceId:string, typeDocumentCodeLOINC?:string, id?:string): R4.IComposition {
-        return createDefaultComposition(authorReferenceId, typeDocumentCodeLOINC, id)
+    createDefaultComposition(authorIdOrURI:string, authorType:string, typeDocumentCodeLOINC?:string, id?:string): R4.IComposition {
+        return createDefaultComposition(authorIdOrURI, authorType, typeDocumentCodeLOINC, id)
     }
     
     /** deprecated: create the empty IPS document and then add resources by section
@@ -111,7 +112,7 @@ export function getCodesOfSections(sections:R4.IComposition_Section[] | undefine
  * The default 'status' is set to 'preliminary' if not provided (draft).
  * Date is the timestamp (ISO string).
 */
-export function createDefaultComposition(authorReferenceURN:string, typeDocumentCodeLOINC?:string, typeDocumentDisplay?:string,
+export function createDefaultComposition(authorIdOrURI:string, authorType:string, typeDocumentCodeLOINC?:string, typeDocumentDisplay?:string,
     idOrURN?:string, status?:R4.CompositionStatusKind, language?:string
 ): R4.IComposition {
     if (!typeDocumentCodeLOINC) {
@@ -131,16 +132,36 @@ export function createDefaultComposition(authorReferenceURN:string, typeDocument
     const date = new Date().toISOString()
     const title = `${typeDocumentDisplay} (${date})`
 
-    return createCompositionWithId(idOrURN, authorReferenceURN, date, title, status,
+    return createCompositionWithId(idOrURN, authorIdOrURI, authorType, date, title, status,
         typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, language)
 }
 
 /** Create composition with mandatory properties and with URN as ID. Title is mandatory, it is not automatically generated */
-export function createCompositionWithId(idOrURN:string, authorReferenceURN:string, date:string, title:string,
+export function createCompositionWithId(idOrURN:string, authorIdOrURI:string, authorType:string, date:string, title:string,
     status:R4.CompositionStatusKind, typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay?:string, language?:string
 ): R4.IComposition {
+
+    let authorReference:R4.IReference = {}
+    if (String(authorIdOrURI).startsWith('did')
+        || String(authorIdOrURI).startsWith('urn') || String(authorIdOrURI).startsWith('URN')
+        || String(authorIdOrURI).startsWith('http')
+        || authorIdOrURI.includes('/')
+    ){
+        // it is an URI
+        authorReference = {
+            reference: authorIdOrURI,
+            type: authorType
+        }
+    } else {
+        // it is an ID, e.g.: UUID v4
+        authorReference = {
+            id: authorIdOrURI,
+            type: authorType
+        }
+    }
+
     let composition:R4.IComposition = {
-        author: [{reference: authorReferenceURN}],
+        author:[authorReference],
         date: date,
         id: idOrURN,
         language: language,
@@ -160,13 +181,13 @@ export function createCompositionWithId(idOrURN:string, authorReferenceURN:strin
 }
 
 /** Title example: "Patient Summary as of December 11, 2017 14:30". TODO: if not title, generate it automatically */
-function createEmptyCompositionIPS(idOrURN:string, authorReferenceURN:string,
+function createEmptyCompositionIPS(idOrURN:string, authorIdOrURI:string, authorType:string,
     date:string, status:R4.CompositionStatusKind, title?:string, language?:string)
 : R4.IComposition {
     if (!title) {
         title = `Patient Summary (${date})`
     }
-    return createCompositionWithId(idOrURN, authorReferenceURN, date, title, status,
+    return createCompositionWithId(idOrURN, authorIdOrURI, authorType, date, title, status,
         medicalHistoryClassification.ips, CodingSystem.loinc, 'Patient summary Document', language)
 }
 

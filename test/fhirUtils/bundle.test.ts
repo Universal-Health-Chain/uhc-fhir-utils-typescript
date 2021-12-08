@@ -3,10 +3,13 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { FhirUtils } from '../../src/FhirUtils';
 import { CodingSystem, medicalHistoryClassification } from "../../src";
-import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition, testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC} from "../../test/data/dataForImmunizations"
-import { testAuthorReferenceId, testBundleDocumentId, testDatetime1, testDiagnosticReportFHIR, testDocumentCompositionId, testDocumentCompositionStatus, testLanguageEN, testTitleDocumentComposition, testTypeDocumentCodeLOINC, testTypeDocumentDisplay } from "../data/dataForCommonTests";
+import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition,
+  testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC
+} from "../../test/data/dataForImmunizations"
+import { testAuthorId, testAuthorType, testBundleDocumentId, testDatetime1, testDiagnosticReportFHIR, testDocumentCompositionId,
+  testDocumentCompositionStatus, testLanguageEN, testTitleDocumentComposition, testTypeDocumentCodeLOINC, testTypeDocumentDisplay
+} from "../data/dataForCommonTests";
 import { testBundleDocumentWithCompositionForGenericMedicalRecordsButWithoutMedicalRecords } from "../data/dataForBundleTests";
-import { exit } from "process";
 
 const fhirUtils = new FhirUtils()
 
@@ -28,7 +31,7 @@ describe("test create bundle with composition", () => {
   it("should create bundle with options", () => {
 
     const bundle = fhirUtils.bundle.createBundleDocumentAndCompositionWithIds(
-      testBundleDocumentId, testDocumentCompositionId, testAuthorReferenceId, testDatetime1,
+      testBundleDocumentId, testDocumentCompositionId, testAuthorId, testAuthorType, testDatetime1,
       testTitleDocumentComposition, testDocumentCompositionStatus, testTypeDocumentCodeLOINC, CodingSystem.loinc,
       testTypeDocumentDisplay, testLanguageEN, [testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC]
     )

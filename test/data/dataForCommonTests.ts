@@ -4,7 +4,8 @@ import { CodingSystem } from "../../src/models/CommonModels"
 // GENERAL
 export const testDatetime1 = "2021-02-18";
 export const testDatetime2 = "2021-11-29";
-export const testAuthorReferenceId = "author-reference-uuid";
+export const testAuthorId = "author-reference-uuid";
+export const testAuthorType = "PractitionerRole";
 export const testSubjectId = "uhc-subject-uuid";
 export const testSubjectReference = "Patient/" + testSubjectId;
 export const testLanguageEN = "en";

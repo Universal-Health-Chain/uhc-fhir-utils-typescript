@@ -1,6 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { medicalHistoryClassification } from "../../src/fhirUtils/Loinc";
-import { testAuthorReferenceId } from "./dataForCommonTests";
+import { testAuthorId } from "./dataForCommonTests";
 
 export const testCompositionIndexForGenericMedicalRecordsSoWithoutSections: R4.IComposition = {
     resourceType: "Composition",
@@ -11,7 +11,7 @@ export const testCompositionIndexForGenericMedicalRecordsSoWithoutSections: R4.I
           "system": 'http://loinc.org'
        }]
     },
-    author:[{"reference": testAuthorReferenceId}]
+    author:[{"reference": testAuthorId}]
 }
 
 // A bundle for Diagnostic Results or Laboratory Tests can contain both DiagnosticReport, Observation(s) and Specimen(s) resources

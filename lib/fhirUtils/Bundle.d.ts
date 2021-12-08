@@ -62,10 +62,10 @@ export declare class Bundle {
     /** it checks if composition exists and replace it or error. TODO: verify the ID? */
     updateComposition(bundleDocument: R4.IBundle, composition: R4.IComposition): R4.IBundle;
     /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-    createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
+    createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorId: string, authorType: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
 }
 /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-export declare function createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorReferenceId: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
+export declare function createBundleDocumentAndCompositionWithIds(bundleId: string, compositionId: string, authorIdOrURI: string, authorType: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay: string, language?: string, resources?: any[], excludeResources?: string[]): R4.IBundle;
 /** deprecated: use createBundleDocumentAndCompositionWithIds */
 /** It filters resources by types adding section code LOINC from 1) Composition type, 2) given defaultCodeLOINC or 3) generic 'Medical records' */
 export declare function getResourcesByTypesWithOptionalMetadata(fhirBundle: R4.IBundle, includeResourceTypes: string[], defaultCodeLOINC?: string): any[];

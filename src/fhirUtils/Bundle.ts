@@ -165,10 +165,10 @@ export class Bundle {
     }
 
     /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-    createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string, title:string, status:R4.CompositionStatusKind,
+    createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorId:string, authorType:string, date:string, title:string, status:R4.CompositionStatusKind,
         typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
     ): R4.IBundle {
-        return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorReferenceId, date, title, status,
+        return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorId, authorType, date, title, status,
             typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, typeDocumentDisplay, resources, excludeResources
         )
     }
@@ -180,12 +180,13 @@ export class Bundle {
 // NOTE: the exported functions can be used by other external managers (classes)
 
 /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorReferenceId:string, date:string, title:string, status:R4.CompositionStatusKind,
+export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string,
+    authorIdOrURI:string, authorType:string, date:string, title:string, status:R4.CompositionStatusKind,
     typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
 ): R4.IBundle {
     // console.log(`createBundleDocumentWithCompositionAndURNs with ${resources.length} resources`)
-    let basicComposition:R4.IComposition = createCompositionWithId(compositionId, authorReferenceId, date, title, status,
-        typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, language)
+    let basicComposition:R4.IComposition = createCompositionWithId(compositionId, authorIdOrURI, authorType,
+        date, title, status, typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, language)
     //console.log("basicComposition = ", basicComposition)
 
     // It creates the bundle documment, adds the composition and the additional resources
@@ -618,6 +619,7 @@ export function addResourceAsBundleEntry(bundle:R4.IBundle, resource:any, fullUr
         return bundle
     }
 
+    // let updatedBundle = {...bundle} as R4.IBundle // less efficient but avoid problems on tests
     let updatedBundle = bundle // less efficient but avoid problems on tests
     // it prepares the new resource as a new entry in the bundle and inserts it
     let newEntry: R4.IBundle_Entry = {
