@@ -4,7 +4,9 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 import { FhirUtils } from '../../src/FhirUtils';
 import { CodingSystem, medicalHistoryClassification } from "../../src";
 import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition, testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC} from "../../test/data/dataForImmunizations"
-import { testAuthorReferenceId, testBundleDocumentId, testDatetime1, testDocumentCompositionId, testDocumentCompositionStatus, testLanguageEN, testTitleDocumentComposition, testTypeDocumentCodeLOINC, testTypeDocumentDisplay } from "../data/dataForCommonTests";
+import { testAuthorReferenceId, testBundleDocumentId, testDatetime1, testDiagnosticReportFHIR, testDocumentCompositionId, testDocumentCompositionStatus, testLanguageEN, testTitleDocumentComposition, testTypeDocumentCodeLOINC, testTypeDocumentDisplay } from "../data/dataForCommonTests";
+import { testBundleDocumentWithCompositionForGenericMedicalRecordsButWithoutMedicalRecords } from "../data/dataForBundleTests";
+import { exit } from "process";
 
 const fhirUtils = new FhirUtils()
 
@@ -13,8 +15,14 @@ const targetDisease:string = "840539006"
 
 const bundleIPS:R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json")
 
-
 describe("test create bundle with composition", () => {
+
+  // initialBundle is the "test" object
+  let initialBundle;
+
+  beforeEach(() => {
+      initialBundle = {... testBundleDocumentWithCompositionForGenericMedicalRecordsButWithoutMedicalRecords}
+  })
 
   // TODO: test all mandatory properties
   it("should create bundle with options", () => {
@@ -44,9 +52,78 @@ describe("test create bundle with composition", () => {
     const documentCompositionTypeLOINC = fhirUtils.bundle.getTypeOfBundleDocumentComposition(bundle)
     expect(documentCompositionTypeLOINC).toBe(testTypeDocumentCodeLOINC)
   })
+
+  it("should add bundle entries", (done) => {
+    const bundleEntry: R4.IBundle_Entry = {
+      resource: testFhirImmunization1stDoseForCovid19WithVaccineCodeATC
+    }
+    const bundle = fhirUtils.bundle.addEntriesToBundle(initialBundle, [bundleEntry])
+    expect(bundle.resourceType).toBe("Bundle")
+    expect(bundle.id).toBeDefined()
+    // expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toHaveLength(2)    // updated with the composition resource included
+    const resourceEntry = bundle.entry[1]
+    expect(resourceEntry).toHaveProperty("resource")      
+    expect(resourceEntry.resource).toEqual(testFhirImmunization1stDoseForCovid19WithVaccineCodeATC)
+    done()
+  });
+  
+  it("should add a resource as entry in the Bundle", (done) => {
+    const bundle = fhirUtils.bundle.addResourceAsBundleEntry(initialBundle, testFhirImmunization1stDoseForCovid19WithVaccineCodeATC)
+    expect(bundle.resourceType).toBe("Bundle")
+    expect(bundle.id).toBeDefined()
+    // expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toHaveLength(2)    // updated with the composition resource included
+    const resourceEntry = bundle.entry[1]
+    expect(resourceEntry).toHaveProperty("resource")      
+    expect(resourceEntry.resource).toEqual(testFhirImmunization1stDoseForCovid19WithVaccineCodeATC)
+    done()
+  });
+
+  // TODO: the problem is the addResourcesWithOptions the original resource but it does not return a new updated one 
+  it("should add a resources with options to exclude resources", (done) => {
+    if(initialBundle.entry.length>1) {
+      console.warn(`initial bundle has incorrect size, run the test manually`)
+      expect(initialBundle.entry.length).toBe(1)
+    }
+    const bundle = fhirUtils.bundle.addResourcesWithOptions(
+      initialBundle,
+      [testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testDiagnosticReportFHIR],
+      undefined,        // add to section
+      ['Immunization']  // exlude resources
+    )
+    expect(bundle.resourceType).toBe("Bundle")
+    expect(bundle.id).toBeDefined()
+    // expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toHaveLength(2)    // updated with the composition resource included
+    const resourceEntry = bundle.entry[1]
+    expect(resourceEntry).toHaveProperty("resource")      
+    expect(resourceEntry.resource).toEqual(testDiagnosticReportFHIR)
+    done()
+  });
+
+  // TODO: the problem is addResourcesWithOptions modifies the original resource but it does not return a new updated one 
+  it("should add resource without options for excluding resources", (done) => {
+    if(initialBundle.entry.length>1) {
+      console.warn(`initial bundle has incorrect size, run the test manually`)
+      expect(initialBundle.entry.length).toBe(1)
+    }
+    const bundle = fhirUtils.bundle.addResourcesWithOptions(initialBundle, [testFhirImmunization1stDoseForCovid19WithVaccineCodeATC])
+    expect(bundle.resourceType).toBe("Bundle")
+    expect(bundle.id).toBeDefined()
+    // expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toBeDefined()
+    expect(bundle.entry).toHaveLength(2)    // updated with the composition resource included
+    const resourceEntry = bundle.entry[1]
+    expect(resourceEntry).toHaveProperty("resource")      
+    expect(resourceEntry.resource).toEqual(testFhirImmunization1stDoseForCovid19WithVaccineCodeATC)
+    done()
+  });
   
 })
-
 
 describe("testing bundle composition functions", () => {
 

@@ -58,7 +58,7 @@ export declare class Bundle {
     addResourceToSection(bundleDocument: R4.IBundle, resource: any, sectionCode: string, fullUrl?: string): R4.IBundle;
     /** It adds resources both for Bundle document, Bundle composition and Bundle Message.
      * If sectionCodeLOINC is provided then the Bundle SHALL be a document with composition or it will throw an error */
-    addResourcesWithOptions(bundle: R4.IBundle, resources?: any[], excludeResources?: string[], sectionCodeLOINC?: string, fullUrlPrefix?: string): R4.IBundle;
+    addResourcesWithOptions(bundle: R4.IBundle, resources?: any[], sectionCodeLOINC?: string, excludeResources?: string[], fullUrlPrefix?: string): R4.IBundle;
     /** it checks if composition exists and replace it or error. TODO: verify the ID? */
     updateComposition(bundleDocument: R4.IBundle, composition: R4.IComposition): R4.IBundle;
     /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */

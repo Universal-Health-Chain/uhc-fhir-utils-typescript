@@ -178,7 +178,7 @@ export const testCompositionIndexForDiagnosticReportDocument: R4.IComposition = 
           ]
        }
     ]
- }
+}
   
  // BUNDLE DOCUMENTS
  // A bundle for Diagnostic Results or Laboratory Tests can contain both DiagnosticReport, Observation(s) and Specimen(s) resources

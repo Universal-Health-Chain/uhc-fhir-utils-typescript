@@ -188,7 +188,7 @@ export function addResourcesToComposition(composition:R4.IComposition, resources
 
     // It updates the section in the composition
     newComposition = putSectionInComposition(newComposition, section)    // error if section does not have any code
-     return newComposition
+    return newComposition
 }
 
 /** it checks if composition exists and replace it or error. TODO: verify the ID? */
