@@ -4,12 +4,21 @@ import { CodingSystem } from "../../src/models/CommonModels"
 // GENERAL
 export const testDatetime1 = "2021-02-18";
 export const testDatetime2 = "2021-11-29";
-export const testAuthorId = "author-reference-uuid";
-export const testAuthorType = "PractitionerRole";
-export const testSubjectId = "uhc-subject-uuid";
-export const testSubjectReference = "Patient/" + testSubjectId;
 export const testLanguageEN = "en";
 export const testLanguageES = "es";
+
+// IDENTITY
+export const testAuthorId = "author-uuid";
+export const testAuthorType = "PractitionerRole";
+export const testAuthorURI = testAuthorType + "/" + testAuthorId;
+export const testAuthorDisplay = 'Author Display Name';
+export const testSubjectId = "uhc-subject-uuid";
+export const testSubjectReference = "Patient/" + testSubjectId;
+export const testIssuerOrgHexUUID = '18492e52-1c64-4f4e-ac20-38900d315fc6' // https://www.uuidgenerator.net/version4
+export const testIssuerOrgBase58UUID = '3zwNekKsPK7H2JjMoxMnEq' // https://learnmeabitcoin.com/technical/base58
+export const testAuthorPractRoleHexUUID = '21d08eb6-37a5-41c2-9e39-6e16c239a2c8'
+export const testAuthorPractRoleBase58UUID= '5BBesbtwFxGv9NziHkT5D1'
+export const testChannelIdentityEU = 'hcare-eu'
 
 export const testTypeDocumentCodeLOINC = '11503-0';
 export const testTypeDocumentDisplay = 'Medica records';

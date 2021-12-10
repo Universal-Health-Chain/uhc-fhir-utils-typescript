@@ -3,7 +3,7 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { medicalHistoryClassification } from "./Loinc"
 import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCompositionSection, 
-    addReferencesToCompositionSection, putSectionInComposition, getTypeOfBundleDocumentComposition, createCompositionWithId, updateComposition
+    addReferencesToCompositionSection, putSectionInComposition, getTypeOfBundleDocumentComposition, createCompositionWithIdAndAuthor, updateComposition
 } from "./Composition"
 import {getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
@@ -165,11 +165,12 @@ export class Bundle {
     }
 
     /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-    createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorId:string, authorType:string, date:string, title:string, status:R4.CompositionStatusKind,
-        typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
+    createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorType:string, date:string, title:string, status:R4.CompositionStatusKind,
+        typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, authorId?:string, authorURI?:string, authorDisplay?:string, language?: string, resources?:any[], excludeResources?:string[]
     ): R4.IBundle {
-        return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorId, authorType, date, title, status,
-            typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, typeDocumentDisplay, resources, excludeResources
+        return createBundleDocumentAndCompositionWithIds(bundleId, compositionId, authorType,
+            date, title, status, typeDocumentCode, typeDocumentSystem, typeDocumentDisplay,
+            authorId, authorURI, authorDisplay, language, resources, excludeResources
         )
     }
 
@@ -180,13 +181,14 @@ export class Bundle {
 // NOTE: the exported functions can be used by other external managers (classes)
 
 /** Creates a Bundle document with all mandatory properties in the document 'Composition' resource (the index) */
-export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string,
-    authorIdOrURI:string, authorType:string, date:string, title:string, status:R4.CompositionStatusKind,
-    typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string, language?: string, resources?:any[], excludeResources?:string[]
+export function createBundleDocumentAndCompositionWithIds(bundleId:string, compositionId: string, authorType:string, date:string,
+    title:string, status:R4.CompositionStatusKind,typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay:string,
+    authorId?:string, authorURI?:string, authorDisplay?:string, language?: string, resources?:any[], excludeResources?:string[]
 ): R4.IBundle {
     // console.log(`createBundleDocumentWithCompositionAndURNs with ${resources.length} resources`)
-    let basicComposition:R4.IComposition = createCompositionWithId(compositionId, authorIdOrURI, authorType,
-        date, title, status, typeDocumentCode, typeDocumentSystem, typeDocumentDisplay, language)
+    let basicComposition:R4.IComposition = createCompositionWithIdAndAuthor(compositionId, authorType,
+        date, title, status, typeDocumentCode, typeDocumentSystem, typeDocumentDisplay,
+        authorId, authorURI, authorDisplay, language)
     //console.log("basicComposition = ", basicComposition)
 
     // It creates the bundle documment, adds the composition and the additional resources

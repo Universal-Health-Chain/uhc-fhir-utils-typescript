@@ -5,7 +5,7 @@ export declare class Composition {
      * as first resource in the FHIR Bundle document, then return the type code if any or undefined */
     getTypeOfBundleDocumentComposition(fhirBundleDocument: R4.IBundle | undefined): string | undefined;
     getCodesOfSections(sections: R4.IComposition_Section[] | undefined, system: string): string[];
-    createDefaultComposition(authorIdOrURI: string, authorType: string, typeDocumentCodeLOINC?: string, id?: string): R4.IComposition;
+    createDefaultComposition(authorType: string, authorId?: string, authorURI?: string, authorDisplay?: string, typeDocumentCodeLOINC?: string, id?: string): R4.IComposition;
     /** deprecated: create the empty IPS document and then add resources by section
     createEmptyCompositionIPS(authorReferenceId:string): R4.IComposition {
         return createEmptyCompositionIPS(authorReferenceId)
@@ -27,9 +27,9 @@ export declare function getCodesOfSections(sections: R4.IComposition_Section[] |
  * The default 'status' is set to 'preliminary' if not provided (draft).
  * Date is the timestamp (ISO string).
 */
-export declare function createDefaultComposition(authorIdOrURI: string, authorType: string, typeDocumentCodeLOINC?: string, typeDocumentDisplay?: string, idOrURN?: string, status?: R4.CompositionStatusKind, language?: string): R4.IComposition;
+export declare function createDefaultComposition(authorType: string, authorId?: string, authorURI?: string, authorDisplay?: string, typeDocumentCodeLOINC?: string, typeDocumentDisplay?: string, idOrURN?: string, status?: R4.CompositionStatusKind, language?: string): R4.IComposition;
 /** Create composition with mandatory properties and with URN as ID. Title is mandatory, it is not automatically generated */
-export declare function createCompositionWithId(idOrURN: string, authorIdOrURI: string, authorType: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay?: string, language?: string): R4.IComposition;
+export declare function createCompositionWithIdAndAuthor(idOrURN: string, authorType: string, date: string, title: string, status: R4.CompositionStatusKind, typeDocumentCode: string, typeDocumentSystem: string, typeDocumentDisplay?: string, authorId?: string, authorURI?: string, authorDisplay?: string, language?: string): R4.IComposition;
 export declare function addResourcesToComposition(composition: R4.IComposition, resources: any[], sectionCode: string): R4.IComposition;
 /** it checks if composition exists and replace it or error. TODO: verify the ID? */
 export declare function updateComposition(bundleDocument: R4.IBundle, composition: R4.IComposition): R4.IBundle;

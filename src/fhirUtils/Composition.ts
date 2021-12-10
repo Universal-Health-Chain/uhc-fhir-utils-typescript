@@ -25,8 +25,8 @@ export class Composition {
     }
     
     // TODO: manage empty authorReferenceId and typeDocumentCodeLOINC
-    createDefaultComposition(authorIdOrURI:string, authorType:string, typeDocumentCodeLOINC?:string, id?:string): R4.IComposition {
-        return createDefaultComposition(authorIdOrURI, authorType, typeDocumentCodeLOINC, id)
+    createDefaultComposition(authorType:string, authorId?:string, authorURI?:string, authorDisplay?:string, typeDocumentCodeLOINC?:string, id?:string): R4.IComposition {
+        return createDefaultComposition(authorType, authorId, authorURI,typeDocumentCodeLOINC, id)
     }
     
     /** deprecated: create the empty IPS document and then add resources by section
@@ -112,8 +112,8 @@ export function getCodesOfSections(sections:R4.IComposition_Section[] | undefine
  * The default 'status' is set to 'preliminary' if not provided (draft).
  * Date is the timestamp (ISO string).
 */
-export function createDefaultComposition(authorIdOrURI:string, authorType:string, typeDocumentCodeLOINC?:string, typeDocumentDisplay?:string,
-    idOrURN?:string, status?:R4.CompositionStatusKind, language?:string
+export function createDefaultComposition(authorType:string, authorId?:string, authorURI?:string, authorDisplay?:string,
+    typeDocumentCodeLOINC?:string, typeDocumentDisplay?:string, idOrURN?:string, status?:R4.CompositionStatusKind, language?:string
 ): R4.IComposition {
     if (!typeDocumentCodeLOINC) {
         typeDocumentCodeLOINC = '11503-0'; // generic 'Medical records' type of document if not provided
@@ -132,33 +132,46 @@ export function createDefaultComposition(authorIdOrURI:string, authorType:string
     const date = new Date().toISOString()
     const title = `${typeDocumentDisplay} (${date})`
 
-    return createCompositionWithId(idOrURN, authorIdOrURI, authorType, date, title, status,
-        typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay, language)
+    return createCompositionWithIdAndAuthor(idOrURN, authorType, date, title, status,
+        typeDocumentCodeLOINC, CodingSystem.loinc, typeDocumentDisplay,
+        authorId, authorURI, authorDisplay, language)
 }
 
 /** Create composition with mandatory properties and with URN as ID. Title is mandatory, it is not automatically generated */
-export function createCompositionWithId(idOrURN:string, authorIdOrURI:string, authorType:string, date:string, title:string,
-    status:R4.CompositionStatusKind, typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay?:string, language?:string
+export function createCompositionWithIdAndAuthor(idOrURN:string, authorType:string, date:string, title:string,
+    status:R4.CompositionStatusKind, typeDocumentCode:string, typeDocumentSystem:string, typeDocumentDisplay?:string,
+    authorId?:string, authorURI?:string, authorDisplay?:string, language?:string
 ): R4.IComposition {
 
     let authorReference:R4.IReference = {}
-    if (String(authorIdOrURI).startsWith('did')
+    /*
+    if (authorIdOrURI &&
+        ( String(authorIdOrURI).startsWith('did')
         || String(authorIdOrURI).startsWith('urn') || String(authorIdOrURI).startsWith('URN')
         || String(authorIdOrURI).startsWith('http')
-        || authorIdOrURI.includes('/')
+        || authorIdOrURI.includes('/') )
     ){
         // it is an URI
         authorReference = {
             reference: authorIdOrURI,
-            type: authorType
         }
     } else {
         // it is an ID, e.g.: UUID v4
         authorReference = {
             id: authorIdOrURI,
-            type: authorType
         }
     }
+    */
+    if (authorId){
+        authorReference.id = authorId
+    }
+    if (authorURI){
+        authorReference.reference = authorURI
+    }
+    if (authorDisplay) {
+        authorReference.display = authorDisplay
+    }
+    authorReference.type = authorType
 
     let composition:R4.IComposition = {
         author:[authorReference],
@@ -181,14 +194,15 @@ export function createCompositionWithId(idOrURN:string, authorIdOrURI:string, au
 }
 
 /** Title example: "Patient Summary as of December 11, 2017 14:30". TODO: if not title, generate it automatically */
-function createEmptyCompositionIPS(idOrURN:string, authorIdOrURI:string, authorType:string,
-    date:string, status:R4.CompositionStatusKind, title?:string, language?:string)
+function createEmptyCompositionIPS(idOrURN:string, authorType:string,
+    date:string, status:R4.CompositionStatusKind, title?:string, authorId?:string, authorURI?:string, authorDisplay?:string, language?:string)
 : R4.IComposition {
     if (!title) {
         title = `Patient Summary (${date})`
     }
-    return createCompositionWithId(idOrURN, authorIdOrURI, authorType, date, title, status,
-        medicalHistoryClassification.ips, CodingSystem.loinc, 'Patient summary Document', language)
+    return createCompositionWithIdAndAuthor(idOrURN, authorType, date, title, status,
+        medicalHistoryClassification.ips, CodingSystem.loinc, 'Patient summary Document',
+        authorId, authorURI, authorDisplay, language)
 }
 
 // TODO: put display and text of the section (translation)

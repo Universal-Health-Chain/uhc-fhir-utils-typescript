@@ -6,7 +6,7 @@ import { CodingSystem, medicalHistoryClassification } from "../../src";
 import { testBundleDocumentWithCovid19ImmunizationsWithoutComposition,
   testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC
 } from "../../test/data/dataForImmunizations"
-import { testAuthorId, testAuthorType, testBundleDocumentId, testDatetime1, testDiagnosticReportFHIR, testDocumentCompositionId,
+import { testAuthorDisplay, testAuthorId, testAuthorType, testAuthorURI, testBundleDocumentId, testDatetime1, testDiagnosticReportFHIR, testDocumentCompositionId,
   testDocumentCompositionStatus, testLanguageEN, testTitleDocumentComposition, testTypeDocumentCodeLOINC, testTypeDocumentDisplay
 } from "../data/dataForCommonTests";
 import { testBundleDocumentWithCompositionForGenericMedicalRecordsButWithoutMedicalRecords } from "../data/dataForBundleTests";
@@ -31,9 +31,10 @@ describe("test create bundle with composition", () => {
   it("should create bundle with options", () => {
 
     const bundle = fhirUtils.bundle.createBundleDocumentAndCompositionWithIds(
-      testBundleDocumentId, testDocumentCompositionId, testAuthorId, testAuthorType, testDatetime1,
+      testBundleDocumentId, testDocumentCompositionId, testAuthorType, testDatetime1,
       testTitleDocumentComposition, testDocumentCompositionStatus, testTypeDocumentCodeLOINC, CodingSystem.loinc,
-      testTypeDocumentDisplay, testLanguageEN, [testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC]
+      testTypeDocumentDisplay, testAuthorId, testAuthorURI, testAuthorDisplay,
+      testLanguageEN, [testFhirImmunization1stDoseForCovid19WithVaccineCodeATC, testFhirImmunization2ndDoseForCovid19WithVaccineCodeATC]
     )
 
     // console.log("createBundleDocumentAndCompositionWithIds = ", bundle)
