@@ -689,7 +689,10 @@ export function addResourceToSection(bundleDocument:R4.IBundle, resource:any, se
 }
 
 /** It adds resources both for Bundle document, Bundle composition and Bundle Message.
- * If sectionCodeLOINC is provided then the Bundle SHALL be a document with composition or it will throw an error */
+ * If a section code is provided then the Bundle SHALL be a document with composition or it will throw an error
+ * CAUTION: the resources can can have length > 0 but some of them can be null, 
+ * for example if Immunization + undefined (null) DocumentReference is pased by the main function.
+ * */
 export function addResourcesWithOptions(bundle:R4.IBundle, resources?:any[], sectionCodeLOINC?:string, excludeResources?:string[], fullUrlPrefix?:string): R4.IBundle {
     let updatedBundle = Object.create(bundle) // less efficient but avoid problems on tests
 
@@ -699,8 +702,9 @@ export function addResourcesWithOptions(bundle:R4.IBundle, resources?:any[], sec
     }
 
     resources.forEach(function(resource:any){
-        if (!resource.resourceType || !resource.id) {
-            console.warn("Skipping invalid resource")
+        if (!resource || !resource.resourceType || !resource.id) {
+            // CAUTION: the resources can have length > 0 but some of them can be null, for example if Immunization + undefined (null) DocumentReference is pased by the main function.
+            console.log("Skipping invalid resource")
         } else {
             // valid resource
             if (!excludeResources ||

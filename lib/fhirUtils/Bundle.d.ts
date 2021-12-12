@@ -104,7 +104,10 @@ export declare function addResourcesToSection(bundleDocument: R4.IBundle, resour
 /** It adds the resource to the composition, updates the composition and adds the resource as bundle entry */
 export declare function addResourceToSection(bundleDocument: R4.IBundle, resource: any, sectionCode: string, fullUrl?: string): R4.IBundle;
 /** It adds resources both for Bundle document, Bundle composition and Bundle Message.
- * If sectionCodeLOINC is provided then the Bundle SHALL be a document with composition or it will throw an error */
+ * If a section code is provided then the Bundle SHALL be a document with composition or it will throw an error
+ * CAUTION: the resources can can have length > 0 but some of them can be null,
+ * for example if Immunization + undefined (null) DocumentReference is pased by the main function.
+ * */
 export declare function addResourcesWithOptions(bundle: R4.IBundle, resources?: any[], sectionCodeLOINC?: string, excludeResources?: string[], fullUrlPrefix?: string): R4.IBundle;
 export declare function getReferencesInSection(section: R4.IComposition_Section): R4.IReference[];
 /** It gets all the resources excluding some resource types if provided
