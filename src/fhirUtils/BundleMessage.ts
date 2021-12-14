@@ -7,6 +7,7 @@ import { getResourcesByTypesWithOptionalMetadata, addResourceAsBundleEntry,
     getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getResourcesWithFilters, addResourcesWithOptions
 } from "./Bundle"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
+import { createPatientRecordAuditEvent } from "./AuditEvent"
 
 const uuidUtils = new Uuid() 
 
@@ -142,9 +143,11 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
     if (attachments) addAttachmentsToBundleMessage(messageBundle, attachments)
  
     return messageBundle
- }
- 
- export function createBundleMessage(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
+}
+
+// TODO: review why the following ones are exported
+
+export function createBundleMessage(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
      if (!messageId || !uuidUtils.validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
     
     let BundleMessage:R4.IBundle = createBasicBundleMessage(messageId, textMessage, attachments)
@@ -156,80 +159,6 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
         BundleMessage = addResourcesWithOptions(BundleMessage, [patientRecordAudit, bundleDoc])
     }
     return BundleMessage
- }
-
-// It creates the 'entity' of a Patient Record Audit Event
-function createAuditEntity(entityTitle?:string, entityDescription?:string, payloadBase64?:string, encryptedPayload?:boolean) : R4.IAuditEvent_Entity {
-    // purposeOfEvent = "HDIRECT" <-- operations on information used to manage a patient directory
-
-    // it creates the 'entity' of this Patient Record Audit Event
-    let entity:R4.IAuditEvent_Entity = {
-        type: {
-            // What contains the entity
-            system: "http://hl7.org/fhir/resource-types",
-            code: "Bundle"
-        }
-    }
-    if (entityTitle) entity.name = entityTitle
-    if (entityDescription) entity.description = entityDescription
-
-    /* TODO: fix the code
-    let payloadBase64:string
-    if (sharedKey) {
-        // It indicates that the entity must to be encrypted
-        let extensionEncrypted:R4.IExtension = {
-            url: "http://hl7.org/fhir/StructureDefinition/auditevent-Encrypted",
-            valueBoolean: true
-        }
-        entity.extension = [extensionEncrypted]
-
-        // It encrypts the bundle
-        payloadBase64 = await encryptJsonToBase64(sharedKey, bundle)
-    } else {
-        payloadBase64 = btoa(JSON.stringify(bundle))
-    }
-
-    let entityDetail:R4.IAuditEvent_Detail = {
-        // Information about the entity (the object related with the Audit Event)
-        type: "payload",
-        valueBase64Binary: payloadBase64
-    }   
-    // It contains the payload (base64) with the Bundle document (encrypted or not)
-    entity.detail = [entityDetail]
-    */
-
-    return entity
-}
-
-// TODO: review both source, agents, entity (sender, receiver, patient): eg. parent / guardian, practitioner, children 
-function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, entityDescription?:string, payloadBase64?:string, encryptedPayload?:boolean) : R4.IAuditEvent {
-    // purposeOfEvent = "HDIRECT" <-- operations on information used to manage a patient directory
-
-    let auditEventEntity:R4.IAuditEvent_Entity = createAuditEntity(entityTitle, entityDescription, payloadBase64, encryptedPayload)
-
-    let agent:R4.IAuditEvent_Agent = {
-        requestor: true     // Whether user is initiator
-    }
-
-    let auditEvent:R4.IAuditEvent = {
-        id: uuidv4(),
-        resourceType: "AuditEvent",
-        type: {
-            code: "110110"  // Patient record audit event: Patient Record has been created, read, updated, or deleted
-        },
-        agent: [agent],
-        source: {
-            // Who is the Audit Event Reporter
-            observer: {
-                // The identity of source detecting the event
-                reference: reporterId
-                // type = 1 <-- User Device: End-user display device, diagnostic device
-            }
-        },
-        entity: [auditEventEntity]
-    }
-    
-    return auditEvent
 }
 
 export function getBundleDocumentInBundleMessage(bundleMessage:R4.IBundle): R4.IBundle{

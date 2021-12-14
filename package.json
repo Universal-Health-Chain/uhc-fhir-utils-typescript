@@ -1,6 +1,6 @@
 {
   "name": "@universal-health-chain/uhc-fhir-utils-typescript",
-  "version": "1.2.36",
+  "version": "1.2.40",
   "description": "UHC's FHIR utils (Typescript)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,7 +27,7 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@ahryman40k/ts-fhir-types": "^4.0.25",
+    "@ahryman40k/ts-fhir-types": "^4.0.36",
     "@stablelib/base64": "^1.0.0",
     "@types/js-base64": "^2.3.2",
     "@types/node": "^14.6.0",

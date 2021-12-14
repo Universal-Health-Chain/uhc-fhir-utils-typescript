@@ -62,9 +62,10 @@ function createAuditEntity(entityTitle?:string, entityDescription?:string, paylo
     return entity
 }
 
-// TODO: review both source, agents, entity (sender, receiver, patient): eg. parent / guardian, practitioner, children 
-function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, entityDescription?:string, payloadBase64?:string, encryptedPayload?:boolean) : R4.IAuditEvent {
-    // purposeOfEvent = "HDIRECT" <-- operations on information used to manage a patient directory
+/** It is exported because it is used in BundleMessage
+ * TODO: review both source, agents, entity (sender, receiver, patient): eg. parent / guardian, practitioner, children 
+ */
+export function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, entityDescription?:string, payloadBase64?:string, encryptedPayload?:boolean, recorded?:string) : R4.IAuditEvent {
 
     let auditEventEntity:R4.IAuditEvent_Entity = createAuditEntity(entityTitle, entityDescription, payloadBase64, encryptedPayload)
 
@@ -72,9 +73,14 @@ function createPatientRecordAuditEvent(reporterId:string, entityTitle?:string, e
         requestor: true     // Whether user is initiator
     }
 
+    if (!recorded) {
+        recorded = new Date().toISOString();
+    }
+
     let auditEvent:R4.IAuditEvent = {
         id: uuidUtils.getValidOrNewRandomUUID(),
         resourceType: "AuditEvent",
+        recorded: recorded,
         type: {
             code: "110110"  // Patient record audit event: Patient Record has been created, read, updated, or deleted
         },
