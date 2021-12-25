@@ -23,13 +23,13 @@ export declare class CommonFHIR {
     classifyBundleByResourceTypes: (fhirDocument: R4.IBundle) => Map<string, R4.IBundle_Entry[]>;
     getLabelsOfGroupedCodes(codes: string[], codeLabels: any, groupedSectionName?: string): string[];
     /** It returns empty or an ID with no URN prefix and no FHIR Reference prefix */
-    getCleanId: (id: string) => string;
+    getCleanId: (id: string | undefined) => string;
     getCleanIdByFhirResource: (resource: any | undefined) => string;
     /** It returns a normalized and crypto safe predictable FHIR JSON resource or document as string (canonicalized as defined by RFC8785) */
     normalizedAndCanonicalizedFHIR: (json: any) => any;
 }
 /** It returns empty or an ID without URN prefix or FHIR Reference prefix */
-export declare function getCleanId(id: string): string;
+export declare function getCleanId(id: string | undefined): string;
 /**
  * It gets a single ID from a FHIR reference URI or URN, among others.
  * If EMPTY result then it should be fixed or deleted by the fronted.

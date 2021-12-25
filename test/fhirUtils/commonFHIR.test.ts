@@ -9,6 +9,39 @@ const fhirUtils = new FhirUtils();
 const ipsDocument: R4.IBundle = require("../examples/fhirR4/Bundle-IPS-examples-Bundle-01.json");
 const immunizationResource: R4.IBundle = require("../examples/fhirR4/Immunization-75680.json");
 
+
+describe("test get clean ID", () => {
+  it("should return the ID from a simple ID", () => {
+    const singleID = 'some-simple-id';
+    const cleanID = fhirUtils.commonFHIR.getCleanId(singleID);
+    expect(cleanID).toBe(singleID);
+  });
+
+  it("should return the ID from a FHIR Reference URI", () => {
+    const singleID = 'some-simple-id';
+    const inputID = 'Patient/' + singleID;
+    const cleanID = fhirUtils.commonFHIR.getCleanId(inputID);
+    expect(cleanID).toBe(singleID);
+  });
+
+  it("should return the ID from a DID", () => {
+    const singleID = 'some-simple-id';
+    const inputID = 'did:method:' + singleID;
+    const cleanID = fhirUtils.commonFHIR.getCleanId(inputID);
+    expect(cleanID).toBe(singleID);
+  });
+
+});
+
+describe("fhir organization of bundles", () => {
+  it("should organize bundle by resource type", (done) => {
+    const map = fhirUtils.commonFHIR.classifyBundleByResourceTypes(ipsDocument);
+    // console.log("classifyFhirBundleByResourceType map = ", map)
+    expect(map.get("Composition")).not.toBeUndefined();
+    done();
+  });
+});
+
 describe("fhir organization of bundles", () => {
   it("should organize bundle by resource type", (done) => {
     const map = fhirUtils.commonFHIR.classifyBundleByResourceTypes(ipsDocument);

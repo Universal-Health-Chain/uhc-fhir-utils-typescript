@@ -3,7 +3,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import canonicalize from "canonicalize"
 import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript";
-import { getSectionCodeForResourceIdInBundle, hasSections } from "./Bundle";
 
 /** URNs are case insensitive
  * "UUID", "UVCI". "DVCI" or "VCID" MUST BE added when an UUID, Health Certificate, SMART Health Card or a Verifiable Credential ID (txId or version ID) exists
@@ -98,7 +97,7 @@ export class CommonFHIR {
   }
 
   /** It returns empty or an ID with no URN prefix and no FHIR Reference prefix */
-  getCleanId = (id:string): string => getCleanId(id)
+  getCleanId = (id:string | undefined): string => getCleanId(id)
   getCleanIdByFhirResource = (resource:any | undefined): string => getCleanIdByFhirResource(resource)
   
   /** It returns a normalized and crypto safe predictable FHIR JSON resource or document as string (canonicalized as defined by RFC8785) */
@@ -160,9 +159,12 @@ export function getResourceWithOptionalMetaData(fhirResource:any, fhirBundle:R4.
 */
 
 /** It returns empty or an ID without URN prefix or FHIR Reference prefix */
-export function getCleanId(id:string): string {
-  const cleanId = getCleanIdWithoutReferenceFHIROrURN(id)
-  return cleanId
+export function getCleanId(id:string | undefined): string {
+  if (!id){
+    return '';
+  } else {
+    return getCleanIdWithoutReferenceFHIROrURN(id);
+  }
 }
 
 /** it gets a single ID from a FHIR reference URI or URN, among others */
@@ -179,12 +181,12 @@ function getCleanIdWithoutReferenceFHIROrURN(referenceOrURN:string) {
 export function getCleanIdByFhirResource(resource:any | undefined): string {
   try {
     if (resource && resource.id){
-      const cleanId = getCleanIdWithoutReferenceFHIROrURN(resource.id)
-      return cleanId || "" // it can be an URN with the ID at the end of the string
+      const cleanId = getCleanIdWithoutReferenceFHIROrURN(resource.id);
+      return cleanId || ''; // it can be an URN with the ID at the end of the string
     }
-    else return ""
+    else return '';
   } catch (e) {
-    return ""
+    return '';
   }
 }
 
