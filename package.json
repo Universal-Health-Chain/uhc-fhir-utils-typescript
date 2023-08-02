@@ -34,7 +34,8 @@
     "@types/uuid": "^8.3.0",
     "@universal-health-chain/uhc-common-utils-typescript": "^0.4.19",
     "canonicalize": "^1.0.5",
-    "dicom-parser": "^1.8.7"
+    "dicom-parser": "^1.8.7",
+    "url-search-params": "^1.1.0"
   },
   "directories": {
     "lib": "lib",
