@@ -29,7 +29,7 @@ export enum ClinicalImpressionParameters {
   }
   
 
-  class ClinicalImpression {
+  export class ClinicalImpression {
     resourceData: ClinicalImpressionResource;
     fhirRelease: string;
   
