@@ -78,7 +78,7 @@ export enum ObservationParameters {
           }
           parameter.name = key;
           parameter.base = ['Observation'];
-          this.resourceData[key as keyof ObservationResource] = parameter;
+          (this.resourceData as any)[key as keyof ObservationResource] = parameter;
         }
       }
     }

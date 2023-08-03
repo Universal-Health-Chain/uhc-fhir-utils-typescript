@@ -60,7 +60,7 @@ export enum SpecimenParameters {
           }
           parameter.name = key;
           parameter.base = ['Specimen'];
-          this.resourceData[key as keyof SpecimenResource] = parameter;
+          (this.resourceData as any)[key as keyof SpecimenResource] = parameter;
         }
       }
     }

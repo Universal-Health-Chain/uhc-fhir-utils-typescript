@@ -77,7 +77,7 @@ enum AllergyIntoleranceParameters {
             }
             parameter.name = key;
             parameter.base = ['AllergyIntolerance'];
-            this.resourceData[key as keyof AllergyIntoleranceResource] = parameter;
+            (this.resourceData as any)[key as keyof AllergyIntoleranceResource] = parameter;
           }
         }
       }

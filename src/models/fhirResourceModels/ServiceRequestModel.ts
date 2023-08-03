@@ -65,7 +65,7 @@ export enum ServiceRequestParameters {
           }
           parameter.name = key;
           parameter.base = ['ServiceRequest'];
-          this.resourceData[key as keyof ServiceRequestResource] = parameter;
+          (this.resourceData as any)[key as keyof ServiceRequestResource] = parameter;
         }
       }
     }

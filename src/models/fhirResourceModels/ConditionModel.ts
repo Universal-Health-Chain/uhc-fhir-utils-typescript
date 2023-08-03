@@ -77,7 +77,7 @@ export enum ConditionParameters {
           }
           parameter.name = key;
           parameter.base = ['Condition'];
-          this.resourceData[key as keyof ConditionResource] = parameter;
+          (this.resourceData as any)[key as keyof ConditionResource] = parameter;
         }
       }
     }

@@ -73,7 +73,7 @@ export enum EncounterParameters {
           }
           parameter.name = key;
           parameter.base = ['Encounter'];
-          this.resourceData[key as keyof EncounterResource] = parameter;
+          (this.resourceData as any)[key as keyof EncounterResource] = parameter;
         }
       }
     }

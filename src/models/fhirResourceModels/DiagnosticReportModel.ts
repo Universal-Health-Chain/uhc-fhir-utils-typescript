@@ -69,7 +69,7 @@ export enum DiagnosticReportParameters {
           }
           parameter.name = key;
           parameter.base = ['DiagnosticReport'];
-          this.resourceData[key as keyof DiagnosticReportResource] = parameter;
+          (this.resourceData as any)[key as keyof DiagnosticReportResource] = parameter;
         }
       }
     }

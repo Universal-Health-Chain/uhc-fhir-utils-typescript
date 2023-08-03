@@ -63,7 +63,7 @@ export class Appointment {
             }
             parameter.name = key;
             parameter.base = ['Appointment'];
-            this.resourceData[key as keyof AppointmentResource] = parameter;
+            (this.resourceData as any)[key as keyof AppointmentResource] = parameter;
           }
         }
       }

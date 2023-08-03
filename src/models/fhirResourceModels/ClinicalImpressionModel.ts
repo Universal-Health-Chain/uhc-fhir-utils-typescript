@@ -67,7 +67,7 @@ export enum ClinicalImpressionParameters {
           }
           parameter.name = key;
           parameter.base = ['ClinicalImpression'];
-          this.resourceData[key as keyof ClinicalImpressionResource] = parameter ;
+          (this.resourceData as any)[key as keyof ClinicalImpressionResource] = parameter ;
         }
       }
     }

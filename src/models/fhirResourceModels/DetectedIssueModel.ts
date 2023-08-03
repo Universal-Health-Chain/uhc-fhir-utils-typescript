@@ -57,7 +57,7 @@ export enum DetectedIssueParameters {
           }
           parameter.name = key;
           parameter.base = ['DetectedIssue'];
-          this.resourceData[key as keyof DetectedIssueResource] = parameter;
+          (this.resourceData as any)[key as keyof DetectedIssueResource] = parameter;
         }
       }
     }

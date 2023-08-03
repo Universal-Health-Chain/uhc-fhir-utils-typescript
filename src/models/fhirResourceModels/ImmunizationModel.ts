@@ -66,7 +66,7 @@ export enum ImmunizationParameters {
           }
           parameter.name = key;
           parameter.base = ['Immunization'];
-          this.resourceData[key as keyof ImmunizationResource] = parameter;
+          (this.resourceData as any)[key as keyof ImmunizationResource] = parameter;
         }
       }
     }

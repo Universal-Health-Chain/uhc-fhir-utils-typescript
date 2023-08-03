@@ -63,9 +63,9 @@ export class AdverseEvent {
               default:
                 throw new Error(`Unsupported parameter: ${key}`);
             }
-            parameter.name = key;
-            parameter.base = ['AdverseEvent'];
-            this.resourceData[key as keyof AdverseEventResource] = parameter;
+              parameter.name = key;
+              parameter.base = ['AdverseEvent'];
+              (this.resourceData as any)[key as keyof AdverseEventResource] = parameter as SearchParameter;
           }
         }
       }

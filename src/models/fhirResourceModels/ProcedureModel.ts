@@ -70,7 +70,7 @@ export enum ProcedureParameters {
           }
           parameter.name = key;
           parameter.base = ['Procedure'];
-          this.resourceData[key as keyof ProcedureResource] = parameter;
+          (this.resourceData as any)[key as keyof ProcedureResource] = parameter;
         }
       }
     }
