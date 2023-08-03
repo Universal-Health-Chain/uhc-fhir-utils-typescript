@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter, QuantitySearchParameter, StringSearchParameter } from './SearchParamsModel';
+
 // Observation Parameters
 export enum ObservationParameters {
     BasedOn = 'based-on',

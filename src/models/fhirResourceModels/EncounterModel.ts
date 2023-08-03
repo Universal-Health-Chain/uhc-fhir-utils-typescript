@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, TokenSearchParameter } from './SearchParamsModel';
+
 // Encounter Parameters
 export enum EncounterParameters {
     Appointment = 'appointment',

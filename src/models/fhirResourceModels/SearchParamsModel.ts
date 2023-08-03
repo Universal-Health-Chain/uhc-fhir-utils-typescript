@@ -1,8 +1,8 @@
 // Define the types as a type
-type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri';
+export type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri';
 
 // Common interface for all types
-interface SearchParameter {
+export interface SearchParameter {
   reference: string;
   system: string;
   code: string;
@@ -15,44 +15,44 @@ interface SearchParameter {
 }
 
 // Number Search Parameter
-interface NumberSearchParameter extends SearchParameter {
+export interface NumberSearchParameter extends SearchParameter {
   type: 'number';
   value: number;
 }
 
 // Date Search Parameter
-interface DateSearchParameter extends SearchParameter {
+export interface DateSearchParameter extends SearchParameter {
   type: 'date';
   value: string; // ISO8601 Date format
 }
 
 // String Search Parameter
-interface StringSearchParameter extends SearchParameter {
+export interface StringSearchParameter extends SearchParameter {
   type: 'string';
   value: string;
 }
 
 // Token Search Parameter
-interface TokenSearchParameter extends SearchParameter {
+export interface TokenSearchParameter extends SearchParameter {
   type: 'token';
   value: string; 
   system: string; // The system in which the token is defined
 }
 
 // Reference Search Parameter
-interface ReferenceSearchParameter extends SearchParameter {
+export interface ReferenceSearchParameter extends SearchParameter {
   type: 'reference';
   reference: string; // Reference to another resource
 }
 
 // Composite Search Parameter
-interface CompositeSearchParameter extends SearchParameter {
+export interface CompositeSearchParameter extends SearchParameter {
   type: 'composite';
   components: SearchParameter[]; // The components of the composite
 }
 
 // Quantity Search Parameter
-interface QuantitySearchParameter extends SearchParameter {
+export interface QuantitySearchParameter extends SearchParameter {
   type: 'quantity';
   value: number; 
   system: string; 
@@ -60,16 +60,16 @@ interface QuantitySearchParameter extends SearchParameter {
 }
 
 // URI Search Parameter
-interface URISearchParameter extends SearchParameter {
+export interface URISearchParameter extends SearchParameter {
   type: 'uri';
   value: string; // URI value
 }
 
 // The collection of all search parameter types
-type FHIRSearchParameter = NumberSearchParameter | DateSearchParameter | StringSearchParameter | TokenSearchParameter | ReferenceSearchParameter | CompositeSearchParameter | QuantitySearchParameter | URISearchParameter;
+export type FHIRSearchParameter = NumberSearchParameter | DateSearchParameter | StringSearchParameter | TokenSearchParameter | ReferenceSearchParameter | CompositeSearchParameter | QuantitySearchParameter | URISearchParameter;
 
 
-function parseTokenParameter(value: string): TokenSearchParameter {
+export function parseTokenParameter(value: string): TokenSearchParameter {
   const parts = value.split('|');
   const parameter: TokenSearchParameter = {
     type: 'token',
@@ -91,7 +91,7 @@ function parseTokenParameter(value: string): TokenSearchParameter {
   return parameter;
 }
 
-function parseReferenceParameter(value: string): ReferenceSearchParameter {
+export function parseReferenceParameter(value: string): ReferenceSearchParameter {
   return {
     type: 'reference',
     name: '',
@@ -105,7 +105,7 @@ function parseReferenceParameter(value: string): ReferenceSearchParameter {
   };
 }
 
-function parseDateParameter(value: string): DateSearchParameter {
+export function parseDateParameter(value: string): DateSearchParameter {
   const parameter: DateSearchParameter = {
     type: 'date',
     name: '',
@@ -126,7 +126,7 @@ function parseDateParameter(value: string): DateSearchParameter {
   return parameter;
 }
 
-function parseQuantityParameter(value: string): QuantitySearchParameter {
+export function parseQuantityParameter(value: string): QuantitySearchParameter {
   const parts = value.split('|');
   const parameter: QuantitySearchParameter = {
     type: 'quantity',

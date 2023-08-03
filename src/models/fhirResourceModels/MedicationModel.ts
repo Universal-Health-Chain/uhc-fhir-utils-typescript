@@ -1,3 +1,5 @@
+import { TokenSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
+
 // Medication Parameters
 export enum MedicationParameters {
     Code = 'code',

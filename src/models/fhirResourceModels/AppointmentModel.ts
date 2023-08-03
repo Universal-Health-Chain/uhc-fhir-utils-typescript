@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } from './SearchParamsModel';
+
 // Create the TypeScript enumerator for the HTTP parameters of the Appointment resource
 export enum AppointmentParameters {
     Actor = 'actor',

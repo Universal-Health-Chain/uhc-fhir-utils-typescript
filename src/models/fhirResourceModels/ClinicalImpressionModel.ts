@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } from './SearchParamsModel';
+
 export enum ClinicalImpressionParameters {
     Assessor = 'assessor',
     Date = 'date',

@@ -1,3 +1,5 @@
+import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter, StringSearchParameter } from './SearchParamsModel';
+
 // Immunization Parameters
 export enum ImmunizationParameters {
     Date = 'date',

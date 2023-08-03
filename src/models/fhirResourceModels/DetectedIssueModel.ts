@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './SearchParamsModel';
+
 // DetectedIssue Parameters
 export enum DetectedIssueParameters {
     Author = 'author',

@@ -1,3 +1,5 @@
+import { TokenSearchParameter, DateSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
+
 // Specimen Parameters
 export enum SpecimenParameters {
     AccessionIdentifier = 'accession-identifier',

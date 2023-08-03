@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './SearchParamsModel';
+
 export enum DiagnosticReportParameters {
     BasedOn = 'based-on',
     Category = 'category',

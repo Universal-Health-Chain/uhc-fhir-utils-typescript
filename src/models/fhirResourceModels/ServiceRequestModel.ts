@@ -1,3 +1,5 @@
+import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
+
 // ServiceRequest Parameters
 export enum ServiceRequestParameters {
     AuthoredOn = 'authored-on',

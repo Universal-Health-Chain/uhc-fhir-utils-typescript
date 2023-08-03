@@ -1,3 +1,5 @@
+import { TokenSearchParameter, DateSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
+
 // Create the TypeScript enumerator for the HTTP parameters of the AllergyIntolerance resource
 export enum AllergyIntoleranceParameters {
     Category = 'category',

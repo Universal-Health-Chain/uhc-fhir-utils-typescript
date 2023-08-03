@@ -1,3 +1,5 @@
+import { TokenSearchParameter, DateSearchParameter, StringSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
+
 export enum ConditionParameters {
     AbatementBoolean = 'abatement-boolean',
     AbatementDate = 'abatement-date',

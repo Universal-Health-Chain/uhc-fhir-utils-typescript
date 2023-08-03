@@ -1,3 +1,5 @@
+import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './SearchParamsModel';
+
 // Procedure Parameters
 export enum ProcedureParameters {
     BasedOn = 'based-on',
