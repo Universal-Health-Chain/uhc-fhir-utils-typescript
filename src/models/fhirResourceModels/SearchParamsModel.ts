@@ -1,8 +1,18 @@
+/** ConceptReferencedDM for Data Minimization is a FHIR CodeableReference element
+ *  but simplified with only a single "code" in a coding "system" and a "reference" string.
+ *  (Note: SearchParameter extends ConceptReferencedDM)
+ */
+export interface ConceptReferencedDM {
+  code?: string;
+  system?: string;
+  reference?: string;
+}
+
 // Define the types as a type
-export type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri';
+export type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri' | 'period';
 
 // Common interface for all types
-export interface SearchParameter {
+export interface SearchParameter extends ConceptReferencedDM {
   reference: string;
   system: string;
   code: string;
@@ -22,8 +32,10 @@ export interface NumberSearchParameter extends SearchParameter {
 
 // Date Search Parameter
 export interface DateSearchParameter extends SearchParameter {
-  type: 'date';
+  type: 'date' | 'period';
   value: string; // ISO8601 Date format
+  end?:       string;     // FHIR Period.end (effectivePeriod, onsetPeriod, effectiveDateTime, onsetDateTime)
+  period?:    boolean;    // true if date is a FHIR Period (effectivePeriod or onsetPeriod)
 }
 
 // String Search Parameter
