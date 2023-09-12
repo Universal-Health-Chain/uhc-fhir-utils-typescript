@@ -12,10 +12,7 @@ export interface ConceptReferencedDM {
 export type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri' | 'period';
 
 // Common interface for all types
-export interface SearchParameter extends ConceptReferencedDM {
-  reference: string;
-  system: string;
-  code: string;
+export interface ParameterData extends ConceptReferencedDM {
   prefix: string;
   name: string;
   description: string;
@@ -25,13 +22,13 @@ export interface SearchParameter extends ConceptReferencedDM {
 }
 
 // Number Search Parameter
-export interface NumberSearchParameter extends SearchParameter {
+export interface NumberSearchParameter extends ParameterData {
   type: 'number';
   value: number;
 }
 
 // Date Search Parameter
-export interface DateSearchParameter extends SearchParameter {
+export interface DateSearchParameter extends ParameterData {
   type: 'date' | 'period';
   value: string; // ISO8601 Date format
   end?:       string;     // FHIR Period.end (effectivePeriod, onsetPeriod, effectiveDateTime, onsetDateTime)
@@ -39,40 +36,40 @@ export interface DateSearchParameter extends SearchParameter {
 }
 
 // String Search Parameter
-export interface StringSearchParameter extends SearchParameter {
+export interface StringSearchParameter extends ParameterData {
   type: 'string';
   value: string;
 }
 
 // Token Search Parameter
-export interface TokenSearchParameter extends SearchParameter {
+export interface TokenSearchParameter extends ParameterData {
   type: 'token';
   value: string; 
   system: string; // The system in which the token is defined
 }
 
 // Reference Search Parameter
-export interface ReferenceSearchParameter extends SearchParameter {
+export interface ReferenceSearchParameter extends ParameterData {
   type: 'reference';
   reference: string; // Reference to another resource
 }
 
 // Composite Search Parameter
-export interface CompositeSearchParameter extends SearchParameter {
+export interface CompositeSearchParameter extends ParameterData {
   type: 'composite';
-  components: SearchParameter[]; // The components of the composite
+  components: ParameterData[]; // The components of the composite
 }
 
 // Quantity Search Parameter
-export interface QuantitySearchParameter extends SearchParameter {
+export interface QuantitySearchParameter extends ParameterData {
   type: 'quantity';
   value: number; 
   system: string; 
-  code: string; // The code for the quantity
+  unit: string;
 }
 
 // URI Search Parameter
-export interface URISearchParameter extends SearchParameter {
+export interface URISearchParameter extends ParameterData {
   type: 'uri';
   value: string; // URI value
 }
@@ -80,9 +77,21 @@ export interface URISearchParameter extends SearchParameter {
 // The collection of all search parameter types
 export type FHIRSearchParameter = NumberSearchParameter | DateSearchParameter | StringSearchParameter | TokenSearchParameter | ReferenceSearchParameter | CompositeSearchParameter | QuantitySearchParameter | URISearchParameter;
 
+export interface Reaction {
+    substance: StringSearchParameter; // Replace with the correct type for substance
+    manifestation: StringSearchParameter[]; // Replace with the correct type for manifestation
+    severity: string; // Replace with the correct type for severity
+    exposureRoute: StringSearchParameter; // Replace with the correct type for exposureRoute
+    note: StringSearchParameter[]; // Replace with the correct type for note
+    quantity: {
+        value: number; // Replace with the correct type for value
+        system: string; // Replace with the correct type for system
+    };
+}
 
-export function parseTokenParameter(value: string): TokenSearchParameter {
-  const parts = value.split('|');
+
+export function parseTokenParameter(inputValue: string): TokenSearchParameter {
+  const parts = inputValue.split('|');
   const parameter: TokenSearchParameter = {
     type: 'token',
     name: '',
@@ -90,34 +99,32 @@ export function parseTokenParameter(value: string): TokenSearchParameter {
     base: [],
     value: '',
     system: '',
-    code: '',
     reference: '',
     prefix: ''
   };
   if (parts.length === 2) {
     parameter.system = parts[0];
-    parameter.code = parts[1];
+    parameter.value = parts[1];
   } else if (parts.length === 1) {
-    parameter.code = parts[0];
+    parameter.value = parts[0];
   }
   return parameter;
 }
 
-export function parseReferenceParameter(value: string): ReferenceSearchParameter {
+export function parseReferenceParameter(inputValue: string): ReferenceSearchParameter {
   return {
     type: 'reference',
     name: '',
     description: '',
     base: [],
-    reference: value,
+    reference: inputValue,
     value: '',
     system: '',
-    code: '',
     prefix: ''
   };
 }
 
-export function parseDateParameter(value: string): DateSearchParameter {
+export function parseDateParameter(inputValue: string): DateSearchParameter {
   const parameter: DateSearchParameter = {
     type: 'date',
     name: '',
@@ -126,20 +133,19 @@ export function parseDateParameter(value: string): DateSearchParameter {
     value: '',
     prefix: '',
     system: '',
-    code: '',
-    reference: value,
+    reference: inputValue,
   };
-  if (value.match(/^(eq|ne|gt|lt|ge|le|sa|eb|ap)/)) {
-    parameter.prefix = value.slice(0, 2);
-    parameter.value = value.slice(2);
+  if (inputValue.match(/^(eq|ne|gt|lt|ge|le|sa|eb|ap)/)) {
+    parameter.prefix = inputValue.slice(0, 2);
+    parameter.value = inputValue.slice(2);
   } else {
-    parameter.value = value;
+    parameter.value = inputValue;
   }
   return parameter;
 }
 
-export function parseQuantityParameter(value: string): QuantitySearchParameter {
-  const parts = value.split('|');
+export function parseQuantityParameter(inputValue: string): QuantitySearchParameter {
+  const parts = inputValue.split('|');
   const parameter: QuantitySearchParameter = {
     type: 'quantity',
     name: '',
@@ -147,14 +153,15 @@ export function parseQuantityParameter(value: string): QuantitySearchParameter {
     base: [],
     value: 2,
     system: '',
-    code: '',
     prefix: '',
-    reference: value,
+    unit: '',
+    reference: inputValue,
   };
   if (parts.length === 3) {
     parameter.prefix = parts[0];
     parameter.value = parseInt(parts[1]);
     parameter.system = parts[2];
+    parameter.unit = parts[2]
   } else if (parts.length === 2) {
     parameter.value = parseInt(parts[0]);
     parameter.system = parts[1];
