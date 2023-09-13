@@ -27,6 +27,5 @@ export interface ImmunizationResource {
   [ImmunizationParameters.Reaction]?: ReferenceSearchParameter;
   [ImmunizationParameters.Status]?: TokenSearchParameter;
   [ImmunizationParameters.VaccineCode]?: TokenSearchParameter;
-  [ImmunizationParameters.VaccineCode]?: TokenSearchParameter;
   [ImmunizationParameters.ManufacturerDisplay]?: ReferenceSearchParameter;
 }

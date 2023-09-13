@@ -1,17 +1,18 @@
 import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } from './SearchParamsModel';
 
 export enum ClinicalImpressionParameters {
-    Assessor = 'assessor',
-    Date = 'date',
-    FindingCode = 'finding-code',
-    FindingRef = 'finding-ref',
-    Identifier = 'identifier',
-    Investigation = 'investigation',
-    Patient = 'patient',
-    Previous = 'previous',
-    Problem = 'problem',
-    Status = 'status',
-    Support = 'support',
+  Assessor = 'assessor',
+  Date = 'date',
+  FindingCode = 'finding-code',
+  FindingRef = 'finding-ref',
+  Identifier = 'identifier',
+  Investigation = 'investigation',
+  Patient = 'patient',
+  Previous = 'previous',
+  Problem = 'problem',
+  Status = 'status',
+  Support = 'support',
+  Subject = 'subject'
   }
   
 export interface ClinicalImpressionResource {
@@ -26,5 +27,6 @@ export interface ClinicalImpressionResource {
   [ClinicalImpressionParameters.Problem]?: ReferenceSearchParameter;
   [ClinicalImpressionParameters.Status]?: TokenSearchParameter;
   [ClinicalImpressionParameters.Support]?: ReferenceSearchParameter;
+  [ClinicalImpressionParameters.Subject]?: ReferenceSearchParameter;
 }
   
