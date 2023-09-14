@@ -2,15 +2,16 @@ import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } f
 
 // Create the TypeScript enumerator for the HTTP parameters of the Appointment resource
 export enum AppointmentParameters {
-    Actor = 'actor',
-    Date = 'date',
-    Identifier = 'identifier',
-    Location = 'location',
-    PartStatus = 'part-status',
-    Patient = 'patient',
-    Practitioner = 'practitioner',
-    ServiceType = 'service-type',
-    Status = 'status',
+  Actor = 'actor',
+  Date = 'date',
+  Identifier = 'identifier',
+  Location = 'location',
+  PartStatus = 'part-status',
+  Patient = 'patient',
+  Practitioner = 'practitioner',
+  ServiceType = 'service-type',
+  Status = 'status',
+  Specialty = 'specialty',
   }
   
   // Create the TypeScript interface for the Appointment resource using the enumerator and the search parameter types
