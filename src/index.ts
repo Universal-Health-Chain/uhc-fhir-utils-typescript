@@ -8,17 +8,17 @@ export { CodingSystem } from "./models/CommonModels"
 
 // export classes
 export * from "./FhirUtils";            // global class
-export * from "./fhirUtils/index";   // independent classes
+export * from "./managers/index";   // independent classes
 
 // export consts and enums (and functions outside classes)
-export { MimeType } from "./fhirUtils/Attachment"
-export { getCleanIdByFhirResource as getCleanId, getBundleEntriesMap, normalizedAndCanonicalizedFHIR, anonymizeResource} from "./fhirUtils/CommonFHIR"
-export { GlobalIndexATC } from "./fhirUtils/Atc"
-export { GlobalIndexEMA } from "./fhirUtils/Ema"
-export { GlobalIndexFHIR } from "./fhirUtils/Hl7"
-export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./fhirUtils/Loinc";
+export { MimeType } from "./managers/Attachment"
+export { getCleanIdByFhirResource as getCleanId, getBundleEntriesMap, normalizedAndCanonicalizedFHIR, anonymizeResource} from "./managers/CommonFHIR"
+export { GlobalIndexATC } from "./managers/Atc"
+export { GlobalIndexEMA } from "./managers/Ema"
+export { GlobalIndexFHIR } from "./managers/Hl7"
+export { GlobalIndexLOINC, GroupedLOINC, medicalHistoryClassification } from "./managers/Loinc";
 export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED,
     resultCovid19NaatCodesSNOMED, resultCovid19SerologyCodesSNOMED,
     SNOMED_TO_ICD10, SNOMED_TO_ICD11
-} from "./fhirUtils/Snomed";
+} from "./managers/Snomed";
 

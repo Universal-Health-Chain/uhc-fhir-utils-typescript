@@ -9,30 +9,33 @@ export interface ConceptReferencedDM {
 }
 
 // Define the types as a type
-export type SearchParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri' | 'period';
+export type ParameterType = 'number' | 'date' | 'string' | 'token' | 'reference' | 'composite' | 'quantity' | 'uri' | 'period';
 
 // Common interface for all types
-export interface ParameterData extends ConceptReferencedDM {
-  prefix: string;
-  name: string;
-  description: string;
-  base: string[]; // What kind of resources this parameter applies to
-  type: SearchParameterType;
-  value: any; // Value type will be overridden in derived interfaces
+export interface ParameterData {
+  name: string;         // key name of the parameter, e.g.: '_type' (resource type) or 'vaccine-code'
+  type: ParameterType;
+  value: any;           // string or number (the type will be overridden in derived interfaces)
+  system?: string;      // SNOMED, LOINC...
+  unit?: string;        // ml, mg...
+  period?: boolean;     // true if date is a FHIR Period (e.g.: effectivePeriod or onsetPeriod)
+  end?: string;         // FHIR Period.end
+  hint?: string;          // UI hint for the parameter
+  appliesTo?: string[];   // What kind of resources this parameter applies to
+  localizedText?: string;  // Localized text from FHIR CodeableConcept
+  intDisplay?: string;     // International display from FHIR Coding within CodeableConcept
+  prefix?: string           // optional parameter for date/
 }
-
 // Number Search Parameter
 export interface NumberSearchParameter extends ParameterData {
-  type: 'number';
   value: number;
 }
 
 // Date Search Parameter
 export interface DateSearchParameter extends ParameterData {
-  type: 'date' | 'period';
   value: string; // ISO8601 Date format
   end?:       string;     // FHIR Period.end (effectivePeriod, onsetPeriod, effectiveDateTime, onsetDateTime)
-  period?:    boolean;    // true if date is a FHIR Period (effectivePeriod or onsetPeriod)
+  period?: boolean;    // true if date is a FHIR Period (effectivePeriod or onsetPeriod)
 }
 
 // String Search Parameter
@@ -95,12 +98,8 @@ export function parseTokenParameter(inputValue: string): TokenSearchParameter {
   const parameter: TokenSearchParameter = {
     type: 'token',
     name: '',
-    description: '',
-    base: [],
     value: '',
     system: '',
-    reference: '',
-    prefix: ''
   };
   if (parts.length === 2) {
     parameter.system = parts[0];
@@ -115,12 +114,9 @@ export function parseReferenceParameter(inputValue: string): ReferenceSearchPara
   return {
     type: 'reference',
     name: '',
-    description: '',
-    base: [],
     reference: inputValue,
     value: '',
     system: '',
-    prefix: ''
   };
 }
 
@@ -128,12 +124,9 @@ export function parseDateParameter(inputValue: string): DateSearchParameter {
   const parameter: DateSearchParameter = {
     type: 'date',
     name: '',
-    description: '',
-    base: [],
     value: '',
     prefix: '',
     system: '',
-    reference: inputValue,
   };
   if (inputValue.match(/^(eq|ne|gt|lt|ge|le|sa|eb|ap)/)) {
     parameter.prefix = inputValue.slice(0, 2);
@@ -149,13 +142,10 @@ export function parseQuantityParameter(inputValue: string): QuantitySearchParame
   const parameter: QuantitySearchParameter = {
     type: 'quantity',
     name: '',
-    description: '',
-    base: [],
     value: 2,
     system: '',
     prefix: '',
     unit: '',
-    reference: inputValue,
   };
   if (parts.length === 3) {
     parameter.prefix = parts[0];

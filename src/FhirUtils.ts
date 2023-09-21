@@ -1,28 +1,28 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { Atc } from "./fhirUtils/Atc";
-import { Attachment } from "./fhirUtils/Attachment";
-import { AuditEvent } from "./fhirUtils/AuditEvent";
-import { Bundle } from "./fhirUtils/Bundle";
-import { BundleMessage } from "./fhirUtils/BundleMessage";
-import { CodeableConcept } from "./fhirUtils/CodeableConcept";
-import { CommonFHIR } from "./fhirUtils/CommonFHIR";
-import { Communication } from "./fhirUtils/Communication";
-import { Composition } from "./fhirUtils/Composition";
-import { Covid19 } from "./fhirUtils/Covid19";
-import { DiagnosticReport } from "./fhirUtils/DiagnosticReport";
+import { Atc } from "./managers/Atc";
+import { Attachment } from "./managers/Attachment";
+import { AuditEvent } from "./managers/AuditEvent";
+import { Bundle } from "./managers/Bundle";
+import { BundleMessage } from "./managers/BundleMessage";
+import { CodeableConcept } from "./managers/CodeableConcept";
+import { CommonFHIR } from "./managers/CommonFHIR";
+import { Communication } from "./managers/Communication";
+import { Composition } from "./managers/Composition";
+import { Covid19 } from "./managers/Covid19";
+import { DiagnosticReport } from "./managers/DiagnosticReport";
 // import { Dicom } from "./fhirUtils/Dicom";
-import { DocumentReference } from "./fhirUtils/DocumentReference";
-import { Hl7 } from "./fhirUtils/Hl7";
-import { Identifier } from "./fhirUtils/Identifier";
-import { ImagingStudy } from "./fhirUtils/ImagingStudy";
-import { Immunization } from "./fhirUtils/Immunization";
-import { Loinc } from "./fhirUtils/Loinc";
-import { Personal } from "./fhirUtils/Personal";
-import { Quantity } from "./fhirUtils/Quantity";
-import { Reference } from "./fhirUtils/Reference";
-import { Sections } from "./fhirUtils/Sections";
-import { Snomed } from "./fhirUtils/Snomed";
+import { DocumentReference } from "./managers/DocumentReference";
+import { Hl7 } from "./managers/Hl7";
+import { Identifier } from "./managers/Identifier";
+import { ImagingStudy } from "./managers/ImagingStudy";
+import { Immunization } from "./managers/Immunization";
+import { Loinc } from "./managers/Loinc";
+import { Personal } from "./managers/Personal";
+import { Quantity } from "./managers/Quantity";
+import { Reference } from "./managers/Reference";
+import { Sections } from "./managers/Sections";
+import { Snomed } from "./managers/Snomed";
 
 
 export class FhirUtils {
