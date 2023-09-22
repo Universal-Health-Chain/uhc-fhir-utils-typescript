@@ -1,12 +1,12 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { medicalHistoryClassification } from "../../src/fhirUtils/Loinc"
+import { medicalHistoryClassification } from "../../src/managers/Loinc"
 import { testAuthorReferenceId, testDatetime1 } from "./dataForCommonTests"
 
 export const testDiagnosticReportNotDetectedCovid19FHIR:R4.IDiagnosticReport = {
 	"category": [
 		{
 			"coding": [
-				{
+				{ 
 					"code": "LAB",
 					"display": "Laboratory",
 					"system": "http://terminology.hl7.org/CodeSystem/v2-0074"

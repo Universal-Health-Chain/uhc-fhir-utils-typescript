@@ -1,6 +1,6 @@
 
-import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/fhirUtils/Hl7";
+import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
+import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/managers/Hl7";
 import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects

@@ -60,3 +60,4 @@ export function GetParamsByImmunizationFHIR4(immunization: R4.IImmunization): Pa
 
     return parameters;
 }
+

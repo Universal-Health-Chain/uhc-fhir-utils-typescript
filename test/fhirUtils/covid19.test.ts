@@ -1,10 +1,10 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { FhirUtils, CodingSystem, medicalHistoryClassification } from "../../src/"
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { getCodeListInArrayOfCodeableConcepts } from "../../src/fhirUtils/CodeableConcept"
+import { getCodeListInArrayOfCodeableConcepts } from "../../src/managers/CodeableConcept"
 import { testBundleDocumentWithCompositionAndCovid19Immunization } from "../data/dataForImmunizations"
 import { testBundleDocumentWithCompositionAndCovid19DiagnosticReport } from "../data/dataForDiagnosticReportTests"
+import { CodingSystem, FhirUtils } from '../../src'
 
 const fhirUtils = new FhirUtils()
 

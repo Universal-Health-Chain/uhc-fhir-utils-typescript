@@ -1,6 +1,6 @@
 
-import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED, resultCovid19SerologyCodesSNOMED, getDisplayOrTextByCodeSNOMED } from "../../src/fhirUtils/Snomed";
+import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
+import { GroupedSNOMED, getVaccinationProcedureCovid19CodesSNOMED, resultCovid19SerologyCodesSNOMED, getDisplayOrTextByCodeSNOMED } from "../../src/managers/Snomed";
 
 import { FhirUtils } from '../../src/FhirUtils';
 const fhirUtils = new FhirUtils()

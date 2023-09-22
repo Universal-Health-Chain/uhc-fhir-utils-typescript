@@ -2,7 +2,7 @@
 
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
-import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
+import { createCodeableConcept } from '../../src/managers/CodeableConcept';
 import { CodingSystem } from '../../src/models/CommonModels';
 
 const fhirUtils = new FhirUtils()

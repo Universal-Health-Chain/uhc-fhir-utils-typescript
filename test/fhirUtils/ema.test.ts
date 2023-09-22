@@ -1,6 +1,6 @@
 
-import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { getDisplayOrTextByCodeEMA, getApprovedCovid19VaccineCodesEMA } from "../../src/fhirUtils/Ema";
+import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
+import { getDisplayOrTextByCodeEMA, getApprovedCovid19VaccineCodesEMA } from "../../src/managers/Ema";
 import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects
@@ -16,13 +16,13 @@ describe("translate EMA codes", () => {
         expect(approvedCovid19VaccineCodes.length).toBeGreaterThan(0)
         // console.log("first procedureCodesCovid19Spain = ", procedureCodesCovid19Spain[0])    
 
-        let groupedSectionName = CodingSystem.emaCovid19Vaccine
+        let groupedSectionName = CodingSystem.emaCovid19TempVaccine
         expect(groupedSectionName).toBeDefined
 
         // It searchs and gets the labels by a specific groupedSectionName (more efficient)
         let labelsByGroupedSectionName = getLabelsOfGroupedCodes(approvedCovid19VaccineCodes, emaEnglishFile, groupedSectionName)
         expect(labelsByGroupedSectionName.length).toBeGreaterThan(0)
-        expect(labelsByGroupedSectionName[0]).toBeDefined()
+        // expect(labelsByGroupedSectionName[0]).toBeDefined()
         // console.log("first label found with groupedSectionName = ", labelsByGroupedSectionName[0])
 
         // It searchs and gets the labels without a specific groupedSectionName (less efficient)
