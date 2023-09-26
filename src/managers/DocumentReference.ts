@@ -30,6 +30,7 @@ export class DocumentReference {
 }
 
 // TODO: urn identifier
+/** throws error if something is wrong */
 export function createDocumentReferenceToCertificate(
     documentIdentifier:     string,     // universal ID of the document (UUID v4 format), it can have several certified / verifiable versions (VC)
     masterIdentifierVC:     string,     // assigned by the source of the document and specific to this version of the document
@@ -57,7 +58,7 @@ export function createDocumentReferenceToCertificate(
         let documentReference:R4.IDocumentReference = createDocumentReference([fhirContent], categoryLOINC, documentIdentifier)
         return documentReference
     } catch (e){
-        return e
+        throw e
     }
 }
 

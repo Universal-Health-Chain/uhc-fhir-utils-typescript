@@ -1,8 +1,5 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
-// import { getValidOrNewRandomUUID } from "./commonUtils"
-import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
-
-const uuidUtils = new Uuid() 
+import { getValidOrNewRandomUUID } from "@universal-health-chain/uhc-common-utils-typescript"
 
 export class AuditEvent{
 
@@ -78,7 +75,7 @@ export function createPatientRecordAuditEvent(reporterId:string, entityTitle?:st
     }
 
     let auditEvent:R4.IAuditEvent = {
-        id: uuidUtils.getValidOrNewRandomUUID(),
+        id: getValidOrNewRandomUUID(),
         resourceType: "AuditEvent",
         recorded: recorded,
         type: {

@@ -7,15 +7,20 @@ export class Atc {
     }
     
     getVaccinesGroupsATC= (): string[] => getVaccinesGroupsATC()
-    getDisplayOrTextByCodeATC = (code:string, atcLanguageFile?:object): string => getDisplayOrTextByCodeATC(code, atcLanguageFile)
+    
+    /** async method */
+    getDisplayOrTextByCodeATC = async (code:string, atcLanguageFile?:object): Promise<string> => await getDisplayOrTextByCodeATC(code, atcLanguageFile)
 }
 
 // display code SHALL ALWAYS BE English (international)
-export function getDisplayOrTextByCodeATC(code:string, atcLanguageFile?:object): string {  //, groupedSectionName?:string): string {
-    if (!atcLanguageFile) atcLanguageFile = require("../../languages/international/atcUHC.json")
-    // return getLabelsOfGroupedCodes([code], atcLanguageFile, groupedSectionName)[0]
-    return (atcLanguageFile as any)[code]
+export async function getDisplayOrTextByCodeATC(code: string, atcLanguageFile?: object): Promise<string> {  //, groupedSectionName?:string): Promise<string> {
+    if (!atcLanguageFile) {
+        atcLanguageFile = await import("../../languages/international/atcUHC.json");
+    }
+
+    return (atcLanguageFile as any)[code];
 }
+
 
 /*
 export function getLabelsOfCodesInGroupedSection(codes:string[], hl7LanguageFile?:object, groupedSectionName?:string): string[] {

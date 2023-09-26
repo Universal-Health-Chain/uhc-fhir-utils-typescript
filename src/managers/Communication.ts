@@ -7,7 +7,7 @@ import { CodingSystem } from "../models"
 import { getDisplayOrTextByCodeHL7 } from "./Hl7"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 
-import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
+import { Uuid, getValidOrNewRandomUUID } from "@universal-health-chain/uhc-common-utils-typescript"
 
 const uuidUtils = new Uuid() 
 
@@ -16,10 +16,12 @@ export class Communication {
     constructor(){
     }
 
-    // identifier should be the same as the UHC Message ID
-    create(statusCode:string, categoryCode:string, uuidv4?:string, reasonCode?:string, priorityCode?:string, payloadString?:string): R4.ICommunication{
-        const randomUUID = uuidUtils.getValidOrNewRandomUUID(uuidv4)
-        return createCommunication(statusCode, categoryCode, randomUUID, reasonCode, priorityCode, payloadString)
+    /** async method
+     *  Note: identifier should be the same as the UHC Message ID
+     */
+    async create(statusCode:string, categoryCode:string, uuidv4?:string, reasonCode?:string, priorityCode?:string, payloadString?:string): Promise<R4.ICommunication>{
+        const randomUUID = getValidOrNewRandomUUID(uuidv4)
+        return await createCommunication(statusCode, categoryCode, randomUUID, reasonCode, priorityCode, payloadString)
     }
 
     createReasonConcept(code:string, system:string, internationalDisplay:string, userSelected?:boolean, customText?:string): R4.ICodeableConcept {
@@ -31,10 +33,10 @@ export class Communication {
 }
 
 // identifier should be the same as the UHC Message ID, concepts in english by default
-export function createCommunication(statusCode:string, categoryCode:string, randomUUID:string, reasonCode?:string, priorityCode?:string, payloadString?:string): R4.ICommunication{
+export async function createCommunication(statusCode:string, categoryCode:string, randomUUID:string, reasonCode?:string, priorityCode?:string, payloadString?:string): Promise<R4.ICommunication>{
     let communicationIdentifier:R4.IIdentifier = createIdentifierWithoutType("urn:uuid:"+randomUUID, CodingSystem.ucum)
     
-    let categoryDisplayHL7:string = getDisplayOrTextByCodeHL7(categoryCode)
+    let categoryDisplayHL7:string = await getDisplayOrTextByCodeHL7(categoryCode)
     let categoryConceptHL7:R4.ICodeableConcept = createCodeableConcept(categoryCode, CodingSystem.communicationCategory, categoryDisplayHL7)
         
     let communicationFHIR:R4.ICommunication = {

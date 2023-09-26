@@ -108,9 +108,9 @@ export function getComposedUrlPathOfDCM(dcmBytes:Uint8Array): string {
 }
 
 export function getInstanceUrlPathByInstanceDataSet(instanceDataSet:dicom.DataSet): string {    
-    const studyUID:string = getDicomStudyId(instanceDataSet)
-    const serieUID:string = getDicomSeriesInstanceUID(instanceDataSet)
-    const instanceUID:string = getDicomMediaStorageSOPInstanceUID(instanceDataSet)
+    const studyUID = getDicomStudyId(instanceDataSet)
+    const serieUID = getDicomSeriesInstanceUID(instanceDataSet)
+    const instanceUID = getDicomMediaStorageSOPInstanceUID(instanceDataSet)
     return studyUID + "/" + serieUID + "/" + instanceUID    // It returns the values within the DCM file
 }
 
@@ -120,7 +120,7 @@ export function getPixelDataInDCM(dcmBytes:Uint8Array): Uint8Array {
 }
 
 export function getHeightAndWidth(instanceDataSet:dicom.DataSet): number[] {
-    return [getDicomRows(instanceDataSet), getDicomColumns(instanceDataSet)]
+    return [getDicomRows(instanceDataSet)  || 0, getDicomColumns(instanceDataSet) || 0];
 }
 
 export function getHeightAndWidthOfDCM(dcmBytes:Uint8Array): number[] {
@@ -134,7 +134,7 @@ export function getInstanceUidInDCM(dcmBytes:Uint8Array): string {
 }
 
 export function getInstanceUidByInstanceDataSet(instanceDataSet:dicom.DataSet): string {
-    return getDicomMediaStorageSOPInstanceUID(instanceDataSet)
+    return getDicomMediaStorageSOPInstanceUID(instanceDataSet) || '';
 }
 
 export function getDicomPixelData(dataSet:dicom.DataSet): Uint8Array {
@@ -145,17 +145,20 @@ export function getDicomPixelData(dataSet:dicom.DataSet): Uint8Array {
 }
 
 // Invoke the parseDicom function and get back a DataSet object with the contents
-export function buildDicomSecuentialArray(blobByteArray:Uint8Array): any[] {
-    let dataSet:dicom.DataSet
-    let output = []
+export function buildDicomSecuentialArray(blobByteArray: Uint8Array): any[] {
+    let dataSet: dicom.DataSet;
+    let output = [];
     try {
-        dataSet = dicom.parseDicom(blobByteArray)
-        output = dicomSecuentialArrayByParsedDataSet(dataSet)
-    } catch(err) {
-        if (typeof err.dataSet != 'undefined') console.warn("No dataset parsed")
+        dataSet = dicom.parseDicom(blobByteArray);
+        output = dicomSecuentialArrayByParsedDataSet(dataSet);
+    } catch (err) {
+        // Narrow down the type of err using type assertion
+        const error = err as { dataSet?: any };
+        if (error.dataSet !== undefined) {
+            console.warn("No dataset parsed");
+        }
     }
-    // //console.log("dicomSecuentialArray = ", output)
-    return output
+    return output;
 }
 
 // build secuential array (without children elements)
@@ -175,35 +178,35 @@ function dicomSecuentialArrayByParsedDataSet(dataSet:dicom.DataSet): any[] {
                 // TODO: convert to FHIR and ISO datetime
                 // It checks the Directory Record Type: http://dicom.nema.org/dicom/2013/output/chtml/part03/sect_F.3.html
                 if (dicomElement.dataSet.string('x00041430') === 'PATIENT') {
-                    const patientUID:string = getDicomPatientId(dicomElement.dataSet)
-                    let objStudy:DicomdirContentPatient = {id: id, uid: patientUID, key: 'patient', value: getDicomPatientName(dicomElement.dataSet), expanded: true}
+                    const patientUID = getDicomPatientId(dicomElement.dataSet)
+                    let objStudy:DicomdirContentPatient = {id: id, uid: patientUID || '', key: 'patient', value: getDicomPatientName(dicomElement.dataSet) || '', expanded: true}
                     output.push( objStudy )
 
                 } else if (dicomElement.dataSet.string('x00041430') === 'STUDY') {
-                    const studyUID:string = getDicomStudyId(dicomElement.dataSet)
-                    const dateTime:string = dicomDateToLocale(getDicomStudyDate(dicomElement.dataSet)) + " - " + dicomTimeToStr(getDicomStudyTime(dicomElement.dataSet))
-                    const description:string = getDicomStudyDescription(dicomElement.dataSet)
-                    let objStudy:DicomdirContentStudy = {id: id, uid: studyUID, key: 'study', description: description, value: dateTime, expanded: true}
+                    const studyUID = getDicomStudyId(dicomElement.dataSet)
+                    const dateTime = dicomDateToLocale(getDicomStudyDate(dicomElement.dataSet) || '') + " - " + dicomTimeToStr(getDicomStudyTime(dicomElement.dataSet) || '');
+                    const description = getDicomStudyDescription(dicomElement.dataSet)
+                    let objStudy:DicomdirContentStudy = {id: id, uid: studyUID || '', key: 'study', description: description || '', value: dateTime, expanded: true}
                     output.push(objStudy)
 
                 } else if (dicomElement.dataSet.string('x00041430') === 'SERIES') {
-                    const serieUID:string = getDicomSeriesInstanceUID(dicomElement.dataSet)
+                    const serieUID = getDicomSeriesInstanceUID(dicomElement.dataSet)
                     const number:number = getDicomSeriesNumber(dicomElement.dataSet)
-                    const modality:string = getDicomModality(dicomElement.dataSet)
-                    const description:string = getDicomSeriesDescription(dicomElement.dataSet)
-                    let objSerie:DicomdirContentSerie = {id: id, uid: serieUID, key: 'series', description: description, number: number, value: modality, expanded: true}
+                    const modality = getDicomModality(dicomElement.dataSet)
+                    const description = getDicomSeriesDescription(dicomElement.dataSet)
+                    let objSerie:DicomdirContentSerie = {id: id, uid: serieUID || '', key: 'series', description: description || '', number: number, value: modality || '', expanded: true}
                     output.push(objSerie)
 
                 } else if (dicomElement.dataSet.string('x00041430') === 'IMAGE') {
                     // //console.log("Instance element in directoryElements at entry = ", index) // at [3] and so on
-                    const instanceUID:string = getDicomReferencedSOPInstanceUIDInFile(dicomElement.dataSet) // Use it when reading a DICOMDIR file
-                    const sopClassUID:string = getDicomReferencedSOPClassUIDinFile(dicomElement.dataSet)    // Instead of getDicomImageSopClassUID <-undefined
+                    const instanceUID = getDicomReferencedSOPInstanceUIDInFile(dicomElement.dataSet) // Use it when reading a DICOMDIR file
+                    const sopClassUID = getDicomReferencedSOPClassUIDinFile(dicomElement.dataSet)    // Instead of getDicomImageSopClassUID <-undefined
                     const number:number = getDicomInstanceNumber(dicomElement.dataSet)
-                    const filePath:string = getDicomReferencedFileIDAttribute(dicomElement.dataSet)
-                    let path:string = filePath.replace(/\\/g, '/')
-                    let fileName:any = filePath.split('\\').pop()   // 'any' instead of 'string' type to allow 'undefined'
+                    const filePath = getDicomReferencedFileIDAttribute(dicomElement.dataSet)
+                    let path:string = (filePath as string).replace(/\\/g, '/')
+                    let fileName:any = (filePath as string).split('\\').pop()   // 'any' instead of 'string' type to allow 'undefined'
                     // TODO: getDicomImageLaterality and getDicomBodyPartExamined not found in our tests, so they hadn't been added for this reason
-                    let objInstance:DicomdirContentInstance = {id: id, uid: instanceUID, key: 'image', sopClassUID: sopClassUID, number: number, path: path, value: fileName, expanded: true}
+                    let objInstance:DicomdirContentInstance = {id: id, uid: instanceUID || '', key: 'image', sopClassUID: sopClassUID, number: number, path: path, value: fileName, expanded: true}
                     output.push(objInstance)
                 }
             }
@@ -294,72 +297,72 @@ export function getContentStudies(dicomdirContent:DicomdirContentPatient[]): Dic
 
 // --- Directory Content ---
 export function getDicomFileSetId(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00041130')
+    return dataSet.string('x00041130') || '';
 }
 
 export function getDicomTransferSyntaxUid(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00020010')
+    return dataSet.string('x00020010') || '';
 }
 
 export function getDicomImplementationClassUid(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00020012')
+    return dataSet.string('x00020012') || '';
 }
 
 export function getDicomImplementationVersionName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00020013')
+    return dataSet.string('x00020013') || '';
 }
 
 export function getDicomManufacturer(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00080070')
+    return dataSet.string('x00080070') || '';
 }
 
 export function getDicomManufacturersModelName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081090')
+    return dataSet.string('x00081090') || '';
 }
 
 export function getDicomDeviceSerialNumber(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00181000')
+    return dataSet.string('x00181000') || '';
 }
 
 // Use as study.value instead of date - time
 export function getDicomProtocolName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00181030')
+    return dataSet.string('x00181030') || '';
 }
 
 export function getDicomInstitutionName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00080080')
+    return dataSet.string('x00080080') || '';
 }
 
 export function getDicomInstitutionAddress(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00080081')
+    return dataSet.string('x00080081') || '';
 }
 
 export function getDicomStationName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081010')
+    return dataSet.string('x00081010') || '';
 }
 
 export function getDicomInstitutionalDepartmentName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081040')
+    return dataSet.string('x00081040') || '';
 }
 
 // Physician(s) of Record: physician(s) who are responsible for overall patient care at time of Study
 export function getDicomPhysicianOfRecord(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081048')
+    return dataSet.string('x00081048') || '';
 }
 
 // Name of Physician(s) Reading Study
 export function getDicomSPhysicianReadingStudy(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081060')
+    return dataSet.string('x00081060') || '';
 }
 
 // Operators' Name: Name(s) of the operator(s) supporting the Series.
 export function getDicomOperatorsName(dataSet:dicom.DataSet):string {
-    return dataSet.string('x00081070')
+    return dataSet.string('x00081070') || '';
 }
 
 // Use as the UID of the study, but not the StudyID (x00200010 is a number, not OID)
 export function getDicomStudyInstanceUID(dataSet:dicom.DataSet):string {
-    return dataSet.string('x0020000d')
+    return dataSet.string('x0020000d') || '';
 }
 
 // Instance Creation Date (0008,0012) + Instance Creation Time (0008,0013) + Timezone Offset From UTC (0008,0201)
@@ -372,19 +375,19 @@ export function getDicomInstanceCreation(dataSet:dicom.DataSet): string {
 }
 
 export function getDicomInstanceCreationDate(dataSet:dicom.DataSet):string{
-    return dataSet.string('x00080012')
+    return dataSet.string('x00080012') || '';
 }
 
 export function getDicomInstanceCreationTime (dataSet:dicom.DataSet):string{
-    return dataSet.string('x00080013')
+    return dataSet.string('x00080013') || '';
 }
 
 export function getTimezoneOffsetFromUTC(dataSet:dicom.DataSet):string{
-    return dataSet.string('x00080201')
+    return dataSet.string('x00080201') || '';
 }
 
 export function getDicomReferencedSOPClassUIDinFile(dataSet:dicom.DataSet) {
-    return dataSet.string('x00041510')  // Referenced SOP Class UID in File Attribute: Tag	(0004,1510)
+    return dataSet.string('x00041510')  || ''; // Referenced SOP Class UID in File Attribute: Tag	(0004,1510)
 }
 
 export function getDicomLaterality(dataSet:dicom.DataSet) {
@@ -453,7 +456,7 @@ export function getDicomSeriesDescription(dataSet:dicom.DataSet) {
 }
 
 export function getDicomSeriesNumber(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00200011'))
+    return parseFloat(dataSet.string('x00200011') || '');
 }
 
 export function getDicomModality(dataSet:dicom.DataSet) {
@@ -462,7 +465,7 @@ export function getDicomModality(dataSet:dicom.DataSet) {
 
 export function getDicomIpp(dataSet:dicom.DataSet, index:any) {
     const value = dataSet.string('x00200032')
-    const ipp = value.split('\\')
+    const ipp = (value as string).split('\\')
     return parseFloat(ipp[index])
 }
 
@@ -472,20 +475,20 @@ export function getDicomFrameOfReferenceUID(dataSet:dicom.DataSet) {
 
 export function getDicomPixelSpacing(dataSet:dicom.DataSet, index: any) {
     const value = dataSet.string('x00280030')
-    const pixelSpacing = value.split('\\')
+    const pixelSpacing = (value as string).split('\\')
     return pixelSpacing[index]
 }
 
 export function getDicomSpacingBetweenSlice(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00180088'))
+    return parseFloat(dataSet.string('x00180088') || '');
 }
 
 export function getDicomSliceThickness(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00180050'))
+    return parseFloat(dataSet.string('x00180050') || '');
 }
 
 export function getDicomEchoNumber(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00180086'))
+    return parseFloat(dataSet.string('x00180086') || '');
 }
 
 export function getDicomPatientPosition(dataSet:dicom.DataSet) {
@@ -493,11 +496,11 @@ export function getDicomPatientPosition(dataSet:dicom.DataSet) {
 }
 
 export function getDicomSliceLocation(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00201041'))
+    return parseFloat(dataSet.string('x00201041') || '');
 }
 
 export function getDicomInstanceNumber(dataSet:dicom.DataSet) {
-    return parseFloat(dataSet.string('x00200013'))
+    return parseFloat(dataSet.string('x00200013') || '');
 }
 
 export function getDicomRows(dataSet:dicom.DataSet) {
@@ -509,13 +512,13 @@ export function getDicomColumns(dataSet:dicom.DataSet) {
 }
 
 export function isLocalizer(dataSet:dicom.DataSet) {
-    const values = dataSet.string('x00080008').split('\\')
+    const values = (dataSet.string('x00080008') || '').split('\\')
     // //console.log('Localizer: ', values)
     return values.length === 3 && values[2] === 'LOCALIZER'
 }
 
 export function getLocalizer(dataSet:dicom.DataSet) {
-    const value:string = dataSet.string('x00080008')
+    const value = dataSet.string('x00080008')
     if (value) {
         let values:string[] = value.split('\\')
         return values[values.length-1]  // the last value
@@ -524,7 +527,7 @@ export function getLocalizer(dataSet:dicom.DataSet) {
 }
 
 export function getDicomImageXOnRows(dataSet:dicom.DataSet): boolean {
-    const iop = dataSet.string('x00200037').split('\\').map((v: string) => parseFloat(v))
+    const iop = (dataSet.string('x00200037') || '').split('\\').map((v: string) => parseFloat(v))
     if (iop[0] > iop[1]) return true
     else return false
 }

@@ -7,10 +7,12 @@ import { getDisplayOrTextByCodeLOINC } from "./Loinc"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 
 export class CodeableConcept {
+    // someData: any; // this.someData
+
     constructor() {
     }
 
-    getCodings(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
+    static getCodings(codeableConcept:R4.ICodeableConcept, system:string): R4.ICoding[]{
         return getCodingsBySystem(codeableConcept, system)
     }
 
@@ -68,16 +70,19 @@ export class CodeableConcept {
         return createCodeableConcept(typeCode, codeSystem, internationalDisplay, systemVersion, userSelected, customText)
     }
 
-    createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept {
-        return createCodeableConceptWithOptionalLanguage(typeCode, codeSystem, customLanguageFile)
+    /** async method */
+    async createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any): Promise<R4.ICodeableConcept> {
+        return await createCodeableConceptWithOptionalLanguage(typeCode, codeSystem, customLanguageFile)
     }
 
-    createArrayOfCodeableConceptsOfSystem(inputCodes:string[]|undefined, codeSystem:string, customLanguageFile?:any): R4.ICodeableConcept[] {
-        return createCodeableConceptsArrayOfSystem(inputCodes, codeSystem, customLanguageFile)
+    /** async method */
+    async createArrayOfCodeableConceptsOfSystem(inputCodes:string[]|undefined, codeSystem:string, customLanguageFile?:any): Promise<R4.ICodeableConcept[]> {
+        return await createCodeableConceptsArrayOfSystem(inputCodes, codeSystem, customLanguageFile)
     }
 
-    createCodingArrayOfSystem(inputCodes:string[]|undefined, codeSystem:string, englishData:object) : R4.ICoding[] {
-        return createCodingArrayOfSystem(inputCodes, codeSystem, englishData)
+    /** async method */
+    async createCodingArrayOfSystem(inputCodes:string[]|undefined, codeSystem:string, englishData:object) : Promise<R4.ICoding[]> {
+        return await createCodingArrayOfSystem(inputCodes, codeSystem, englishData)
     }
 }
 
@@ -148,7 +153,7 @@ export function getSingleCodingSNOMED(codeableConcept:R4.ICodeableConcept): R4.I
 */
 
 // 'display' SHALL BE English (default) but 'text' can be any custom language
-export function createDisplayOrTextOfCodeable(code:string, system:string, customLanguageFile?:any):string {
+export async function createDisplayOrTextOfCodeable(code:string, system:string, customLanguageFile?:any):Promise<string> {
     let systemType:string = system
     if (String(system).startsWith("http://hl7.org")) systemType = "http://hl7.org"
     // console.log("createDisplayOrText of code " + code + " and system " + system)
@@ -167,7 +172,7 @@ export function createDisplayOrTextOfCodeable(code:string, system:string, custom
             break
         }
         case "http://hl7.org": {
-            result = getDisplayOrTextByCodeHL7(code, customLanguageFile, system)
+            result = await getDisplayOrTextByCodeHL7(code, customLanguageFile, system)
             // console.log("getDisplayOrTextByCodeHL7 = ", result)
             break
         }
@@ -187,35 +192,40 @@ export function createCoding(code:string, system:string, display?:string, system
 }
 
 /** Codeable Concepts */
-
-// It searchs and returns all codes from every system without duplicates
 export function getExistingTargetCodesInCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], targetCodes:string[]): string[] {
     if (!targetCodes.length || targetCodes.length < 1) return []  // do nothing
     
     let newList:string[] = []
     let codes:string[] = getCodeListInArrayOfCodeableConcepts(codeableConcepts)  // without system -> for every system
+
     if (codes && codes.length && codes.length > 0) {
         codes.forEach( function(code:string) {
-            // //console.log("found code = ", code)
-            if ( targetCodes.includes(code) && (!newList.includes(code)) ) newList.push(code) // //console.log("added code = ", code)
+            // using 'indexOf' instead of 'includes' for ES2015 compatibility
+            if ( targetCodes.indexOf(code) !== -1 && newList.indexOf(code) === -1 ) {
+                newList.push(code)
+            }
         })
     }
     return newList
 }
+
 
 // It searchs and adds all codes from every system without duplicates to the given currentCodes
 export function addExistingTargetCodesInCodeableConcepts(codeableConcepts:R4.ICodeableConcept[], targetCodes:string[], currentCodes:string[]): string[] {
     if (!targetCodes.length || targetCodes.length < 1) return currentCodes  // do nothing
     
     let codes:string[] = getCodeListInArrayOfCodeableConcepts(codeableConcepts)  // without system -> for every system
+
     if (codes && codes.length && codes.length > 0) {
         codes.forEach( function(code:string) {
-            // //console.log("found code = ", code)
-            if ( targetCodes.includes(code) && (!currentCodes.includes(code)) ) currentCodes.push(code) // //console.log("added code = ", code)
+            if ( targetCodes.indexOf(code) !== -1 && currentCodes.indexOf(code) === -1 ) {
+                currentCodes.push(code)
+            }
         })
     }
     return currentCodes
 }
+
 
 // system is optional but recommended
 export function getCodeListInCodeableConcept(codeableConcept:R4.ICodeableConcept|undefined, system?:string): string[]{
@@ -244,14 +254,14 @@ export function getCodeListInArrayOfCodeableConcepts(codeableConcepts:R4.ICodeab
 }
 
 // It creates CodeableConcept with display in english and text also in english or in other language if language file is provided
-export function createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any, systemVersion?:string, userSelected?:boolean) : R4.ICodeableConcept {
+export async function createCodeableConceptWithOptionalLanguage(typeCode:string|undefined, codeSystem:string, customLanguageFile?:any, systemVersion?:string, userSelected?:boolean) : Promise<R4.ICodeableConcept> {
     if (!typeCode) return [] as R4.ICodeableConcept
     // invert order of customLanguageFile and system because system is mandatory in coding
-    const internationalDisplay:string = createDisplayOrTextOfCodeable(typeCode, codeSystem) // international display text in English by default, no customLanguageFile
+    const internationalDisplay:string = await createDisplayOrTextOfCodeable(typeCode, codeSystem) // international display text in English by default, no customLanguageFile
     //console.log("createCodeableConceptBySystem display = ", display)
     
     let customText:string = internationalDisplay // it puts english as default text
-    if (customLanguageFile) customText = createDisplayOrTextOfCodeable(typeCode, codeSystem, customLanguageFile)
+    if (customLanguageFile) customText = await createDisplayOrTextOfCodeable(typeCode, codeSystem, customLanguageFile)
     // console.log("createCodeableConceptBySystem customText = ", customText)
 
     return createCodeableConcept(typeCode, codeSystem, internationalDisplay, systemVersion, userSelected, customText)
@@ -266,37 +276,24 @@ export function createCodeableConcept(typeCode:string, codeSystem:string, intern
     return codeableConcept    
 }
 
-// it does not throws an error if empty
-export function createCodeableConceptsArrayOfSystem(inputCodes:string[]|undefined, system:string, customLanguageFile?:any) : R4.ICodeableConcept[] {
-    let output:R4.ICodeableConcept[] = []
-    if (!inputCodes || !inputCodes.length || inputCodes.length < 1) return output // throw new Error ("Missing codes")
+export async function createCodeableConceptsArrayOfSystem(inputCodes: string[] | undefined, system: string, customLanguageFile?: any): Promise<R4.ICodeableConcept[]> {
+    if (!inputCodes || inputCodes.length < 1) return []; // Early return if no valid inputCodes
 
-    inputCodes.forEach(function(code){
-        let newCodeableConcept:R4.ICodeableConcept = createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile)
+    const output = await Promise.all(inputCodes.map(async code => {
+        return await createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile);
+    }));
 
-        // put the CodeableConcept in the output array
-        if (!output) output = [newCodeableConcept]    // if not initialized
-        else output.push(...output, newCodeableConcept)
-    })
-
-    return output
+    return output;
 }
 
 // it does not throws an error if empty; it is used to generate several target diseases in a code system for a single CodeableConcept
-export function createCodingArrayOfSystem(inputCodes:string[]|undefined, codeSystem:string, englishData:object) : R4.ICoding[] {
-    let output:R4.ICoding[] = []
-    if (!inputCodes || inputCodes.length || inputCodes.length < 1) return output // throw new Error ("Missing codes")
+export async function createCodingArrayOfSystem (inputCodes: string[] | undefined, codeSystem: string, englishData: object): Promise<R4.ICoding[]> {
+    if (!inputCodes || inputCodes.length < 1) return []; // Early return if no valid inputCodes
 
-    inputCodes.forEach(function(typeCode){
-        const internationalDisplay = createDisplayOrTextOfCodeable(typeCode, codeSystem, englishData)
-        // console.log("internationalDisplay = ", internationalDisplay)
-    
-        let newCoding:R4.ICoding = createCoding(typeCode, codeSystem, internationalDisplay)
+    const output = await Promise.all(inputCodes.map(async typeCode => {
+        const internationalDisplay = await createDisplayOrTextOfCodeable(typeCode, codeSystem, englishData);
+        return createCoding(typeCode, codeSystem, internationalDisplay);
+    }));
 
-        // put the CodeableConcept in the output array
-        if (!output) output = [newCoding]   // if not initialized
-        else output.push(...output, newCoding)
-    })
-
-    return output
+    return output;
 }

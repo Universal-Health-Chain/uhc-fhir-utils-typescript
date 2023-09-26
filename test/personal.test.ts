@@ -57,12 +57,15 @@ const testPersonFHIR:R4.IPerson = {
 describe("test Personal data", () => {
 
     it("test second surname", (done) => {
-        let surname = fhirUtils.personal.getSurname2(testPersonFHIR.name[0])
-        // console.log("surname from FHIR Person HumanName = ", surname)
-        expect(surname).toBeDefined()
-        expect(surname).toBe(surname2)
+      let surname = testPersonFHIR && testPersonFHIR.name && testPersonFHIR.name[0]
+      ? fhirUtils.personal.getSurname2(testPersonFHIR.name[0])
+      : '';
+      
+      // console.log("surname from FHIR Person HumanName = ", surname)
+      expect(surname).toBeDefined()
+      expect(surname).toBe(surname2)
 
-        done()
+      done()
     })
 
     it("test telecom data", (done) => {

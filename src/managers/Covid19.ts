@@ -13,7 +13,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 // import { getValidOrNewRandomUUID } from "./commonUtils"
 import { getCodeListInArrayOfCodeableConcepts, getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getResourcesByTypesWithOptionalMetadata } from "./Bundle"
-import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
+import { Uuid, getValidOrNewRandomUUID } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCovid19OfficialManufacturerCodesEMA, getCovid19TempManufacturerCodesEMA } from "./Ema"
 
 const uuidUtils = new Uuid() 
@@ -32,15 +32,17 @@ export class Covid19 {
 
 
     /** Alert Communications */
-    
-    createCovid19DiseaseAlertCommunication = (priorityCode?:string): R4.ICommunication =>
-        createCovid19DiseaseAlertCommunication(priorityCode)
+    /** async method */
+    createCovid19DiseaseAlertCommunication = async (priorityCode?:string): Promise<R4.ICommunication> =>
+        await createCovid19DiseaseAlertCommunication(priorityCode)
 
-    createCovid19SuspectedAlertCommunication = (priorityCode?:string): R4.ICommunication =>
-        createCovid19SuspectedAlertCommunication(priorityCode)
+    /** async method */
+    createCovid19SuspectedAlertCommunication = async (priorityCode?:string): Promise<R4.ICommunication> =>
+        await createCovid19SuspectedAlertCommunication(priorityCode)
 
-    createCovid19ExposureAlertCommunication = (priorityCode?:string): R4.ICommunication =>
-        createCovid19ExposureAlertCommunication(priorityCode)
+    /** async method */
+    createCovid19ExposureAlertCommunication = async (priorityCode?:string): Promise<R4.ICommunication> =>
+        await createCovid19ExposureAlertCommunication(priorityCode)
 
     isCovid19DiseaseAlertCommunication = (communication:R4.ICommunication): boolean =>
         isCovid19DiseaseAlertCommunication(communication)
@@ -118,16 +120,16 @@ export class Covid19 {
 }
 
 // identifier should be the same as the UHC Message ID, concepts in english by default
-export function createCovid19DiseaseAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.covid19Disease, priorityCode)
+export async function createCovid19DiseaseAlertCommunication(priorityCode?:string): Promise<R4.ICommunication>{
+    return await createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.covid19Disease, priorityCode)
 }
 
-export function createCovid19SuspectedAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.suspectedCovid19, priorityCode)
+export async function createCovid19SuspectedAlertCommunication(priorityCode?:string): Promise<R4.ICommunication>{
+    return await createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.suspectedCovid19, priorityCode)
 }
 
-export function createCovid19ExposureAlertCommunication(priorityCode?:string): R4.ICommunication{
-    return createCommunication("completed", "alert", uuidUtils.getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.exposureToCovid19, priorityCode)
+export async function createCovid19ExposureAlertCommunication(priorityCode?:string): Promise<R4.ICommunication>{
+    return await createCommunication("completed", "alert", getValidOrNewRandomUUID(), covid19DiseaseTerminologySNOMED.exposureToCovid19, priorityCode)
 }
 
 export function isCovid19DiseaseAlertCommunication(communication:R4.ICommunication): boolean {

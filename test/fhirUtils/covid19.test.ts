@@ -1,10 +1,10 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { FhirUtils, CodingSystem } from "../../src/"
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getCodeListInArrayOfCodeableConcepts } from "../../src/managers/CodeableConcept"
 import { testBundleDocumentWithCompositionAndCovid19Immunization } from "../data/dataForImmunizations"
 import { testBundleDocumentWithCompositionAndCovid19DiagnosticReport } from "../data/dataForDiagnosticReportTests"
-import { CodingSystem, FhirUtils } from '../../src'
 
 const fhirUtils = new FhirUtils()
 
@@ -12,8 +12,8 @@ const diagnosticReportCodeLOINC:string = "LG51018-6" // "94762-2"
 
 describe("test COVID-19 alert communications", () => {
 
-    it("should create confirmed COVID-19 alert communication", () => {
-        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19DiseaseAlertCommunication()
+    it("should create confirmed COVID-19 alert communication", async () => {
+        let communication:R4.ICommunication = await fhirUtils.covid19.createCovid19DiseaseAlertCommunication()
         // console.log("COVID-19 communication = ", JSON.stringify(communication))
         expect(communication.category).toHaveLength(1)
         expect(communication.reasonCode).toHaveLength(1)
@@ -27,8 +27,8 @@ describe("test COVID-19 alert communications", () => {
         expect(fhirUtils.covid19.isCovid19DiseaseAlertCommunication(communication)).toBeTruthy
     })
 
-    it("should create suspected COVID-19 alert communication", () => {
-        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19SuspectedAlertCommunication()
+    it("should create suspected COVID-19 alert communication", async () => {
+        let communication:R4.ICommunication = await fhirUtils.covid19.createCovid19SuspectedAlertCommunication()
         // console.log("COVID-19 communication = ", JSON.stringify(communication))
         expect(communication.category).toHaveLength(1)
         expect(communication.reasonCode).toHaveLength(1)
@@ -42,8 +42,8 @@ describe("test COVID-19 alert communications", () => {
         expect(fhirUtils.covid19.isCovid19SuspectedAlertCommunication(communication)).toBeTruthy
     })
 
-    it("should create exposure to COVID-19 alert communication", () => {
-        let communication:R4.ICommunication = fhirUtils.covid19.createCovid19ExposureAlertCommunication()
+    it("should create exposure to COVID-19 alert communication", async () => {
+        let communication:R4.ICommunication = await fhirUtils.covid19.createCovid19ExposureAlertCommunication()
         // console.log("COVID-19 communication = ", JSON.stringify(communication))
         expect(communication.category).toHaveLength(1)
         expect(communication.reasonCode).toHaveLength(1)

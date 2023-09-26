@@ -24,6 +24,8 @@ import { Reference } from "./managers/Reference";
 import { Sections } from "./managers/Sections";
 import { Snomed } from "./managers/Snomed";
 
+import { TerminologyAdapterMem } from '@universal-health-chain/uhc-common-utils-typescript'
+export const terminology = new TerminologyAdapterMem();
 
 export class FhirUtils {
     public atc: Atc

@@ -2,6 +2,8 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import {  } from "../../src/managers/Bundle"
+import { medicalHistoryClassification } from "../../src/managers/Loinc"
+import { testSubjectId } from "../data/dataForCommonTests"
 
 const observationForTesting: R4.IObservation = {
     resourceType: "Observation",
@@ -19,12 +21,4 @@ const observationForTesting: R4.IObservation = {
 }
 
 // TODO:
-describe("test FHIR Bundle of type Message", () => {
-
-    // errors with resources.filter is not a function at Object.getResources (src/fhirUtils/fhirBundleUtils.ts:453:35): let results:any[] = resources.filter( function(resource){
-
-    it("should create a FHIR Message", async (done) => {
-        done()
-    })
-
-})
+// describe("test FHIR Bundle of type Message", ...

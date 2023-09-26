@@ -2,7 +2,6 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import canonicalize from "canonicalize"
-import { CommonUtilsUHC } from "@universal-health-chain/uhc-common-utils-typescript";
 
 /** URNs are case insensitive
  * "UUID", "UVCI". "DVCI" or "VCID" MUST BE added when an UUID, Health Certificate, SMART Health Card or a Verifiable Credential ID (txId or version ID) exists
@@ -65,8 +64,6 @@ export const ANONYMIZATION: string[] = [
   "id",
   "fullUrl",
 ];
-
-const commonUtils = new CommonUtilsUHC();
 
 export class CommonFHIR {
   constructor() {}

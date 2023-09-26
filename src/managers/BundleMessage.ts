@@ -1,15 +1,12 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { v4 as uuidv4 } from 'uuid'
+import { getValidOrNewRandomUUID, validateUUIDv4 } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getCleanIdByFhirResource } from "./CommonFHIR"
 import { getResourcesByTypesWithOptionalMetadata, addResourceAsBundleEntry, 
     getResourceByIdInBundle, getResourceIdsInBundle, getTimestamp, replaceResourceById, getResourcesWithFilters, addResourcesWithOptions
 } from "./Bundle"
-import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { createPatientRecordAuditEvent } from "./AuditEvent"
-
-const uuidUtils = new Uuid() 
 
 export class BundleMessage {
     constructor() {
@@ -112,7 +109,7 @@ function createEmptyMessage(): R4.IBundle{
     let bundle: R4.IBundle = {
         resourceType: "Bundle",
         type: R4.BundleTypeKind._message,
-        id: uuidv4()
+        id: getValidOrNewRandomUUID()
     }    
 
     return bundle
@@ -148,7 +145,7 @@ function createBasicBundleMessage(messageId:string, textMessage?:string, attachm
 // TODO: review why the following ones are exported
 
 export function createBundleMessage(senderId:string, messageId:string, bundleDoc?:R4.IBundle, textMessage?:string, attachments?:R4.IAttachment[], entityTitle?:string, entityDescription?:string):R4.IBundle {
-     if (!messageId || !uuidUtils.validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
+     if (!messageId || !validateUUIDv4(messageId)) throw new Error ("Message ID must be a valid UUIDv4")
     
     let BundleMessage:R4.IBundle = createBasicBundleMessage(messageId, textMessage, attachments)
     

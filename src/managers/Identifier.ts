@@ -8,8 +8,9 @@ export class Identifier {
     constructor(){
     }
 
-    createIdentifierType(code:string, system:string, customLanguageFile?:any):R4.ICodeableConcept{
-        return createIdentifierType(code, system, customLanguageFile)
+    /** async method */
+    async createIdentifierType(code:string, system:string, customLanguageFile?:any):Promise<R4.ICodeableConcept>{
+        return await createIdentifierType(code, system, customLanguageFile)
     }
 
     createIdentifierByType(typeCode:string, codeSystem:string, internationalDisplay:string, systemVersion?:string, userSelected?:boolean, customText?:string):R4.IIdentifier{
@@ -51,8 +52,8 @@ export function addIdentifierToResource(fhirResource:any, system:string, value:s
     return fhirResource as any
 }
 
-export function createIdentifierType(code:string, system:string, customLanguageFile?:any):R4.ICodeableConcept{
-    return createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile)
+export async function createIdentifierType(code:string, system:string, customLanguageFile?:any):Promise<R4.ICodeableConcept>{
+    return await createCodeableConceptWithOptionalLanguage(code, system, customLanguageFile)
 }
 
 export function createIdentifierByType(typeCode:string, codeSystem:string, internationalDisplay:string, systemVersion?:string, userSelected?:boolean, customText?:string):R4.IIdentifier{
