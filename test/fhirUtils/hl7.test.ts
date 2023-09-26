@@ -1,6 +1,6 @@
 
-import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
-import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/fhirUtils/Hl7";
+import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
+import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/managers/Hl7";
 import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects
@@ -34,9 +34,9 @@ describe("translate HL7 codes", () => {
         done()
     })
 
-    it("should display HL7 code", () => {
+    it("should display HL7 code", async () => {
         let codes = getVaccinesCovid19CVX()
-        let displayCode = getDisplayOrTextByCodeHL7(codes[0])   // international English display code (default)
+        let displayCode = await getDisplayOrTextByCodeHL7(codes[0])   // international English display code (default)
         // console.log("displayCode HL7 = ", displayCode)
         expect(displayCode).toBeDefined()
     })

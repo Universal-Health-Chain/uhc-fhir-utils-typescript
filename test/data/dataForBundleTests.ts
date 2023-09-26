@@ -1,5 +1,5 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { medicalHistoryClassification } from "../../src/fhirUtils/Loinc";
+import { medicalHistoryClassification } from "../../src/managers/Loinc";
 import { testAuthorId } from "./dataForCommonTests";
 
 export const testCompositionIndexForGenericMedicalRecordsSoWithoutSections: R4.IComposition = {

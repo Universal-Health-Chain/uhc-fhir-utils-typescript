@@ -2,7 +2,7 @@
 
 import { FhirUtils } from '../../src/FhirUtils';
 import { R4 } from '@ahryman40k/ts-fhir-types';
-import { createCodeableConcept } from '../../src/fhirUtils/CodeableConcept';
+import { createCodeableConcept } from '../../src/managers/CodeableConcept';
 import { CodingSystem } from '../../src/models/CommonModels';
 
 const fhirUtils = new FhirUtils()
@@ -26,9 +26,9 @@ describe("test CodeableConcept", () => {
         expect(coding.display).toBe(internationalDisplay)
 
     })
-    it("should create an array of codeable concepts and get the codes, display and text", () => {
+    it("should create an array of codeable concepts and get the codes, display and text", async () => {
         const code = fhirUtils.covid19.suspectedDiseaseSNOMED()
-        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+        const codeableConcepts:R4.ICodeableConcept[] = await fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             [code],
             CodingSystem.snomed,
             customLanguageFileSpanishSNOMED
@@ -46,9 +46,9 @@ describe("test CodeableConcept", () => {
     })
 
 
-    it("should get a single coding from an array of codeable concepts", () => {
+    it("should get a single coding from an array of codeable concepts", async () => {
         const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
-        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+        const codeableConcepts:R4.ICodeableConcept[] = await fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             snomedCodes,
             CodingSystem.snomed,
             customLanguageFileSpanishSNOMED
@@ -61,9 +61,9 @@ describe("test CodeableConcept", () => {
         // console.log("single coding by array of codeable concepts = ", JSON.stringify(coding))
     })
 
-    it("should get a single codeable concept from an array of codeable concepts", () => {
+    it("should get a single codeable concept from an array of codeable concepts", async () => {
         const snomedCodes = fhirUtils.covid19.diseaseOrSuspectedDiseaseCodes()
-        const codeableConcepts:R4.ICodeableConcept[] = fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
+        const codeableConcepts:R4.ICodeableConcept[] = await fhirUtils.codeableConcept.createArrayOfCodeableConceptsOfSystem(
             snomedCodes,
             CodingSystem.snomed,
             customLanguageFileSpanishSNOMED

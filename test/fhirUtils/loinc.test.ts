@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { GroupedLOINC } from "../../src/fhirUtils/Loinc";
+import { GroupedLOINC } from "../../src/managers/Loinc";
 
 import { FhirUtils } from "../../src"
 const fhirUtils = new FhirUtils()

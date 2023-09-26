@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { getLabelsOfGroupedCodes } from "../../src/fhirUtils/CommonFHIR";
+import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
 import { FhirUtils } from "../../src";
 
 const fhirUtils = new FhirUtils();

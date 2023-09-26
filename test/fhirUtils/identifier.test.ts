@@ -14,10 +14,10 @@ const customLanguageFileSpanishHL7:any = {
 
 describe("test Identifer", () => {
     
-    it("should create a patient identifier", () => {
+    it("should create a patient identifier", async () => {
         const hl7CodeType:string = "NN"
         const identifierTypeCode = hl7CodeType + "ESP" // HL7 type code: Spanish National Person Identifier
-        const identifierConcept:R4.ICodeableConcept = fhirUtils.codeableConcept.createCodeableConceptWithOptionalLanguage(
+        const identifierConcept:R4.ICodeableConcept = await fhirUtils.codeableConcept.createCodeableConceptWithOptionalLanguage(
             identifierTypeCode,
             GlobalIndexFHIR.groupedCodes.identifierPersonal.system, // "http://hl7.org/fhir/v2/0203/"
             customLanguageFileSpanishHL7
