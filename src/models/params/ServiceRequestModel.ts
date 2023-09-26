@@ -13,6 +13,7 @@ export enum ServiceRequestParameters {
     ReasonCode = 'reason-code',
     ReasonReference = 'reason-reference',
     Status = 'status',
+    Subject = 'subject'
   }
   
 // ServiceRequest Resource Interface
@@ -27,6 +28,7 @@ export interface ServiceRequestResource {
   [ServiceRequestParameters.Performer]?: ReferenceSearchParameter;
   [ServiceRequestParameters.ReasonCode]?: TokenSearchParameter;
   [ServiceRequestParameters.ReasonReference]?: ReferenceSearchParameter;
+  [ServiceRequestParameters.Subject]?: ReferenceSearchParameter;
   [ServiceRequestParameters.Status]?: TokenSearchParameter;
 }
   

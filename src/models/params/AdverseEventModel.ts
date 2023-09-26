@@ -2,16 +2,18 @@ import { TokenSearchParameter, DateSearchParameter, ReferenceSearchParameter } f
 
 // Create the TypeScript enumerator for the HTTP parameters of the AdverseEvent resource
 export enum AdverseEventParameters {
-    Category = 'category',
-    Date = 'date',
-    Identifier = 'identifier',
-    Location = 'location',
-    Reaction = 'reaction',
-    Recorder = 'recorder',
-    Seriousness = 'seriousness',
-    Study = 'study',
-    Subject = 'subject',
-    Substance = 'substance',
+  Category = 'category',
+  Date = 'date',
+  Identifier = 'identifier',
+  Location = 'location',
+  Reaction = 'reaction',
+  Recorder = 'recorder',
+  Seriousness = 'seriousness',
+  Study = 'study',
+  Subject = 'subject',
+  Substance = 'substance',
+  RecordedDate = 'recorder-date',
+  ReferenceDocument = 'reference-document'
   }
   
   // Create the TypeScript interface for the AdverseEvent resource using the enumerator and the search parameter types
@@ -26,6 +28,8 @@ export enum AdverseEventParameters {
     [AdverseEventParameters.Study]?: ReferenceSearchParameter;
     [AdverseEventParameters.Subject]?: ReferenceSearchParameter;
     [AdverseEventParameters.Substance]?: ReferenceSearchParameter;
+    [AdverseEventParameters.RecordedDate]?: DateSearchParameter;
+    [AdverseEventParameters.ReferenceDocument]?: ReferenceSearchParameter;
   }
   
 

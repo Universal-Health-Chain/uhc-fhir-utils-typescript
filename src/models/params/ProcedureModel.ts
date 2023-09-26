@@ -13,7 +13,8 @@ export enum ProcedureParameters {
     Performer = 'performer',
     ReasonCode = 'reason-code',
     ReasonReference = 'reason-reference',
-    Status = 'status',
+  Status = 'status',
+    Subject= 'subject'
   }
   
 // Procedure Resource Interface
@@ -29,6 +30,7 @@ export interface ProcedureResource {
   [ProcedureParameters.Performer]?: ReferenceSearchParameter;
   [ProcedureParameters.ReasonCode]?: TokenSearchParameter;
   [ProcedureParameters.ReasonReference]?: ReferenceSearchParameter;
+  [ProcedureParameters.Subject]?: ReferenceSearchParameter;
   [ProcedureParameters.Status]?: TokenSearchParameter;
 }
   

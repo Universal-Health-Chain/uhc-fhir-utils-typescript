@@ -9,6 +9,7 @@ export const testLanguageES = "es";
 
 // IDENTITY
 export const testAuthorId = "author-uuid";
+export const testAuthorReferenceId = "";
 export const testAuthorType = "PractitionerRole";
 export const testAuthorURI = testAuthorType + "/" + testAuthorId;
 export const testAuthorDisplay = 'Author Display Name';

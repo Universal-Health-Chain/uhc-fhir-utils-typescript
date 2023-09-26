@@ -9,7 +9,7 @@ const fhirUtils = new FhirUtils()
 // const LoincLabelsEN:any = require ("../../languages/international/loincUHC.json")
 
 describe("translate LOINC codes", () => {
-    xit("should translate LOINC code", () => {
+    xit("should translate LOINC code", () => { 
         // expect(Object.keys(LoincLabelsEN.healthSection).length).toBeGreaterThan(0)
         // console.log("LoincLabelsEN.healthSection = ", LoincLabelsEN.healthSection)
           

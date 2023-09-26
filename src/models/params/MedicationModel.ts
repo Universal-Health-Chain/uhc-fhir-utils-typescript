@@ -27,6 +27,7 @@ export enum MedicationStatementParameters {
   Identifier = 'identifier',
   Patient = 'patient',
   Status = 'status',
+  Subject = 'subject'
 }
 
 // MedicationStatement Resource Interface
@@ -35,6 +36,7 @@ export interface MedicationStatementResource {
   [MedicationStatementParameters.Medication]?: ReferenceSearchParameter;
   [MedicationStatementParameters.Identifier]?: TokenSearchParameter;
   [MedicationStatementParameters.Patient]?: ReferenceSearchParameter;
+  [MedicationStatementParameters.Subject]?: ReferenceSearchParameter;
   [MedicationStatementParameters.Status]?: TokenSearchParameter;
 }
 
@@ -60,6 +62,7 @@ export enum MedicationRequestParameters {
   Medication = 'medication',
   Patient = 'patient',
   Status = 'status',
+  Subject = 'subject'
 }
 
 // MedicationRequest Resource Interface
@@ -67,6 +70,7 @@ export interface MedicationRequestResource {
   [MedicationRequestParameters.AuthoredOn]?: DateSearchParameter;
   [MedicationRequestParameters.Medication]?: ReferenceSearchParameter;
   [MedicationRequestParameters.Patient]?: ReferenceSearchParameter;
+  [MedicationRequestParameters.Subject]?: ReferenceSearchParameter;
   [MedicationRequestParameters.Status]?: TokenSearchParameter;
 }
 
@@ -77,6 +81,7 @@ export enum MedicationAdministrationParameters {
   Patient = 'patient',
   Status = 'status',
   EffectiveTime = 'effective-time',
+  Subject = 'subject'
 }
 
 // MedicationAdministration Resource Interface
@@ -86,4 +91,5 @@ export interface MedicationAdministrationResource {
   [MedicationAdministrationParameters.Patient]?: ReferenceSearchParameter;
   [MedicationAdministrationParameters.Status]?: TokenSearchParameter;
   [MedicationAdministrationParameters.EffectiveTime]?: DateSearchParameter;
+  [MedicationRequestParameters.Subject]?: ReferenceSearchParameter;
 }

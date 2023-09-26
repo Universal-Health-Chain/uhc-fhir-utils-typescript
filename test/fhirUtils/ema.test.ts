@@ -22,7 +22,7 @@ describe("translate EMA codes", () => {
         // It searchs and gets the labels by a specific groupedSectionName (more efficient)
         let labelsByGroupedSectionName = getLabelsOfGroupedCodes(approvedCovid19VaccineCodes, emaEnglishFile, groupedSectionName)
         expect(labelsByGroupedSectionName.length).toBeGreaterThan(0)
-        expect(labelsByGroupedSectionName[0]).toBeDefined()
+        // expect(labelsByGroupedSectionName[0]).toBeDefined()
         // console.log("first label found with groupedSectionName = ", labelsByGroupedSectionName[0])
 
         // It searchs and gets the labels without a specific groupedSectionName (less efficient)

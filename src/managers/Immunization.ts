@@ -1,8 +1,9 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
+import { ParameterData } from '../models/params/SearchParamsModel'
 import { vaccineProphylaxisCodeATC } from "./Covid19"
-import {  Bundle, createBundleDocumentAndCompositionWithIds } from './Bundle';
+import { fhirDateOrPeriodToParam, fhirIdentifiersToParam, fhirImmunizationVaccineCodeToParam, fhirReferenceToParam } from "./Params";
 
 export class Immunization {
     
@@ -29,6 +30,34 @@ export function createCovid19BundleDocumentWithImmunizationAndAttachmentsByGroup
 
 export function createBundleDocumentWithImmunizationAndAttachmentsByGroupATC(atcCode:string, attachments:R4.IAttachment[]) : R4.IBundle {
     let bundleDoc:R4.IBundle = {resourceType:"Bundle"}
-    createBundleDocumentAndCompositionWithIds
     return bundleDoc
 }
+
+export function GetParamsByImmunizationFHIR4(immunization: R4.IImmunization): ParameterData[] {
+    let parameters: ParameterData[] = [];
+
+    if (immunization.vaccineCode) {
+        parameters.push(fhirImmunizationVaccineCodeToParam(immunization.vaccineCode));
+    }
+    if (immunization.identifier && immunization.identifier.length > 0) {
+        parameters.push(fhirIdentifiersToParam(immunization.identifier));
+    }
+    if (immunization.patient) {
+        parameters.push(fhirReferenceToParam(immunization.patient, 'patient'));
+    }
+    if (immunization.encounter) {
+        parameters.push(fhirReferenceToParam(immunization.encounter, 'encounter'));
+    }
+    if (immunization.location) {
+        parameters.push(fhirReferenceToParam(immunization.location, 'location'));
+    }
+    if (immunization.occurrenceDateTime) {
+        parameters.push(fhirDateOrPeriodToParam(immunization.occurrenceDateTime, 'date'));
+    }
+    if (immunization.expirationDate) {
+        parameters.push(fhirDateOrPeriodToParam(immunization.expirationDate, 'expirationDate'));
+    }
+
+    return parameters;
+}
+

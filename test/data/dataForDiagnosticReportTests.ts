@@ -1,29 +1,12 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { medicalHistoryClassification } from "../../src/managers/Loinc"
-import { testAuthorId, testDatetime1 } from "./dataForCommonTests"
+import { testAuthorReferenceId, testDatetime1 } from "./dataForCommonTests"
 
-
-/**
- * The `$meta` operation can be used to access metadata and
- * to get a summary of all the labels that are in use across the system.
- * The principle use for this operation is to support search e.g. what tags can be searched for.
- * At these levels, the returned `meta` will not contain `versionId`, `lastUpdated`, `deleted`, etc.
- * For example, the following operations will return the same metadata:
- * GET http://<tenant-web-path>/cds-<territory>/v1/health/fhir/Observation/<uuid-v4>/$meta
- * GET http://<tenant-web-path>/cds-<territory>/v1/health/fhir/Observation/<uuid-v4>/_history/<versionId>/$meta
- * Both $meta-add and $meta-delete operations can easily change the metadata on the resources.
- * These operations can be performed on the instance and history level.
- * For example, when a lab test is to diagnose a concrete condition (e.g.: COVID-19 or others)
- * the tag for the condition can be set in the metadata to be used as a search filter, e.g.:
- * POST http://<tenant-web-path>/cds-<territory>/v1/health/fhir/Observation/<uuid-v4>/$meta-add
- * Then a search for resources containing a condition in the metadata `tag` can be done:
- * POST http://<tenant-web-path>/cds-<territory>/v1/health/fhir/Observation/_tag?code:in=codingSystem|codeValue
- */
 export const testDiagnosticReportNotDetectedCovid19FHIR:R4.IDiagnosticReport = {
 	"category": [
 		{
 			"coding": [
-				{
+				{ 
 					"code": "LAB",
 					"display": "Laboratory",
 					"system": "http://terminology.hl7.org/CodeSystem/v2-0074"
@@ -42,7 +25,7 @@ export const testDiagnosticReportNotDetectedCovid19FHIR:R4.IDiagnosticReport = {
 		],
 		"text": "SARS-CoV-2 (COVID-19) Ab [Presencia] en suero o plasma por inmunoensayo"
 	},
-   "conclusion": "Negativo",
+    "conclusion": "Negativo",
 	"conclusionCode": [
 		{
 			"coding": [
@@ -63,11 +46,6 @@ export const testDiagnosticReportNotDetectedCovid19FHIR:R4.IDiagnosticReport = {
 		}
 	],
 	"language": "es",
-   "meta": {
-      "tag": [{
-         // ...
-      }]
-   },   
 	"performer": [
 		{
 			"reference": "Organization/<universal-health-identifier-organization-uuid>"
@@ -187,7 +165,7 @@ export const testCompositionIndexForDiagnosticReportDocument: R4.IComposition = 
           "system": 'http://loinc.org'
        }]
     },
-    author:[{"reference": testAuthorId}],
+    author:[{"reference": testAuthorReferenceId}],
     section: [
        {
           code: {
