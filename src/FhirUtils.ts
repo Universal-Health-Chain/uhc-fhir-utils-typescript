@@ -1,5 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { TerminologyAdapterMem, TerminologyInterface } from '@universal-health-chain/uhc-common-utils-typescript'
 import { Atc } from "./managers/Atc";
 import { Attachment } from "./managers/Attachment";
 import { AuditEvent } from "./managers/AuditEvent";
@@ -23,9 +24,6 @@ import { Quantity } from "./managers/Quantity";
 import { Reference } from "./managers/Reference";
 import { Sections } from "./managers/Sections";
 import { Snomed } from "./managers/Snomed";
-
-import { TerminologyAdapterMem } from '@universal-health-chain/uhc-common-utils-typescript'
-export const terminology = new TerminologyAdapterMem();
 
 export class FhirUtils {
     public atc: Atc
@@ -52,7 +50,10 @@ export class FhirUtils {
     public sections: Sections
     public snomed: Snomed
 
+    // public terminologyAdapter: TerminologyAdapterMem;
+    
     constructor() {
+        // initializing other managers
         this.atc = new Atc()
         this.attachment = new Attachment()
         this.auditEvent = new AuditEvent()

@@ -21,3 +21,4 @@ export * from "./Quantity"
 export * from "./Reference"
 export * from "./Sections"
 export * from "./Snomed"
+export * from './terminology.manager';
