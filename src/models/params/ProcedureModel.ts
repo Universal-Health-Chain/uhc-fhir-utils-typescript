@@ -2,23 +2,23 @@ import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } f
 
 // Procedure Parameters
 export enum ProcedureParameters {
-    BasedOn = 'based-on',
-    Category = 'category',
-    Code = 'code',
-    Date = 'date',
-    Encounter = 'encounter',
-    Identifier = 'identifier',
-    Location = 'location',
-    Patient = 'patient',
-    Performer = 'performer',
-    ReasonCode = 'reason-code',
-    ReasonReference = 'reason-reference',
-  Status = 'status',
-    Subject= 'subject'
+    BasedOn = 'org.hl7.fhir.http.procedure.based-on',
+    Category = 'org.hl7.fhir.http.procedure.category',
+    Code = 'org.hl7.fhir.http.procedure.code',
+    Date = 'org.hl7.fhir.http.procedure.date',
+    Encounter = 'org.hl7.fhir.http.procedure.encounter',
+    Identifier = 'org.hl7.fhir.http.procedure.identifier',
+    Location = 'org.hl7.fhir.http.procedure.location',
+    Patient = 'org.hl7.fhir.http.procedure.patient',
+    Performer = 'org.hl7.fhir.http.procedure.performer',
+    ReasonCode = 'org.hl7.fhir.http.procedure.reason-code',
+    ReasonReference = 'org.hl7.fhir.http.procedure.reason-reference',
+  Status = 'org.hl7.fhir.http.procedure.status',
+    Subject= 'org.hl7.fhir.http.procedure.subject'
   }
   
 // Procedure Resource Interface
-export interface ProcedureResource {
+export interface ProcedureTemplateFHIR {
   [ProcedureParameters.BasedOn]?: ReferenceSearchParameter;
   [ProcedureParameters.Category]?: TokenSearchParameter;
   [ProcedureParameters.Code]?: TokenSearchParameter;

@@ -2,22 +2,22 @@ import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter } f
 
 // ServiceRequest Parameters
 export enum ServiceRequestParameters {
-    AuthoredOn = 'authored-on',
-    Category = 'category',
-    Code = 'code',
-    Encounter = 'encounter',
-    Identifier = 'identifier',
-    OccurrenceDate = 'occurrence-date',
-    Patient = 'patient',
-    Performer = 'performer',
-    ReasonCode = 'reason-code',
-    ReasonReference = 'reason-reference',
-    Status = 'status',
-    Subject = 'subject'
+    AuthoredOn = 'org.hl7.fhir.http.service-request.authored-on',
+    Category = 'org.hl7.fhir.http.service-request.category',
+    Code = 'org.hl7.fhir.http.service-request.code',
+    Encounter = 'org.hl7.fhir.http.service-request.encounter',
+    Identifier = 'org.hl7.fhir.http.service-request.identifier',
+    OccurrenceDate = 'org.hl7.fhir.http.service-request.occurrence-date',
+    Patient = 'org.hl7.fhir.http.service-request.patient',
+    Performer = 'org.hl7.fhir.http.service-request.performer',
+    ReasonCode = 'org.hl7.fhir.http.service-request.reason-code',
+    ReasonReference = 'org.hl7.fhir.http.service-request.reason-reference',
+    Status = 'org.hl7.fhir.http.service-request.status',
+    Subject = 'org.hl7.fhir.http.service-request.subject'
   }
   
 // ServiceRequest Resource Interface
-export interface ServiceRequestResource {
+export interface ServiceRequestTemplateFHIR {
   [ServiceRequestParameters.AuthoredOn]?: DateSearchParameter;
   [ServiceRequestParameters.Category]?: TokenSearchParameter;
   [ServiceRequestParameters.Code]?: TokenSearchParameter;

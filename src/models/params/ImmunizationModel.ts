@@ -2,21 +2,22 @@ import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter, St
 
 // Immunization Parameters
 export enum ImmunizationParameters {
-    Date = 'date',
-    Identifier = 'identifier',
-    Location = 'location',
-    LotNumber = 'lot-number',
-    Manufacturer = 'manufacturer',
-    Patient = 'patient',
-    Performer = 'performer',
-    Reaction = 'reaction',
-    Status = 'status',
-    VaccineCode = 'vaccine-code',
-    ManufacturerDisplay = 'manufacturer-display',
-  }
+  Date = 'org.hl7.fhir.http.immunization.date',
+  Identifier = 'org.hl7.fhir.http.immunization.identifier',
+  Location = 'org.hl7.fhir.http.immunization.location',
+  LotNumber = 'org.hl7.fhir.http.immunization.lot-number',
+  Manufacturer = 'org.hl7.fhir.http.immunization.manufacturer',
+  Patient = 'org.hl7.fhir.http.immunization.patient',
+  Performer = 'org.hl7.fhir.http.immunization.performer',
+  Reaction = 'org.hl7.fhir.http.immunization.reaction',
+  Status = 'org.hl7.fhir.http.immunization.status',
+  VaccineCode = 'org.hl7.fhir.http.immunization.vaccine-code',
+  ManufacturerDisplay = 'org.hl7.fhir.http.immunization.manufacturer-display',
+  TargetDisease = 'org.hl7.fhir.http.immunization.target-disease',
+}
   
 // Immunization Resource Interface
-export interface ImmunizationResource {
+export interface ImmunizationTemplateFHIR {
   [ImmunizationParameters.Date]?: DateSearchParameter;
   [ImmunizationParameters.Identifier]?: TokenSearchParameter;
   [ImmunizationParameters.Location]?: ReferenceSearchParameter;
@@ -28,4 +29,5 @@ export interface ImmunizationResource {
   [ImmunizationParameters.Status]?: TokenSearchParameter;
   [ImmunizationParameters.VaccineCode]?: TokenSearchParameter;
   [ImmunizationParameters.ManufacturerDisplay]?: ReferenceSearchParameter;
+  [ImmunizationParameters.TargetDisease]?: TokenSearchParameter;
 }

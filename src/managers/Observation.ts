@@ -4,6 +4,8 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 import { terminologyCodesLOINC, getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
 import { CodingSystem } from "../models/CommonModels"
+import { ParameterData } from '../models/params/SearchParamsModel'
+import { fhirIdentifiersToParam, fhirReferenceToParam, fhirDateOrPeriodToParam, fhirCodeableConceptsToParam } from './Params'
 
 export interface ObservationChoiceValueFhirR4{
     valueString?:             string
@@ -89,6 +91,30 @@ export function createABOBloodTypeCodeableConceptFromSNOMED(code:string): R4.ICo
   codeableConcept.coding = [coding]    
   return codeableConcept
 }
+
+export function GetParamsByObservationFHIR4(observation: R4.IObservation): ParameterData[] {
+  let parameters: ParameterData[] = [];
+
+  if (observation.identifier && observation.identifier.length > 0) {
+      parameters.push(fhirIdentifiersToParam(observation.identifier));
+  }
+  if (observation.subject) {
+      parameters.push(fhirReferenceToParam(observation.subject, 'patient'));
+  }
+  if (observation.encounter) {
+      parameters.push(fhirReferenceToParam(observation.encounter, 'encounter'));
+  }
+  if (observation.effectiveDateTime) {
+      parameters.push(fhirDateOrPeriodToParam(observation.effectiveDateTime, 'effectiveDateTime'));
+  }
+  if (observation.code) {
+      parameters.push(fhirCodeableConceptsToParam([observation.code], 'code'));
+  }
+  // Add more conditions for other Observation properties as needed
+
+  return parameters;
+}
+
 
 /*
 export function createFHIRObservationFromObservationFormUHC(form: ObservationFormUHC): R4.IObservation {

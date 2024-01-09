@@ -6,14 +6,14 @@ import {
 
 // Medication Parameters
 export enum MedicationParameters {
-  Code = 'code',
-  Identifier = 'identifier',
-  Manufacturer = 'manufacturer',
-  Status = 'status',
+  Code = 'org.hl7.fhir.http.medication.code',
+  Identifier = 'org.hl7.fhir.http.medication.identifier',
+  Manufacturer = 'org.hl7.fhir.http.medication.manufacturer',
+  Status = 'org.hl7.fhir.http.medication.status',
 }
 
 // Medication Resource Interface
-export interface MedicationResource {
+export interface MedicationTemplateFHIR {
   [MedicationParameters.Code]?: TokenSearchParameter;
   [MedicationParameters.Identifier]?: TokenSearchParameter;
   [MedicationParameters.Manufacturer]?: ReferenceSearchParameter;
@@ -22,16 +22,16 @@ export interface MedicationResource {
 
 // MedicationStatement Parameters
 export enum MedicationStatementParameters {
-  Category = 'category',
-  Medication = 'medication',
-  Identifier = 'identifier',
-  Patient = 'patient',
-  Status = 'status',
-  Subject = 'subject'
+  Category = 'org.hl7.fhir.http.medication-statement.category',
+  Medication = 'org.hl7.fhir.http.medication-statement.medication',
+  Identifier = 'org.hl7.fhir.http.medication-statement.identifier',
+  Patient = 'org.hl7.fhir.http.medication-statement.patient',
+  Status = 'org.hl7.fhir.http.medication-statement.status',
+  Subject = 'org.hl7.fhir.http.medication-statement.subject'
 }
 
 // MedicationStatement Resource Interface
-export interface MedicationStatementResource {
+export interface MedicationStatementTemplateFHIR {
   [MedicationStatementParameters.Category]?: TokenSearchParameter;
   [MedicationStatementParameters.Medication]?: ReferenceSearchParameter;
   [MedicationStatementParameters.Identifier]?: TokenSearchParameter;
@@ -42,14 +42,14 @@ export interface MedicationStatementResource {
 
 // MedicationDispense Parameters
 export enum MedicationDispenseParameters {
-  Identifier = 'identifier',
-  Medication = 'medication',
-  Patient = 'patient',
-  Status = 'status',
+  Identifier = 'org.hl7.fhir.http.medication-dispense.identifier',
+  Medication = 'org.hl7.fhir.http.medication-dispense.medication',
+  Patient = 'org.hl7.fhir.http.medication-dispense.patient',
+  Status = 'org.hl7.fhir.http.medication-dispense.status',
 }
 
 // MedicationDispense Resource Interface
-export interface MedicationDispenseResource {
+export interface MedicationDispenseTemplateFHIR {
   [MedicationDispenseParameters.Identifier]?: TokenSearchParameter;
   [MedicationDispenseParameters.Medication]?: ReferenceSearchParameter;
   [MedicationDispenseParameters.Patient]?: ReferenceSearchParameter;
@@ -58,15 +58,15 @@ export interface MedicationDispenseResource {
 
 // MedicationRequest Parameters
 export enum MedicationRequestParameters {
-  AuthoredOn = 'authored-on',
-  Medication = 'medication',
-  Patient = 'patient',
-  Status = 'status',
-  Subject = 'subject'
+  AuthoredOn = 'org.hl7.fhir.http.medication-request.authored-on',
+  Medication = 'org.hl7.fhir.http.medication-request.medication',
+  Patient = 'org.hl7.fhir.http.medication-request.patient',
+  Status = 'org.hl7.fhir.http.medication-request.status',
+  Subject = 'org.hl7.fhir.http.medication-request.subject'
 }
 
 // MedicationRequest Resource Interface
-export interface MedicationRequestResource {
+export interface MedicationRequestTemplateFHIR {
   [MedicationRequestParameters.AuthoredOn]?: DateSearchParameter;
   [MedicationRequestParameters.Medication]?: ReferenceSearchParameter;
   [MedicationRequestParameters.Patient]?: ReferenceSearchParameter;
@@ -76,16 +76,16 @@ export interface MedicationRequestResource {
 
 // MedicationAdministration Parameters
 export enum MedicationAdministrationParameters {
-  Identifier = 'identifier',
-  Medication = 'medication',
-  Patient = 'patient',
-  Status = 'status',
-  EffectiveTime = 'effective-time',
-  Subject = 'subject'
+  Identifier = 'org.hl7.fhir.http.medication-administration.identifier',
+  Medication = 'org.hl7.fhir.http.medication-administration.medication',
+  Patient = 'org.hl7.fhir.http.medication-administration.patient',
+  Status = 'org.hl7.fhir.http.medication-administration.status',
+  EffectiveTime = 'org.hl7.fhir.http.medication-administration.effective-time',
+  Subject = 'org.hl7.fhir.http.medication-administration.subject'
 }
 
 // MedicationAdministration Resource Interface
-export interface MedicationAdministrationResource {
+export interface MedicationAdministrationTemplateFHIR {
   [MedicationAdministrationParameters.Identifier]?: TokenSearchParameter;
   [MedicationAdministrationParameters.Medication]?: ReferenceSearchParameter;
   [MedicationAdministrationParameters.Patient]?: ReferenceSearchParameter;

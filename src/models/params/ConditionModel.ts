@@ -1,23 +1,23 @@
 import { TokenSearchParameter, DateSearchParameter, StringSearchParameter, ReferenceSearchParameter } from './SearchParamsModel';
 
 export enum ConditionParameters {
-    AbatementBoolean = 'abatement-boolean',
-    AbatementDate = 'abatement-date',
-    AbatementString = 'abatement-string',
-    AssertedDate = 'asserted-date',
-    BodySite = 'body-site',
-    Category = 'category',
-    ClinicalStatus = 'clinical-status',
-    Code = 'code',
-    Identifier = 'identifier',
-    OnsetDate = 'onset-date',
-    Severity = 'severity',
-    Stage = 'stage',
-    Subject = 'subject',
-    VerificationStatus = 'verification-status',
+    AbatementBoolean = 'org.hl7.fhir.http.condition.abatement-boolean',
+    AbatementDate = 'org.hl7.fhir.http.condition.abatement-date',
+    AbatementString = 'org.hl7.fhir.http.condition.abatement-string',
+    AssertedDate = 'org.hl7.fhir.http.condition.asserted-date',
+    BodySite = 'org.hl7.fhir.http.condition.body-site',
+    Category = 'org.hl7.fhir.http.condition.category',
+    ClinicalStatus = 'org.hl7.fhir.http.condition.clinical-status',
+    Code = 'org.hl7.fhir.http.condition.code',
+    Identifier = 'org.hl7.fhir.http.condition.identifier',
+    OnsetDate = 'org.hl7.fhir.http.condition.onset-date',
+    Severity = 'org.hl7.fhir.http.condition.severity',
+    Stage = 'org.hl7.fhir.http.condition.stage',
+    Subject = 'org.hl7.fhir.http.condition.subject',
+    VerificationStatus = 'org.hl7.fhir.http.condition.verification-status',
   }
   
-export interface ConditionResource {
+export interface ConditionTemplateFHIR {
   [ConditionParameters.AbatementBoolean]?: TokenSearchParameter;
   [ConditionParameters.AbatementDate]?: DateSearchParameter;
   [ConditionParameters.AbatementString]?: StringSearchParameter;

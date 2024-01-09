@@ -2,23 +2,23 @@ import { ReferenceSearchParameter, TokenSearchParameter } from './SearchParamsMo
 
 // Encounter Parameters
 export enum EncounterParameters {
-    Appointment = 'appointment',
-    Class = 'class',
-    Diagnosis = 'diagnosis',
-    EpisodeOfCare = 'episode-of-care',
-    Identifier = 'identifier',
-    Location = 'location',
-    Participant = 'participant',
-    Patient = 'patient',
-    ReasonCode = 'reason-code',
-    ReasonReference = 'reason-reference',
-    ServiceProvider = 'service-provider',
-    Status = 'status',
-    Type = 'type',
+    Appointment = 'org.hl7.fhir.http.encounter.appointment',
+    Class = 'org.hl7.fhir.http.encounter.class',
+    Diagnosis = 'org.hl7.fhir.http.encounter.diagnosis',
+    EpisodeOfCare = 'org.hl7.fhir.http.encounter.episode-of-care',
+    Identifier = 'org.hl7.fhir.http.encounter.identifier',
+    Location = 'org.hl7.fhir.http.encounter.location',
+    Participant = 'org.hl7.fhir.http.encounter.participant',
+    Patient = 'org.hl7.fhir.http.encounter.patient',
+    ReasonCode = 'org.hl7.fhir.http.encounter.reason-code',
+    ReasonReference = 'org.hl7.fhir.http.encounter.reason-reference',
+    ServiceProvider = 'org.hl7.fhir.http.encounter.service-provider',
+    Status = 'org.hl7.fhir.http.encounter.status',
+    Type = 'org.hl7.fhir.http.encounter.type',
   }
   
   // Encounter Resource Interface
-export interface EncounterResource {
+export interface EncounterTemplateFHIR {
   [EncounterParameters.Appointment]?: ReferenceSearchParameter;
   [EncounterParameters.Class]?: TokenSearchParameter;
   [EncounterParameters.Diagnosis]?: ReferenceSearchParameter;

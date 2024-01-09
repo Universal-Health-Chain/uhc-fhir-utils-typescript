@@ -1,21 +1,21 @@
 import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } from './SearchParamsModel';
 
 export enum ClinicalImpressionParameters {
-  Assessor = 'assessor',
-  Date = 'date',
-  FindingCode = 'finding-code',
-  FindingRef = 'finding-ref',
-  Identifier = 'identifier',
-  Investigation = 'investigation',
-  Patient = 'patient',
-  Previous = 'previous',
-  Problem = 'problem',
-  Status = 'status',
-  Support = 'support',
-  Subject = 'subject'
+  Assessor = 'org.hl7.fhir.http.clinical-impression.assessor',
+  Date = 'org.hl7.fhir.http.clinical-impression.date',
+  FindingCode = 'org.hl7.fhir.http.clinical-impression.finding-code',
+  FindingRef = 'org.hl7.fhir.http.clinical-impression.finding-ref',
+  Identifier = 'org.hl7.fhir.http.clinical-impression.identifier',
+  Investigation = 'org.hl7.fhir.http.clinical-impression.investigation',
+  Patient = 'org.hl7.fhir.http.clinical-impression.patient',
+  Previous = 'org.hl7.fhir.http.clinical-impression.previous',
+  Problem = 'org.hl7.fhir.http.clinical-impression.problem',
+  Status = 'org.hl7.fhir.http.clinical-impression.status',
+  Support = 'org.hl7.fhir.http.clinical-impression.support',
+  Subject = 'org.hl7.fhir.http.clinical-impression.subject'
   }
   
-export interface ClinicalImpressionResource {
+export interface ClinicalImpressionTemplateFHIR {
   [ClinicalImpressionParameters.Assessor]?: ReferenceSearchParameter;
   [ClinicalImpressionParameters.Date]?: DateSearchParameter;
   [ClinicalImpressionParameters.FindingCode]?: TokenSearchParameter;

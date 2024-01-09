@@ -2,17 +2,17 @@ import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } f
 
 // DetectedIssue Parameters
 export enum DetectedIssueParameters {
-    Author = 'author',
-    Code = 'code',
-    Identified = 'identified',
-    Identifier = 'identifier',
-    Implicated = 'implicated',
-    Patient = 'patient',
-    Status = 'status',
+    Author = 'org.hl7.fhir.http.detected-issue.author',
+    Code = 'org.hl7.fhir.http.detected-issue.code',
+    Identified = 'org.hl7.fhir.http.detected-issue.identified',
+    Identifier = 'org.hl7.fhir.http.detected-issue.identifier',
+    Implicated = 'org.hl7.fhir.http.detected-issue.implicated',
+    Patient = 'org.hl7.fhir.http.detected-issue.patient',
+    Status = 'org.hl7.fhir.http.detected-issue.status',
   }
   
   // DetectedIssue Resource Interface
-export interface DetectedIssueResource {
+export interface DetectedIssueTemplateFHIR {
   [DetectedIssueParameters.Author]?: ReferenceSearchParameter;
   [DetectedIssueParameters.Code]?: TokenSearchParameter;
   [DetectedIssueParameters.Identified]?: DateSearchParameter;
