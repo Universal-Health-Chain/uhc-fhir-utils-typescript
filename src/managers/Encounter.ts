@@ -1,5 +1,5 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
-import { ParameterData } from '../models/params/SearchParamsModel';
+import { ParameterData } from '../models/params/Search.params.model';
 import { fhirCodeableConceptsToParam, fhirDateOrPeriodToParam, fhirIdentifiersToParam, fhirReferenceToParam } from "./Params";
 
 export function GetParamsByEncounterFHIR4(encounter: R4.IEncounter): ParameterData[] {

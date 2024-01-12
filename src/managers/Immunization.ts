@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { ParameterData } from '../models/params/SearchParamsModel'
+import { ParameterData } from '../models/params/Search.params.model'
 import { vaccineProphylaxisCodeATC } from "./Covid19"
 import { fhirDateOrPeriodToParam, fhirIdentifiersToParam, fhirImmunizationVaccineCodeToParam, fhirReferenceToParam } from "./Params";
 

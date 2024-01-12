@@ -4,7 +4,7 @@ import { R4 } from "@ahryman40k/ts-fhir-types"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 import { terminologyCodesLOINC, getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
 import { CodingSystem } from "../models/CommonModels"
-import { ParameterData } from '../models/params/SearchParamsModel'
+import { ParameterData } from '../models/params/Search.params.model'
 import { fhirIdentifiersToParam, fhirReferenceToParam, fhirDateOrPeriodToParam, fhirCodeableConceptsToParam } from './Params'
 
 export interface ObservationChoiceValueFhirR4{
