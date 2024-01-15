@@ -7,7 +7,7 @@ import { addResourcesToComposition, getSectionByCodeInComposition, createEmptyCo
 } from "./Composition"
 import {getCodeListInCodeableConcept } from "./CodeableConcept"
 import { getCleanIdByFhirResource, getCleanId } from "./CommonFHIR"
-import { CodingSystem } from "../models"
+import { CodingSystem } from "../models/CommonModels"
 
 // TODO: isValidFhirBundleDocument
 

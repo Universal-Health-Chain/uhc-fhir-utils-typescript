@@ -1,6 +1,6 @@
 {
   "name": "@universal-health-chain/uhc-fhir-utils-typescript",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "UHC's FHIR utils (Typescript)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -43,7 +43,7 @@
     "@ahryman40k/ts-fhir-types": "^4.0.39",
     "@stablelib/base64": "^1.0.0",
     "@ungap/url-search-params": "^0.2.2",
-    "@universal-health-chain/uhc-common-utils-typescript": "^0.6.10",
+    "@universal-health-chain/uhc-common-utils-typescript": "^0.7.6",
     "canonicalize": "^1.0.5",
     "dicom-parser": "^1.8.7",
     "sha1": "^1.1.1"

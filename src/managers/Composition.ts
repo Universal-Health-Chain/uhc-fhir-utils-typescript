@@ -2,7 +2,7 @@
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { v4 as uuidv4 } from 'uuid'
-import { CodingSystem } from "../models"
+import { CodingSystem } from "../models/CommonModels"
 import { Uuid } from "@universal-health-chain/uhc-common-utils-typescript"
 import { getDisplayOrTextByCodeLOINC, medicalHistoryClassification } from "./Loinc"
 import { type } from "os"

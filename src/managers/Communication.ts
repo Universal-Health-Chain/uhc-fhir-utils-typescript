@@ -3,7 +3,7 @@
 import { R4 } from "@ahryman40k/ts-fhir-types"
 import { createCodeableConcept } from "./CodeableConcept"
 import { createIdentifierWithoutType } from "./Identifier"
-import { CodingSystem } from "../models"
+import { CodingSystem } from "../models/CommonModels"
 import { getDisplayOrTextByCodeHL7 } from "./Hl7"
 import { getDisplayOrTextByCodeSNOMED } from "./Snomed"
 

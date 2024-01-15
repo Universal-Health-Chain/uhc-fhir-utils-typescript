@@ -1,7 +1,7 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
 import { R4 } from "@ahryman40k/ts-fhir-types"
-import { CodingSystem } from "../models"
+import { CodingSystem } from "../models/CommonModels"
 
 export class Quantity {
     constructor() {
