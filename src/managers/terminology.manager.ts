@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { TerminologyAdapterMem, TerminologyInterface, getTerminologyDomainName } from '@universal-health-chain/uhc-common-utils-typescript'
+import { TerminologyAdapterMem, DomainTerminologyDoc, getTerminologyDomainName } from '@universal-health-chain/uhc-common-utils-typescript'
 
 /** initializes the default international terminologies (english) except if others are sent */
 export class TerminologyManager {
@@ -12,7 +12,7 @@ export class TerminologyManager {
     }
 
     // The static initilalize method constructs and returns a TerminologyManager instance
-    public static async initialize(terminologies?: TerminologyInterface[]): Promise<TerminologyManager> {
+    public static async initialize(terminologies?: DomainTerminologyDoc[]): Promise<TerminologyManager> {
         let adapter;
         if (!terminologies || terminologies.length < 1) {
             const defaultTerms = await this.loadDefaultTerminologies();
@@ -23,7 +23,7 @@ export class TerminologyManager {
         return new TerminologyManager(adapter);
     }
 
-    private static async loadDefaultTerminologies(): Promise<TerminologyInterface[]> {
+    private static async loadDefaultTerminologies(): Promise<DomainTerminologyDoc[]> {
         const [HL7_EN, LOINC_EN, SNOMED_EN] = await Promise.all([
             import('../../terminology/hl7/international/terminology.hl7.international.json'),
             import('../../terminology/loinc/international/terminology.loinc.international.json'),
@@ -31,9 +31,9 @@ export class TerminologyManager {
         ]);
     
         return [
-            HL7_EN as unknown as TerminologyInterface,
-            LOINC_EN as unknown as TerminologyInterface,
-            SNOMED_EN as unknown as TerminologyInterface
+            HL7_EN as unknown as DomainTerminologyDoc,
+            LOINC_EN as unknown as DomainTerminologyDoc,
+            SNOMED_EN as unknown as DomainTerminologyDoc
         ];
     }
 

@@ -1,6 +1,6 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { TerminologyAdapterMem, TerminologyInterface } from '@universal-health-chain/uhc-common-utils-typescript'
+import { TerminologyAdapterMem, DomainTerminologyDoc } from '@universal-health-chain/uhc-common-utils-typescript'
 import { Atc } from "./managers/Atc";
 import { Attachment } from "./managers/Attachment";
 import { AuditEvent } from "./managers/AuditEvent";
