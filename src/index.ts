@@ -1,14 +1,15 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
+import { TerminologyAdapterMem, DomainTerminologyDoc } from '@universal-health-chain/uhc-common-utils-typescript'
+export { TerminologyAdapterMem, DomainTerminologyDoc } from '@universal-health-chain/uhc-common-utils-typescript'
+
 // exports interfaces
 export * from "./models";
-// export * from "./models/DicomModels";
-export { ExtensionsFHIR } from "./models/FhirModels"
-export { CodingSystem } from "./models/CommonModels"
 
 // export classes
-export * from "./FhirUtils";            // global class
 export * from "./managers/index";   // independent classes
+
+export * from "./FhirUtils";        // global class
 
 // export consts and enums (and functions outside classes)
 export { MimeType } from "./managers/Attachment"

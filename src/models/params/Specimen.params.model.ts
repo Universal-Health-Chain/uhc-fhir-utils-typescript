@@ -1,4 +1,3 @@
-import { TokenSearchParameter, DateSearchParameter, ReferenceSearchParameter } from './Search.params.model';
 
 // Specimen Parameters
 export enum SpecimenParameters {

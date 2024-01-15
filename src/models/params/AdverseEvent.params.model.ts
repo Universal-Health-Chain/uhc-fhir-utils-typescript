@@ -1,4 +1,3 @@
-import { TokenSearchParameter, DateSearchParameter, ReferenceSearchParameter } from './Search.params.model';
 
 // Create the TypeScript enumerator for the HTTP parameters of the AdverseEvent resource
 export enum AdverseEventParameters {

@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './Search.params.model';
 
 export enum DiagnosticReportParameters {
     BasedOn = 'org.hl7.fhir.http.DiagnosticReport.based-on',

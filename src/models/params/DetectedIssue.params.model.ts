@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './Search.params.model';
 
 // DetectedIssue Parameters
 export enum DetectedIssueParameters {

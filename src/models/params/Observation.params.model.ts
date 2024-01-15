@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter, QuantitySearchParameter, StringSearchParameter } from './Search.params.model';
 
 // Observation Parameters
 export enum ObservationParameters {

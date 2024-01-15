@@ -1,4 +1,3 @@
-import { TokenSearchParameter, DateSearchParameter, StringSearchParameter, ReferenceSearchParameter } from './Search.params.model';
 
 export enum ConditionParameters {
     AbatementBoolean = 'org.hl7.fhir.http.Condition.abatement-boolean',

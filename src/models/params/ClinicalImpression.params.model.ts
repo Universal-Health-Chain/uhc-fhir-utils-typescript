@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, DateSearchParameter, TokenSearchParameter } from './Search.params.model';
 
 export enum ClinicalImpressionParameters {
   Assessor = 'org.hl7.fhir.http.ClinicalImpression.assessor',

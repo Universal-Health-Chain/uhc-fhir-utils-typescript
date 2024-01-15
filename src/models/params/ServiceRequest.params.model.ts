@@ -1,4 +1,3 @@
-import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter } from './Search.params.model';
 
 // ServiceRequest Parameters
 export enum ServiceRequestParameters {

@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, TokenSearchParameter } from './Search.params.model';
 
 // Encounter Parameters
 export enum EncounterParameters {

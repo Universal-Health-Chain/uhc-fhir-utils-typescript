@@ -1,4 +1,3 @@
-import { ReferenceSearchParameter, TokenSearchParameter, DateSearchParameter } from './Search.params.model';
 
 // Procedure Parameters
 export enum ProcedureParameters {

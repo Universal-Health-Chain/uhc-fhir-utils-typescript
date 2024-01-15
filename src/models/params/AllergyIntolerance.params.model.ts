@@ -1,4 +1,3 @@
-import { TokenSearchParameter, StringSearchParameter, DateSearchParameter, ReferenceSearchParameter } from './Search.params.model';
 
 // Added extra parameter "note"
 // Create the TypeScript enumerator for the HTTP parameters of the AllergyIntolerance resource

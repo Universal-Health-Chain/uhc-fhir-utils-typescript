@@ -1,5 +1,3 @@
-import { MedicationParameters } from './Medication.params.model';
-import { DateSearchParameter, TokenSearchParameter, ReferenceSearchParameter, StringSearchParameter } from './Search.params.model';
 
 // Immunization Parameters
 export enum ImmunizationParameters {
