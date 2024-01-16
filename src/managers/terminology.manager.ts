@@ -25,15 +25,15 @@ export class TerminologyManager {
 
     private static async loadDefaultTerminologies(): Promise<DomainTerminologyDoc[]> {
         const [HL7_EN, LOINC_EN, SNOMED_EN] = await Promise.all([
-            import('../../terminology/hl7/international/terminology.hl7.international.json'),
-            import('../../terminology/loinc/international/terminology.loinc.international.json'),
-            import('../../terminology/snomed/international/terminology.snomed.ips.json')
+            import('../terminology/hl7/international/terminology.hl7.international.json'),
+            import('../terminology/loinc/international/terminology.loinc.international.json'),
+            import('../terminology/snomed/international/terminology.snomed.ips.json')
         ]);
     
         return [
             HL7_EN as unknown as DomainTerminologyDoc,
             LOINC_EN as unknown as DomainTerminologyDoc,
-            SNOMED_EN as unknown as DomainTerminologyDoc
+            SNOMED_EN as unknown as DomainTerminologyDoc 
         ];
     }
 

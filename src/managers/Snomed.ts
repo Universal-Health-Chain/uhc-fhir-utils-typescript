@@ -111,7 +111,7 @@ export const probablyNotPresentCodesSNOMED = ():string[] => [
 
 // display code SHALL ALWAYS BE English (international)
 export function getDisplayOrTextByCodeSNOMED(code:string, snomedLanguageFile?:object): string {
-    if (!snomedLanguageFile) snomedLanguageFile = require("../../languages/international/snomedGPS-UHC.json")
+    if (!snomedLanguageFile) snomedLanguageFile = require("../languages/international/snomedGPS-UHC.json")
     return (snomedLanguageFile as any)[code]
 }
 

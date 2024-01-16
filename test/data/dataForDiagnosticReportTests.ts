@@ -63,10 +63,10 @@ export const testDiagnosticReportNotDetectedCovid19FHIR:R4.IDiagnosticReport = {
 		}
 	],
    "meta": {
-      "tag": {
+     /* "tag": {
 
-      }
-   }
+      }*/
+   },
 	"language": "es",
 	"performer": [
 		{

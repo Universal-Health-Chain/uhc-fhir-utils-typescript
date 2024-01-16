@@ -75,7 +75,7 @@ export enum GroupedLOINC {
 
 // display code SHALL ALWAYS BE English (international)
 export function getDisplayOrTextByCodeLOINC(code:string, loincLanguageFile?:object): string {
-    if (!loincLanguageFile) loincLanguageFile = require("../../languages/international/loincUHC.json")
+    if (!loincLanguageFile) loincLanguageFile = require("../languages/international/loincUHC.json")
     return (loincLanguageFile as any)[code]
 }
 

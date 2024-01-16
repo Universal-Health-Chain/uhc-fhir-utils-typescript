@@ -4,7 +4,7 @@ import { getVaccinesCovid19CVX, getDisplayOrTextByCodeHL7 } from "../../src/mana
 import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects
-const hl7EnglishFile:any = require ("../../languages/international/hl7UHC.json") 
+const hl7EnglishFile:any = require ("../../src/languages/international/hl7UHC.json") 
 
 describe("translate HL7 codes", () => {
 

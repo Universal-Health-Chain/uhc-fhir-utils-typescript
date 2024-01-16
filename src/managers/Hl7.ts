@@ -31,14 +31,14 @@ export class Hl7 {
 // display code SHALL ALWAYS BE English (international)
 export async function getDisplayOrTextByCodeHL7(code: string, hl7LanguageFile?: object, groupedSectionName?: string): Promise<string> {
     if (!hl7LanguageFile) {
-        hl7LanguageFile = await import("../../languages/international/hl7UHC.json");
+        hl7LanguageFile = await import("../languages/international/hl7UHC.json");
     }
     return getLabelsOfGroupedCodes([code], hl7LanguageFile, groupedSectionName)[0];
 }
 
 export async function getLabelsOfCodesInGroupedSection(codes: string[], hl7LanguageFile?: object, groupedSectionName?: string): Promise<string[]> {
     if (!hl7LanguageFile) {
-        hl7LanguageFile = await import("../../languages/international/hl7UHC.json");
+        hl7LanguageFile = await import("../languages/international/hl7UHC.json");
     }
     return getLabelsOfGroupedCodes(codes, hl7LanguageFile, groupedSectionName);
 }

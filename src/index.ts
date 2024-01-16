@@ -1,6 +1,5 @@
 /* Copyright 2020-2021 FUNDACION UNID. Apache License 2.0 */
 
-import { TerminologyAdapterMem, DomainTerminologyDoc } from '@universal-health-chain/uhc-common-utils-typescript'
 export { TerminologyAdapterMem, DomainTerminologyDoc } from '@universal-health-chain/uhc-common-utils-typescript'
 
 // exports interfaces

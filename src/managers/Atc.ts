@@ -15,7 +15,7 @@ export class Atc {
 // display code SHALL ALWAYS BE English (international)
 export async function getDisplayOrTextByCodeATC(code: string, atcLanguageFile?: object): Promise<string> {  //, groupedSectionName?:string): Promise<string> {
     if (!atcLanguageFile) {
-        atcLanguageFile = await import("../../languages/international/atcUHC.json");
+        atcLanguageFile = await import("../languages/international/atcUHC.json");
     }
 
     return (atcLanguageFile as any)[code];

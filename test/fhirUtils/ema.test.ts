@@ -4,7 +4,7 @@ import { getDisplayOrTextByCodeEMA, getApprovedCovid19VaccineCodesEMA } from "..
 import { CodingSystem } from "../../src";
 
 // TODO: define interface for SnomedLabels JSON objects
-const emaEnglishFile:any = require ("../../languages/international/emaUHC.json") 
+const emaEnglishFile:any = require ("../../src/languages/international/emaUHC.json") 
 
 describe("translate EMA codes", () => {
 

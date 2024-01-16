@@ -66,12 +66,12 @@ export function getCovid19TempManufacturerCodesEMA():string[] { // "https://spor
 
 // display code SHALL ALWAYS BE English (international)
 export function getDisplayOrTextByCodeEMA(code:string, emaLanguageFile?:object, groupedSectionName?:string): string {
-    if (!emaLanguageFile) emaLanguageFile = require("../../languages/international/emaUHC.json")
+    if (!emaLanguageFile) emaLanguageFile = require("../languages/international/emaUHC.json")
     return getLabelsOfGroupedCodes([code], emaLanguageFile, groupedSectionName)[0]
 }
 
 export function getLabelsOfCodesInGroupedSection(codes:string[], hl7LanguageFile?:object, groupedSectionName?:string): string[] {
-    if (!hl7LanguageFile) hl7LanguageFile = require("../../languages/international/emaUHC.json")
+    if (!hl7LanguageFile) hl7LanguageFile = require("../languages/international/emaUHC.json")
     return getLabelsOfGroupedCodes(codes, hl7LanguageFile, groupedSectionName)
 }
 
