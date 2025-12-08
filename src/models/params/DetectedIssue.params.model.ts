@@ -1,13 +1,13 @@
 
 // DetectedIssue Parameters
 export enum DetectedIssueParameters {
-    Author = 'org.hl7.fhir.http.DetectedIssue.author',
-    Code = 'org.hl7.fhir.http.DetectedIssue.code',
-    Identified = 'org.hl7.fhir.http.DetectedIssue.identified',
-    Identifier = 'org.hl7.fhir.http.DetectedIssue.identifier',
-    Implicated = 'org.hl7.fhir.http.DetectedIssue.implicated',
-    Patient = 'org.hl7.fhir.http.DetectedIssue.patient',
-    Status = 'org.hl7.fhir.http.DetectedIssue.status',
+    Author = 'org.hl7.fhir.api.DetectedIssue.author',
+    Code = 'org.hl7.fhir.api.DetectedIssue.code',
+    Identified = 'org.hl7.fhir.api.DetectedIssue.identified',
+    Identifier = 'org.hl7.fhir.api.DetectedIssue.identifier',
+    Implicated = 'org.hl7.fhir.api.DetectedIssue.implicated',
+    Patient = 'org.hl7.fhir.api.DetectedIssue.patient',
+    Status = 'org.hl7.fhir.api.DetectedIssue.status',
   }
 
   
