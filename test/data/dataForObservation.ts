@@ -153,3 +153,128 @@ export const TEST_OBSERVATION_BATCH_RESPONSE_ENTRY = {
     claims: { ...TEST_OBSERVATION_CLAIMS_FROM_CLIENT },
   },
 } as const;
+
+// -----------------------------------------------------------------------------
+// Anxiety at night (string value) — second example
+// -----------------------------------------------------------------------------
+
+export const TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN =
+  'urn:uuid:aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee' as const;
+
+export const TEST_ANXIETY_OBSERVATION_SUBJECT_DID =
+  'did:web:api.acme.org:individual:unified-health-identifier' as const;
+
+export const TEST_ANXIETY_OBSERVATION_CLAIMS_FROM_CLIENT = {
+  [ClaimsObservationContext.Context]: 'org.hl7.fhir.api',
+  [ClaimsObservationContext.Type]: 'Observation:SelfReported',
+
+  [ClaimsObservationContext.Subject]: TEST_ANXIETY_OBSERVATION_SUBJECT_DID,
+  [ClaimsObservationContext.Identifier]: TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN,
+
+  [ClaimsObservationContext.Category]:
+    'http://terminology.hl7.org/CodeSystem/observation-category|social-history',
+  [ClaimsObservationContext.Code]: 'SNOMED|48694002',
+  [ClaimsObservationContext.CodeUserSelected]: true,
+
+  [ClaimsObservationContext.Issued]: '2025-11-27T10:00:00Z',
+  [ClaimsObservationContext.DateWhen]: 'NIGHT',
+
+  // Free text is sensitive; it is stored inside encrypted `content` (-> `jwe`).
+  [ClaimsObservationContext.ValueString]: 'Feels anxious at night.',
+} as const;
+
+export const TEST_ANXIETY_OBSERVATION_CLAIMS_FROM_CLIENT_LITERAL = {
+  '@context': 'org.hl7.fhir.api',
+  '@type': 'Observation:SelfReported',
+  'Observation.subject': TEST_ANXIETY_OBSERVATION_SUBJECT_DID,
+  'Observation.identifier': TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN,
+  'Observation.category': 'http://terminology.hl7.org/CodeSystem/observation-category|social-history',
+  'Observation.code': 'SNOMED|48694002',
+  'Observation.code-userselected': true,
+  'Observation.issued': '2025-11-27T10:00:00Z',
+  'Observation.date-when': 'NIGHT',
+  'Observation.value-string': 'Feels anxious at night.',
+} as const;
+
+export const TEST_ANXIETY_OBSERVATION_DATA_ENTRY_FROM_CLIENT = {
+  type: 'Observation-form-v1.0',
+  meta: { claims: { ...TEST_ANXIETY_OBSERVATION_CLAIMS_FROM_CLIENT } },
+  resource: {
+    resourceType: 'Observation',
+    id: TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN.replace('urn:uuid:', ''),
+  },
+} as const;
+
+export const TEST_ANXIETY_OBSERVATION_DERIVED_TAGS = 'Anxiety,Night' as const;
+
+export const TEST_CONFIDENTIAL_ANXIETY_OBSERVATION_DOC_TO_PROTECT: ConfidentialStorageDoc = {
+  id: TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN,
+  status: 'active',
+  sequence: 0,
+  content: { ...TEST_ANXIETY_OBSERVATION_DATA_ENTRY_FROM_CLIENT },
+  indexed: {
+    attributes: [
+      { name: 'identifier', value: TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN, unique: true, type: 'uri' },
+      { name: 'subject', value: TEST_ANXIETY_OBSERVATION_SUBJECT_DID, type: 'uri' },
+      { name: 'code', value: 'SNOMED|48694002', type: 'token' },
+    ],
+  },
+  meta: {
+    created: '2025-11-27T10:00:00Z',
+    contentType: 'org.hl7.fhir.api.Observation',
+  },
+};
+
+export const TEST_CONFIDENTIAL_ANXIETY_OBSERVATION_DOC_STORED: ConfidentialStorageDoc = {
+  id: TEST_ANXIETY_OBSERVATION_IDENTIFIER_URN,
+  status: 'active',
+  sequence: 0,
+  indexed: {
+    attributes: [
+      { name: 'hmac(name:identifier)', value: 'hmac(value:urn:uuid:...)', unique: true, type: 'uri' },
+      { name: 'hmac(name:subject)', value: 'hmac(value:did:web:...)', type: 'uri' },
+      { name: 'hmac(name:code)', value: 'hmac(value:SNOMED|48694002)', type: 'token' },
+    ],
+    hmac: { id: 'did:example:kms#hmac-key-1', type: 'Sha256HmacKey2019' },
+  },
+  jwe: {
+    protected: 'eyJ...<protected-header>...',
+    iv: '...',
+    ciphertext: '...',
+    tag: '...',
+  },
+  meta: {
+    created: '2025-11-27T10:00:00Z',
+    contentType: 'org.hl7.fhir.api.Observation',
+    jurisdiction: 'cds-es',
+    yearOfBirth: '1989',
+    gender: 'female',
+    // sexAtBirth: 'female',
+    tags: TEST_ANXIETY_OBSERVATION_DERIVED_TAGS,
+  },
+};
+
+export const TEST_ANXIETY_OBSERVATION_BATCH_RESPONSE_ENTRY = {
+  type: 'Observation:Stored',
+  meta: {
+    tags: TEST_ANXIETY_OBSERVATION_DERIVED_TAGS,
+    claims: { ...TEST_ANXIETY_OBSERVATION_CLAIMS_FROM_CLIENT },
+  },
+} as const;
+
+// -----------------------------------------------------------------------------
+// Batch example with both Observations
+// -----------------------------------------------------------------------------
+
+export const TEST_OBSERVATION_BATCH_DATA_ENTRIES = [
+  TEST_OBSERVATION_DATA_ENTRY_FROM_CLIENT,
+  TEST_ANXIETY_OBSERVATION_DATA_ENTRY_FROM_CLIENT,
+] as const;
+
+export const TEST_OBSERVATION_BATCH_REQUEST_BODY = {
+  data: [...TEST_OBSERVATION_BATCH_DATA_ENTRIES],
+} as const;
+
+export const TEST_OBSERVATION_BATCH_RESPONSE_BODY = {
+  data: [TEST_OBSERVATION_BATCH_RESPONSE_ENTRY, TEST_ANXIETY_OBSERVATION_BATCH_RESPONSE_ENTRY],
+} as const;
