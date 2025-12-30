@@ -134,6 +134,10 @@ export const TEST_CONFIDENTIAL_OBSERVATION_DOC_STORED: ConfidentialStorageDoc = 
   meta: {
     created: '2025-11-27T10:00:00Z',
     contentType: 'org.hl7.fhir.api.Observation',
+    jurisdiction: 'cds-es',
+    yearOfBirth: '1989',
+    gender: 'female',
+    // sexAtBirth: 'female',
     tags: TEST_OBSERVATION_DERIVED_TAGS,
   },
 };
@@ -146,6 +150,6 @@ export const TEST_OBSERVATION_BATCH_RESPONSE_ENTRY = {
   type: 'Observation:Stored',
   meta: {
     tags: TEST_OBSERVATION_DERIVED_TAGS,
-    identifier: TEST_OBSERVATION_IDENTIFIER_URN,
+    claims: { ...TEST_OBSERVATION_CLAIMS_FROM_CLIENT },
   },
 } as const;
