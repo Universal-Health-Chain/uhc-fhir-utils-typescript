@@ -22,3 +22,4 @@ export { GlobalIndexSNOMED, RegionalIndexSNOMED, GroupedSNOMED,
     SNOMED_TO_ICD10, SNOMED_TO_ICD11
 } from "./managers/Snomed";
 
+export * from "./utils";

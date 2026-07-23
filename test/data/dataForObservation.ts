@@ -134,7 +134,7 @@ export const TEST_CONFIDENTIAL_OBSERVATION_DOC_STORED: ConfidentialStorageDoc = 
   meta: {
     created: '2025-11-27T10:00:00Z',
     contentType: 'org.hl7.fhir.api.Observation',
-    jurisdiction: 'cds-es',
+    jurisdiction: 'es',
     yearOfBirth: '1989',
     gender: 'female',
     // sexAtBirth: 'female',

@@ -118,12 +118,18 @@
  */
 
 export enum ObservationParameters {
+  BasedOn = 'org.hl7.fhir.api.Observation.based-on',
   Subject = 'org.hl7.fhir.api.Observation.subject',
+  Patient = 'org.hl7.fhir.api.Observation.patient',
   Category = 'org.hl7.fhir.api.Observation.category',
   Identifier = 'org.hl7.fhir.api.Observation.identifier',
+  Encounter = 'org.hl7.fhir.api.Observation.encounter',
 
   Code = 'org.hl7.fhir.api.Observation.code',
   CodeUserSelected = 'org.hl7.fhir.api.Observation.code-userselected',
+  Method = 'org.hl7.fhir.api.Observation.method',
+  Performer = 'org.hl7.fhir.api.Observation.performer',
+  Status = 'org.hl7.fhir.api.Observation.status',
 
   Issued = 'org.hl7.fhir.api.Observation.issued',
 
