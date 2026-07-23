@@ -1,4 +1,14 @@
 
+Unreleased
+----------
+
+New
+~~~
+- Added FHIR API Parameters, RelatedPerson, token and telecom utilities with
+  executable tests.
+- Restored the Observation parameter keys required by the public template so
+  the package builds cleanly.
+
 1.2.9 (2021-08-07)
 ------------------
 

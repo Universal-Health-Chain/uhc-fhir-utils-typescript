@@ -262,7 +262,7 @@ export function anonymizeResource(fhirResource: any): any {
     if (
       fhirResource[keyName] instanceof Array &&
       fhirResource[keyName].length &&
-      fhirResource[keyName] > 0
+      fhirResource[keyName].length > 0
     ) {
       fhirResource[keyName].forEach(function (subKey: any, index: number) {
         fhirResource[keyName][index] = anonymizeResource(
