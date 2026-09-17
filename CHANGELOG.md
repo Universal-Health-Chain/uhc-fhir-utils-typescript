@@ -4,6 +4,8 @@ Unreleased
 
 New
 ~~~
+- Added the repository-wide mandatory red-green-refactor contributor contract
+  and explicit TDD contract headers to the existing test suites.
 - Added FHIR API Parameters, RelatedPerson, token and telecom utilities with
   executable tests.
 - Restored the Observation parameter keys required by the public template so

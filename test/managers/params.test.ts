@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import {
     fhirCodingsToParam,

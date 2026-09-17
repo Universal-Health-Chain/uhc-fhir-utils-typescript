@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 import { makeTelecomToken, toTelecomTokens } from '../src/utils/telecom';
 
 describe('telecom utils', () => {
