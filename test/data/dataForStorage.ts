@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 
 /**
  * Defines the structure of an attribute to be indexed for blind, searchable queries.

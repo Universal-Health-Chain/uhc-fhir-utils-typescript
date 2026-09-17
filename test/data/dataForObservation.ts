@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 
 import { ClaimsObservationContext } from '../../src/models/params/Observation.params.model';
 import { ConfidentialStorageDoc } from './dataForStorage';

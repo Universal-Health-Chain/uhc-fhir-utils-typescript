@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 import { getVaccinesCovid19CVX } from "../../src/managers/Hl7";
 import { CodingSystem, TerminologyManager } from "../../src";
 

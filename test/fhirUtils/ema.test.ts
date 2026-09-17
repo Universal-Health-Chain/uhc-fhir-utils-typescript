@@ -1,3 +1,4 @@
+// TDD contract: write this test red first; make it green only with the complete real behavior.
 
 import { getLabelsOfGroupedCodes } from "../../src/managers/CommonFHIR";
 import { getDisplayOrTextByCodeEMA, getApprovedCovid19VaccineCodesEMA } from "../../src/managers/Ema";
